@@ -20,17 +20,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
+# Security settings
 SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = False
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
-
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = [
+    "https://wedbukcom-production.up.railway.app/",
+    "localhost",
+    "127.0.0.1",
+]
 
 CSRF_TRUSTED_ORIGINS = [
-    f"https://{os.getenv('RAILWAY_PUBLIC_DOMAIN')}"
-] if os.getenv("RAILWAY_PUBLIC_DOMAIN") else []
+    "https://wedbukcom-production.up.railway.app/",
+]
 
 
 # Application definition
