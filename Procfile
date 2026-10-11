@@ -1,1 +1,1 @@
-web: gunicorn event_booking.wsgi --bind 0.0.0.0:$PORT
+web: gunicorn config.wsgi --bind 0.0.0.0:$PORT
