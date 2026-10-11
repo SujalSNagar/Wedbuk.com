@@ -25,15 +25,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
+
 ALLOWED_HOSTS = [
-    "https://wedbukcom-production.up.railway.app/",
+    "wedbukcom-production.up.railway.app",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://wedbukcom-production.up.railway.app/",
+    "https://wedbukcom-production.up.railway.app",
 ]
+
 
 
 # Application definition
