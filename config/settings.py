@@ -27,12 +27,16 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = [
+    "wedbuk.com",
+    "www.wedbuk.com",
     "wedbukcom-production.up.railway.app",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://wedbuk.com",
+    "https://www.wedbuk.com",
     "https://wedbukcom-production.up.railway.app",
 ]
 
