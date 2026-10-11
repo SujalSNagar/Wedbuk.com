@@ -24,12 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "True") == "True"
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
-CSRF_TRUSTED_ORIGINS = []
-
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{os.getenv('RAILWAY_PUBLIC_DOMAIN')}"
+] if os.getenv("RAILWAY_PUBLIC_DOMAIN") else []
 
 
 # Application definition
