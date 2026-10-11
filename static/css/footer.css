@@ -1,0 +1,12 @@
+.site-footer { color: #b78f83; background: #210307; padding-top: 55px; }
+.footer-grid { display: grid; grid-template-columns: 1.55fr 1fr 1fr 1fr; gap: 45px; padding-bottom: 48px; }
+.footer-about .brand { margin-bottom: 18px; }
+.footer-about p { max-width: 290px; font-size: .72rem; line-height: 1.7; }
+.site-footer h4 { color: var(--gold); font-size: .7rem; letter-spacing: .13em; margin-bottom: 20px; }
+.site-footer > .container > div:not(.footer-about) a { display: block; font-size: .8rem; margin-bottom: 13px; color: #b28a7d; transition: color .2s; }
+.site-footer a:hover { color: var(--gold-light) !important; }
+.footer-bottom { min-height: 76px; border-top: 1px solid rgba(213,151,50,.14); display: flex; align-items: center; justify-content: space-between; font-size: .65rem; }
+.app-links { display: flex; gap: 13px; }
+.app-links a { border: 1px solid rgba(215,151,54,.25); padding: 7px 13px; border-radius: 999px; }
+.toast { position: fixed; left: 50%; bottom: 25px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 100; background: #260409; color: #fff5e9; border: 1px solid rgba(219,157,53,.45); padding: 12px 18px; border-radius: 10px; font-size: .8rem; transition: .25s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }

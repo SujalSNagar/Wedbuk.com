@@ -1,0 +1,1122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Listing | WedBook{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/listing-form.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div
+    class="listing-form-page"
+    id="listingFormPage"
+    data-cities-url="{% url 'listings:cities_by_state' %}"
+    data-category-attributes-url="{% url 'listings:category_attributes' %}"
+>
+
+    <div class="listing-form-container">
+
+        <!-- ================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ================================================= -->
+
+        <div class="listing-form-header">
+
+            <div class="listing-form-header-icon">
+                <span class="iconify" data-icon="solar:buildings-2-bold"></span>
+            </div>
+
+            <div>
+                <h1>Add New Listing</h1>
+
+                <p>
+                    Add your venue or service and start receiving bookings.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FORM -->
+        <!-- ================================================= -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="listingForm"
+            novalidate
+        >
+
+            {% csrf_token %}
+
+
+            <!-- ================================================= -->
+            <!-- FORM ERRORS -->
+            <!-- ================================================= -->
+
+            {% if form.non_field_errors %}
+
+            <div class="listing-form-alert">
+
+                <div class="listing-form-alert-icon">
+                    <span
+                        class="iconify"
+                        data-icon="solar:danger-triangle-bold"
+                    ></span>
+                </div>
+
+                <div>
+
+                    {% for error in form.non_field_errors %}
+
+                    <p>{{ error }}</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- BASIC INFORMATION -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:document-text-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Basic Information</h2>
+
+                        <p>
+                            Tell customers about your venue or service.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <!-- CATEGORY -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.category.id_for_label }}">
+                            Category
+                            <span>*</span>
+                        </label>
+
+                        {{ form.category }}
+
+                        {% if form.category.errors %}
+
+                        <div class="field-error">
+                            {{ form.category.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.title.id_for_label }}">
+                            Listing Title
+                            <span>*</span>
+                        </label>
+
+                        {{ form.title }}
+
+                        {% if form.title.errors %}
+
+                        <div class="field-error">
+                            {{ form.title.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                        <div class="listing-title-hint">
+                        Eg. Wedding Venue, Photography, Catering, Dj,etc.
+                        </div>
+                    </div>
+
+
+
+                    <!-- PRICE -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.base_price.id_for_label }}">
+                            Starting Price
+                            <span>*</span>
+                        </label>
+
+                        {{ form.base_price }}
+
+                        {% if form.base_price.errors %}
+
+                        <div class="field-error">
+                            {{ form.base_price.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="listing-field listing-field-full">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        Description
+                        <span>*</span>
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+
+                    <div class="field-error">
+                        {{ form.description.errors.0 }}
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- CATEGORY ATTRIBUTES -->
+            <!-- ================================================= -->
+
+            <section
+                class="listing-form-card category-attributes-card {% if not dynamic_attribute_fields %}is-hidden{% endif %}"
+                id="categoryAttributesCard"
+            >
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:widget-5-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Category Details</h2>
+
+                        <p>
+                            Add additional information about your listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="form-grid"
+                    id="categoryAttributesGrid"
+                >
+
+                    {% for attribute, field in dynamic_attribute_fields %}
+
+                    <div class="listing-field">
+
+                        <label for="{{ field.id_for_label }}">
+
+                            {{ field.label }}
+
+                            {% if attribute.unit %}
+                                <span class="attribute-unit">
+                                    ({{ attribute.unit }})
+                                </span>
+                            {% endif %}
+
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+
+                        <small class="field-help">
+                            {{ field.help_text }}
+                        </small>
+
+                        {% endif %}
+
+                        {% if field.errors %}
+
+                        <div class="field-error">
+                            {{ field.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- SERVICES -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:settings-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Services</h2>
+
+                        <p>
+                            Select the services included with this listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="selection-grid">
+
+                    {% for checkbox in form.services %}
+
+                    <label class="selection-card">
+
+                        {{ checkbox.tag }}
+
+                        <span class="selection-card-content">
+
+                            <span class="selection-card-title">
+                                {{ checkbox.choice_label }}
+                            </span>
+
+                        </span>
+
+                        <span class="selection-card-check">
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:check-circle-bold"
+                            ></span>
+
+                        </span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+
+                {% if form.services.errors %}
+
+                <div class="field-error">
+                    {{ form.services.errors.0 }}
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- EVENT TYPES -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:calendar-mark-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Event Types</h2>
+
+                        <p>
+                            Select the events suitable for this listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="selection-grid">
+
+                    {% for checkbox in form.event_types %}
+
+                    <label class="selection-card">
+
+                        {{ checkbox.tag }}
+
+                        <span class="selection-card-content">
+
+                            <span class="selection-card-title">
+                                {{ checkbox.choice_label }}
+                            </span>
+
+                        </span>
+
+                        <span class="selection-card-check">
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:check-circle-bold"
+                            ></span>
+
+                        </span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- GUEST CAPACITY -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:users-group-rounded-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Guest Capacity</h2>
+
+                        <p>
+                            Define the minimum and maximum number of guests.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.min_guests.id_for_label }}">
+                            Minimum Guests
+                        </label>
+
+                        {{ form.min_guests }}
+
+                        {% if form.min_guests.errors %}
+
+                        <div class="field-error">
+                            {{ form.min_guests.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.max_guests.id_for_label }}">
+                            Maximum Guests
+                        </label>
+
+                        {{ form.max_guests }}
+
+                        {% if form.max_guests.errors %}
+
+                        <div class="field-error">
+                            {{ form.max_guests.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- LOCATION -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:map-point-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Location</h2>
+
+                        <p>
+                            Help customers find your venue or service.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field listing-field-full">
+
+                        <label for="{{ form.address_line_1.id_for_label }}">
+                            Address
+                            <span>*</span>
+                        </label>
+
+                        {{ form.address_line_1 }}
+
+                        {% if form.address_line_1.errors %}
+
+                        <div class="field-error">
+                            {{ form.address_line_1.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field listing-field-full">
+
+                        <label for="{{ form.address_line_2.id_for_label }}">
+                            Address Line 2
+                        </label>
+
+                        {{ form.address_line_2 }}
+
+                        {% if form.address_line_2.errors %}
+
+                        <div class="field-error">
+                            {{ form.address_line_2.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.state.id_for_label }}">
+                            State
+                            <span>*</span>
+                        </label>
+
+                        {{ form.state }}
+
+                        {% if form.state.errors %}
+
+                        <div class="field-error">
+                            {{ form.state.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.city.id_for_label }}">
+                            City
+                            <span>*</span>
+                        </label>
+
+                        {{ form.city }}
+
+                        {% if form.city.errors %}
+
+                        <div class="field-error">
+                            {{ form.city.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.pincode.id_for_label }}">
+                            Pincode
+                            <span>*</span>
+                        </label>
+
+                        {{ form.pincode }}
+
+                        {% if form.pincode.errors %}
+
+                        <div class="field-error">
+                            {{ form.pincode.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.latitude.id_for_label }}">
+                            Latitude
+                        </label>
+
+                        {{ form.latitude }}
+
+                        {% if form.latitude.errors %}
+
+                        <div class="field-error">
+                            {{ form.latitude.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.longitude.id_for_label }}">
+                            Longitude
+                        </label>
+
+                        {{ form.longitude }}
+
+                        {% if form.longitude.errors %}
+
+                        <div class="field-error">
+                            {{ form.longitude.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+<!-- ================================================= -->
+<!-- COVER IMAGE -->
+<!-- ================================================= -->
+
+<section class="listing-form-card">
+
+    <div class="form-card-header">
+
+        <div class="form-card-icon">
+
+            <span
+                class="iconify"
+                data-icon="solar:gallery-add-bold"
+            ></span>
+
+        </div>
+
+        <div>
+
+            <h2>Cover Image</h2>
+
+            <p>
+                Add the main image customers will see first.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="media-upload-layout">
+
+        <!-- LEFT : FILE SELECT -->
+
+        <div class="media-upload-selector">
+
+            <div class="listing-field">
+
+                <label for="{{ form.cover_image.id_for_label }}">
+                    Cover Image
+                </label>
+
+
+                <div class="custom-file-box">
+
+                    <label
+                        for="{{ form.cover_image.id_for_label }}"
+                        class="custom-file-button"
+                    >
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:gallery-add-bold"
+                        ></span>
+
+                        Choose Image
+
+                    </label>
+
+
+                    {{ form.cover_image }}
+
+                </div>
+
+
+                <small class="field-help">
+                    Recommended: high-quality venue or service image.
+                </small>
+
+
+                {% if form.cover_image.errors %}
+
+                    <div class="field-error">
+
+                        {{ form.cover_image.errors.0 }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT : COVER PREVIEW -->
+
+        <div
+            id="coverPreview"
+            class="media-preview-box cover-preview-box"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- GALLERY IMAGES -->
+<!-- ================================================= -->
+
+<section class="listing-form-card">
+
+    <div class="form-card-header">
+
+        <div class="form-card-icon">
+
+            <span
+                class="iconify"
+                data-icon="solar:gallery-wide-bold"
+            ></span>
+
+        </div>
+
+        <div>
+
+            <h2>Gallery Images</h2>
+
+            <p>
+                Add up to 8 additional images.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="media-upload-layout">
+
+        <!-- LEFT : FILE SELECT -->
+
+        <div class="media-upload-selector">
+
+            <div class="listing-field">
+
+                <label for="galleryImages">
+                    Gallery Images
+                </label>
+
+
+                <div class="custom-file-box">
+
+                    <label
+                        for="galleryImages"
+                        class="custom-file-button"
+                    >
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:gallery-wide-bold"
+                        ></span>
+
+                        Choose Images
+
+                    </label>
+
+
+                    <input
+                        type="file"
+                        name="gallery_images"
+                        id="galleryImages"
+                        class="media-file-input"
+                        accept="image/*"
+                        multiple
+                    >
+
+                </div>
+
+
+                <small class="field-help">
+                    Maximum 8 gallery images.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT : GALLERY PREVIEW -->
+
+        <div
+            id="galleryPreview"
+            class="media-preview-box gallery-preview"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- VIDEOS -->
+<!-- ================================================= -->
+
+<section class="listing-form-card">
+
+    <div class="form-card-header">
+
+        <div class="form-card-icon">
+
+            <span
+                class="iconify"
+                data-icon="solar:video-frame-bold"
+            ></span>
+
+        </div>
+
+        <div>
+
+            <h2>Videos</h2>
+
+            <p>
+                Add videos to showcase your venue or service.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="media-upload-layout">
+
+        <!-- LEFT : FILE SELECT -->
+
+        <div class="media-upload-selector">
+
+            <div class="listing-field">
+
+                <label for="galleryVideos">
+                    Listing Videos
+                </label>
+
+
+                <div class="custom-file-box">
+
+                    <label
+                        for="galleryVideos"
+                        class="custom-file-button"
+                    >
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:video-frame-bold"
+                        ></span>
+
+                        Choose Videos
+
+                    </label>
+
+
+                    <input
+                        type="file"
+                        name="gallery_videos"
+                        id="galleryVideos"
+                        class="media-file-input"
+                        accept="video/mp4,video/webm,video/quicktime,video/x-msvideo"
+                        multiple
+                    >
+
+                </div>
+
+
+                <small class="field-help">
+
+                    Maximum 2 videos.
+                    Each video can be up to 10 MB.
+                    Supported formats: MP4, WebM, MOV and AVI.
+
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT : VIDEO PREVIEW -->
+
+        <div
+            id="videoPreview"
+            class="media-preview-box video-preview-grid"
+        ></div>
+
+    </div>
+
+</section>
+
+
+            <!-- ================================================= -->
+            <!-- AVAILABILITY -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:calendar-add-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Availability</h2>
+
+                        <p>
+                            Set the period during which this listing is available.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field">
+
+                        <label for="availableFrom">
+                            Available From
+                        </label>
+
+                        <input
+                            type="date"
+                            name="available_from"
+                            id="availableFrom"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="availableUntil">
+                            Available Until
+                        </label>
+
+                        <input
+                            type="date"
+                            name="available_until"
+                            id="availableUntil"
+                            class="form-control"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ACTIVE STATUS -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <span
+                            class="iconify"
+                            data-icon="solar:eye-bold"
+                        ></span>
+                    </div>
+
+                    <div>
+
+                        <h2>Listing Status</h2>
+
+                        <p>
+                            Choose whether customers can see this listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label class="status-toggle">
+
+                    {{ form.is_active }}
+
+                    <span class="status-toggle-content">
+
+                        <strong>
+                            Active Listing
+                        </strong>
+
+                        <small>
+                            Customers can view and book this listing.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ACTIONS -->
+            <!-- ================================================= -->
+
+            <div class="listing-form-actions">
+
+                <a
+                    href="{% url 'listings:my_listings' %}"
+                    class="btn-outline"
+                >
+                    <span
+                        class="iconify"
+                        data-icon="solar:arrow-left-linear"
+                    ></span>
+
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-gold btn-large"
+                    id="saveListingBtn"
+                >
+
+                    <span
+                        class="iconify"
+                        data-icon="solar:check-circle-bold"
+                    ></span>
+
+                    Save Listing
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+<script src="{% static 'js/listing-form.js' %}"></script>
+
+{% endblock %}
+

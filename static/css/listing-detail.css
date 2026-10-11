@@ -1,0 +1,894 @@
+/* =========================================================
+   WEDBOOK - LISTING DETAIL
+   ========================================================= */
+
+.listing-detail-page {
+    min-height: 100vh;
+    padding: 100px 24px 80px;
+    background: #fbf7f1;
+}
+
+.listing-detail-container {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.listing-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 22px;
+    color: #91847d;
+    font-size: 12px;
+}
+
+.listing-breadcrumb a {
+    color: #7d1a30;
+    text-decoration: none;
+    font-weight: 650;
+}
+
+.listing-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.listing-breadcrumb iconify-icon {
+    font-size: 15px;
+}
+
+.listing-breadcrumb span {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   GALLERY
+   ========================================================= */
+
+.listing-gallery-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.listing-main-image {
+    position: relative;
+    height: 490px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #f1e8dc;
+    box-shadow: 0 12px 35px rgba(70, 20, 32, 0.08);
+}
+
+.listing-main-image > img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.listing-detail-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #a08459;
+    background: linear-gradient(135deg, #f8eee1, #f2e5d4);
+}
+
+.listing-detail-placeholder iconify-icon {
+    font-size: 65px;
+}
+
+.listing-detail-placeholder span {
+    font-size: 13px;
+}
+
+.gallery-expand-button {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 11px;
+    color: #fff;
+    background: rgba(65, 15, 28, .78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.gallery-expand-button:hover {
+    background: #8d1b31;
+    transform: translateY(-2px);
+}
+
+.gallery-expand-button iconify-icon {
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   THUMBNAILS
+   ========================================================= */
+
+.listing-thumbnail-grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.listing-thumbnail {
+    height: 72px;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 9px;
+    background: #eee5db;
+    cursor: pointer;
+    opacity: .72;
+    transition: .2s ease;
+}
+
+.listing-thumbnail:hover,
+.listing-thumbnail.active {
+    border-color: #a77d38;
+    opacity: 1;
+}
+
+.listing-thumbnail img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   CONTENT GRID
+   ========================================================= */
+
+.listing-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 35px;
+    align-items: start;
+}
+
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.listing-title-section {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ded3;
+}
+
+.listing-category-label {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #8d1b31;
+    background: #f8eadb;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+}
+
+.listing-title-section h1 {
+    margin: 8px 0 7px;
+    color: #511323;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.detail-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #81756e;
+    font-size: 13px;
+}
+
+.detail-location iconify-icon {
+    color: #a07632;
+    font-size: 18px;
+}
+
+/* =========================================================
+   DETAIL SECTION
+   ========================================================= */
+
+.detail-section {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    column-gap: 28px;
+    align-items: start;
+
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ded3;
+}
+
+.detail-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.detail-section-heading h2 {
+    margin: 0;
+    color: #561626;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.35;
+}
+
+.detail-section-icon {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e5c987;
+    border-radius: 8px;
+
+    color: #8d1b31;
+    background: #fff8eb;
+}
+
+.detail-section-icon iconify-icon {
+    font-size: 17px;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.listing-description {
+    color: #945938;
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.listing-description p {
+    margin: 0 0 6px;
+}
+
+.listing-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   TAGS
+   ========================================================= */
+
+.detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.detail-tag {
+    min-height: 30px;
+    padding: 0 9px;
+    border-radius: 7px;
+    font-size: 11px;
+}
+
+.detail-tag iconify-icon {
+    color: #9b722d;
+    font-size: 16px;
+}
+
+.detail-tag.included {
+    color: #6e392d;
+    border-color: #ead2c8;
+    background: #fff8f4;
+}
+
+.detail-tag.included iconify-icon {
+    color: #8d1b31;
+}
+
+/* =========================================================
+   EVENT TYPES
+   ========================================================= */
+
+.event-type-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.event-type-item {
+    min-width: 110px;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    border: 1px solid #e7dcd1;
+    border-radius: 10px;
+
+    color: #604a43;
+    background: #fff;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.event-type-item iconify-icon {
+    color: #9b702c;
+    font-size: 19px;
+}
+
+.event-type-item img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.address-box {
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+
+    border: 1px solid #e5d9ce;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.address-icon {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+    color: #8d1b31;
+    background: #f8ead6;
+}
+
+.address-icon iconify-icon {
+    font-size: 22px;
+}
+
+.address-content strong {
+    display: block;
+    color: #541526;
+    font-size: 14px;
+}
+
+.address-content p {
+    margin: 6px 0 0;
+    color: #766b64;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.map-location-box {
+    margin-top: 10px;
+    padding: 12px 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    border-radius: 8px;
+    color: #86652b;
+    background: #fff9ed;
+    font-size: 11px;
+}
+
+.map-location-box iconify-icon {
+    font-size: 17px;
+}
+
+/* =========================================================
+   AVAILABILITY
+   ========================================================= */
+
+.availability-periods {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.availability-period {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 13px 15px;
+
+    border: 1px solid #e7dcd0;
+    border-radius: 11px;
+    background: #fff;
+}
+
+.availability-period > div {
+    flex: 1;
+}
+
+.availability-period span {
+    display: block;
+    margin-bottom: 4px;
+    color: #958981;
+    font-size: 10px;
+}
+
+.availability-period strong {
+    color: #571626;
+    font-size: 13px;
+}
+
+.availability-period > iconify-icon {
+    color: #b08a43;
+    font-size: 19px;
+}
+
+/* =========================================================
+   VENDOR
+   ========================================================= */
+
+.vendor-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 17px;
+
+    border: 1px solid #e5d9ce;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.vendor-avatar {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    color: #8d1b31;
+    background: #f8ead6;
+}
+
+.vendor-avatar iconify-icon {
+    font-size: 25px;
+}
+
+.vendor-info h3 {
+    margin: 0 0 4px;
+    color: #541526;
+    font-size: 15px;
+}
+
+.vendor-info p {
+    margin: 0;
+    color: #81766f;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   BOOKING SIDEBAR
+   ========================================================= */
+
+.listing-booking-sidebar {
+    position: sticky;
+    top: 100px;
+}
+
+.booking-card {
+    padding: 25px;
+    border: 1px solid #dfceb0;
+    border-radius: 17px;
+    background:
+        linear-gradient(
+            145deg,
+            #fffdf9,
+            #fff8ed
+        );
+    box-shadow: 0 10px 30px rgba(75, 19, 32, .07);
+}
+
+.booking-label {
+    color: #8a7a70;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.booking-price {
+    margin-top: 3px;
+    color: #84172d;
+    font-size: 35px;
+    font-weight: 800;
+}
+
+.booking-price span {
+    font-size: 19px;
+    vertical-align: top;
+}
+
+.booking-price-note {
+    margin: 5px 0 0;
+    color: #93867e;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.booking-divider {
+    height: 1px;
+    margin: 20px 0;
+    background: #e8dccd;
+}
+
+.booking-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 13px;
+    color: #62524b;
+    font-size: 12px;
+}
+
+.booking-feature iconify-icon {
+    color: #9a702d;
+    font-size: 19px;
+}
+
+.check-availability-button,
+.contact-vendor-button {
+    width: 100%;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.check-availability-button {
+    border: 1px solid #86172e;
+    color: #fff;
+    background: #8d1b31;
+}
+
+.check-availability-button:hover {
+    background: #741326;
+}
+
+.contact-vendor-button {
+    border: 1px solid #ddc9a5;
+    color: #74162a;
+    background: #fff;
+}
+
+.contact-vendor-button:hover {
+    border-color: #8d1b31;
+    color: #fff;
+    background: #8d1b31;
+}
+
+.check-availability-button iconify-icon,
+.contact-vendor-button iconify-icon {
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+
+.listing-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: rgba(36, 8, 16, .94);
+}
+
+.listing-lightbox.show {
+    display: flex;
+}
+
+.listing-lightbox img {
+    max-width: min(1100px, 94vw);
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 22px;
+    right: 25px;
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+
+    color: #fff;
+    background: rgba(255,255,255,.1);
+
+    cursor: pointer;
+}
+
+.lightbox-close iconify-icon {
+    font-size: 23px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .listing-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .listing-booking-sidebar {
+        position: static;
+        order: -1;
+    }
+
+    .booking-card {
+        max-width: 100%;
+    }
+
+    .listing-main-image {
+        height: 430px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .listing-detail-page {
+        padding: 22px 15px 60px;
+    }
+
+    .listing-main-image {
+        height: 330px;
+        border-radius: 15px;
+    }
+
+    .listing-thumbnail-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .listing-thumbnail {
+        height: 58px;
+    }
+
+    .listing-title-section h1 {
+        font-size: 31px;
+    }
+
+    .detail-section {
+        padding: 23px 0;
+    }
+
+    .detail-section-heading h2 {
+        font-size: 19px;
+    }
+
+    .availability-period {
+        gap: 10px;
+    }
+
+    .availability-period > iconify-icon {
+        font-size: 16px;
+    }
+
+    .booking-card {
+        padding: 21px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .listing-detail-page {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 80px;
+    }
+
+    .listing-breadcrumb {
+        font-size: 11px;
+    }
+
+    .listing-main-image {
+        height: 260px;
+    }
+
+    .listing-thumbnail-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .listing-thumbnail {
+        height: 55px;
+    }
+
+    .listing-title-section h1 {
+        font-size: 27px;
+    }
+
+    .detail-section-heading h2 {
+        font-size: 18px;
+    }
+
+    .availability-period {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .availability-period > iconify-icon {
+        transform: rotate(90deg);
+    }
+
+    .address-box {
+        padding: 14px;
+    }
+}
+/* =========================================================
+   GUEST CAPACITY
+   ========================================================= */
+
+.guest-capacity-detail {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 0;
+    border: 0;
+    background: transparent;
+
+    color: #6d5b50;
+}
+
+.guest-capacity-detail strong {
+    color: #74162a;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.guest-capacity-detail span {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   MOBILE FIX - DETAIL SECTIONS
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .detail-section {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 14px;
+        padding: 18px 0;
+    }
+
+    .detail-section-heading {
+        min-width: 0;
+    }
+
+    .detail-section-heading h2 {
+        font-size: 18px;
+    }
+
+    .listing-description {
+        font-size: 14px;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    /* Services / Included tags */
+    .detail-tags {
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .detail-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        height: auto;
+        min-height: 32px;
+        padding: 6px 10px;
+        font-size: 12px;
+        line-height: 1.3;
+        max-width: 100%;
+    }
+
+    .detail-tag iconify-icon {
+        flex-shrink: 0;
+    }
+
+    /* Suitable For */
+    .event-type-list {
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .event-type-item {
+        min-width: 0;
+        flex: 0 1 auto;
+        padding: 9px 12px;
+    }
+
+    /* Guest capacity */
+    .guest-capacity-detail {
+        flex-wrap: wrap;
+    }
+
+    /* Address / vendor / availability */
+    .address-box,
+    .vendor-card,
+    .availability-period {
+        min-width: 0;
+    }
+
+    .address-content,
+    .vendor-info {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+}

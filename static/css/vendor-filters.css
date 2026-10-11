@@ -1,0 +1,694 @@
+/* =========================================================
+   VENDOR FILTERS
+========================================================= */
+
+.vendor-filters {
+    width: 100%;
+    max-width: 300px;
+    background: #fffdf9;
+    border: 1px solid #eadfe1;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(67, 14, 28, .07);
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.vendor-filters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 14px 15px;
+    background: #fff8ed;
+    border-bottom: 1px solid #eadfe1;
+}
+
+.vendor-filters-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.vendor-filters-title-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #670a1b;
+    color: #f5d77b;
+    font-size: 16px;
+}
+
+.vendor-filters-title h2 {
+    margin: 0;
+    color: #670a1b;
+    font-family: var(--display);
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.vendor-filters-title p {
+    margin: 2px 0 0;
+    color: #5d5052;
+    font-size: .67rem;
+    line-height: 1.2;
+}
+
+.vendor-filters-clear {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #795814;
+    font-size: .69rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.vendor-filters-clear:hover {
+    color: #670a1b;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.filter-section {
+    padding: 13px 15px;
+    border-bottom: 1px solid #e9dfe1;
+}
+
+.filter-section:last-of-type {
+    border-bottom: 0;
+}
+
+.filter-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 9px;
+}
+
+.filter-heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9a6f20;
+    font-size: 16px;
+}
+
+.filter-section-heading h3 {
+    margin: 0;
+    color: #5a101f;
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .01em;
+}
+
+
+/* =========================================================
+   CITY
+========================================================= */
+
+.filter-city-box {
+    width: 100%;
+}
+
+.filter-select {
+    width: 100%;
+    min-height: 37px;
+    padding: 0 32px 0 10px;
+    border: 1px solid #d8cacc;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    color: #3f3638;
+    font-family: inherit;
+    font-size: .75rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    border-color: #8d5360;
+    box-shadow: 0 0 0 2px rgba(103, 10, 27, .07);
+}
+
+.filter-map-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #795814;
+    font-size: .69rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.filter-map-button:hover {
+    color: #670a1b;
+}
+
+
+/* =========================================================
+   OPTIONS
+========================================================= */
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 19px;
+    cursor: pointer;
+}
+
+.filter-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.filter-check {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #c6b5b8;
+    border-radius: 3px;
+    background: #fff;
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+.filter-option input[type="radio"] + .filter-check {
+    border-radius: 50%;
+}
+
+.filter-option input:checked + .filter-check {
+    border-color: #670a1b;
+    background: #670a1b;
+    box-shadow: 0 2px 5px rgba(103, 10, 27, .14);
+}
+
+.filter-option input:checked + .filter-check::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.filter-option input[type="checkbox"]:checked + .filter-check::after {
+    width: 6px;
+    height: 3px;
+    border: solid #fff;
+    border-width: 0 0 1.5px 1.5px;
+    border-radius: 0;
+    background: transparent;
+    transform: rotate(-45deg) translateY(-1px);
+}
+
+.filter-option-text {
+    color: #3f3638;
+    font-size: .75rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.filter-option:hover .filter-option-text {
+    color: #670a1b;
+}
+
+.filter-option-text strong {
+    color: #795814;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   SUBSECTIONS
+========================================================= */
+
+.filter-subsection {
+    margin-top: 12px;
+}
+
+.filter-subsection:first-of-type {
+    margin-top: 0;
+}
+
+.filter-subheading {
+    margin-bottom: 6px;
+    color: #5d5052;
+    font-size: .64rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.filter-price-values {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 6px;
+}
+
+.filter-price-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.filter-price-field span {
+    color: #514346;
+    font-size: .66rem;
+    font-weight: 700;
+}
+
+.filter-price-field input {
+    width: 100%;
+    height: 34px;
+    padding: 0 7px;
+    border: 1px solid #d5c7ca;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    color: #332b2d;
+    font-family: inherit;
+    font-size: .73rem;
+    font-weight: 500;
+}
+
+.filter-price-field input:focus {
+    border-color: #8d5360;
+    box-shadow: 0 0 0 2px rgba(103, 10, 27, .07);
+}
+
+.filter-price-divider {
+    padding-bottom: 8px;
+    color: #8f7e81;
+    font-size: .72rem;
+}
+
+.filter-price-range-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+    color: #795814;
+    font-size: .64rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.filter-actions {
+    padding: 12px 15px 14px;
+    background: #fff8ed;
+    border-top: 1px solid #e9dfe1;
+}
+
+.filter-apply-button {
+    width: 100%;
+    min-height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid #741027;
+    border-radius: 7px;
+    background: linear-gradient(
+        135deg,
+        #670a1b,
+        #811027
+    );
+    color: #fffaf2;
+    font-family: inherit;
+    font-size: .72rem;
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow: 0 4px 11px rgba(103, 10, 27, .14);
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.filter-apply-button iconify-icon {
+    font-size: 14px;
+    transition: transform .18s ease;
+}
+
+.filter-apply-button:hover {
+    background: linear-gradient(
+        135deg,
+        #7c0e23,
+        #94142e
+    );
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(103, 10, 27, .18);
+}
+
+.filter-apply-button:hover iconify-icon {
+    transform: translateX(2px);
+}
+
+.filter-apply-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .vendor-filters {
+        max-width: 100%;
+        border-radius: 12px;
+    }
+
+    .vendor-filters-header {
+        padding: 12px 14px;
+    }
+
+    .filter-section {
+        padding: 11px 14px;
+    }
+
+    .filter-actions {
+        padding: 11px 14px 13px;
+    }
+}
+
+
+/* =========================================================
+   DESKTOP: mobile elements hidden
+   ========================================================= */
+
+.vendor-filters-trigger,
+.vendor-filters-overlay,
+.vendor-filters-close {
+    display: none;
+}
+
+.vendor-filters-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =========================================================
+   MOBILE / TABLET: BOTTOM SHEET
+   (breakpoint wahi rakho jahan tumhara search page single column hota hai)
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    /* ---------- Trigger button ---------- */
+
+    .vendor-filters-trigger {
+        width: 100%;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 14px;
+
+        border: 1px solid #e3d3c6;
+        border-radius: 12px;
+        background: #fffdf9;
+        color: #670a1b;
+
+        font-family: inherit;
+        font-size: .82rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(67, 14, 28, .07);
+    }
+
+    .vendor-filters-trigger iconify-icon {
+        font-size: 18px;
+        color: #9a6f20;
+    }
+
+    .vendor-filters-trigger-arrow {
+        margin-left: auto;
+    }
+
+    .vendor-filters-count {
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #670a1b;
+        color: #fff;
+        font-size: .68rem;
+        font-weight: 700;
+    }
+
+    .vendor-filters-count[hidden] {
+        display: none;
+    }
+
+
+    /* ---------- Overlay ---------- */
+
+    .vendor-filters-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        background: rgba(30, 5, 12, .55);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .25s ease;
+    }
+
+    .vendor-filters-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+
+    /* ---------- Sheet ---------- */
+
+    .vendor-filters {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2001;
+
+        width: 100%;
+        max-width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+
+        border-radius: 18px 18px 0 0;
+        border-bottom: 0;
+
+        transform: translateY(100%);
+        visibility: hidden;
+        transition:
+            transform .3s ease,
+            visibility .3s ease;
+    }
+
+    .vendor-filters.open {
+        transform: translateY(0);
+        visibility: visible;
+    }
+
+    .vendor-filters-header {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+    }
+
+    .vendor-filters-close {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 50%;
+        background: #f1e6dc;
+        color: #670a1b;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .filter-actions {
+        position: sticky;
+        bottom: 0;
+        z-index: 3;
+    }
+
+    /* mobile pe thoda bada tap area */
+    .filter-option {
+        min-height: 28px;
+    }
+
+    .filter-select,
+    .filter-price-field input {
+        font-size: 16px;   /* iPhone pe zoom nahi hoga */
+    }
+}
+
+
+/* =========================================================
+   CUSTOM CITY DROPDOWN
+   ========================================================= */
+
+.filter-select-wrap {
+    position: relative;
+}
+
+.filter-select.is-enhanced {
+    display: none;
+}
+
+.filter-dd-btn {
+    position: relative;
+    width: 100%;
+    min-height: 37px;
+    padding: 0 32px 0 10px;
+    box-sizing: border-box;
+
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    border: 1px solid #d8cacc;
+    border-radius: 7px;
+    background: #fff;
+    color: #3f3638;
+
+    font-family: inherit;
+    font-size: .75rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.filter-dd-btn::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border: solid #670a1b;
+    border-width: 0 1.5px 1.5px 0;
+    transform: translateY(-70%) rotate(45deg);
+}
+
+.filter-dd-btn:focus,
+.filter-dd-btn:hover {
+    border-color: #8d5360;
+    outline: none;
+}
+
+.filter-dd-panel {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    display: none;
+
+    border: 1px solid #d8cacc;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 12px 26px rgba(67, 14, 28, .18);
+    overflow: hidden;
+}
+
+.filter-dd-panel.show {
+    display: block;
+}
+
+.filter-dd-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 11px;
+    border: 0;
+    border-bottom: 1px solid #eadfe1;
+    outline: none;
+    font-family: inherit;
+    font-size: 16px;      /* iPhone zoom rokne ke liye */
+    color: #3f3638;
+}
+
+.filter-dd-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+}
+
+.filter-dd-list li {
+    padding: 9px 10px;
+    border-radius: 6px;
+    color: #3f3638;
+    font-size: .78rem;
+    cursor: pointer;
+}
+
+.filter-dd-list li:hover,
+.filter-dd-list li.selected {
+    background: #f8eadb;
+    color: #670a1b;
+}
+
+.filter-dd-list li.empty {
+    color: #8f7e81;
+    cursor: default;
+}
+
+.filter-dd-list li.empty:hover {
+    background: transparent;
+}
+
+.filter-select-wrap > select.filter-select.is-enhanced {
+    display: none !important;
+}

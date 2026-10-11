@@ -1,0 +1,395 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ category.name }} | WedBook
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/category-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="category-page">
+
+    <!-- =========================================
+         BREADCRUMB
+    ========================================== -->
+
+    <div class="category-container">
+
+        <div class="category-breadcrumb">
+            <a href="{% url 'core:home' %}">
+                Home
+            </a>
+
+            <span>/</span>
+
+            <span>Categories</span>
+
+            <span>/</span>
+
+            <strong>{{ category.name }}</strong>
+        </div>
+
+
+        <!-- =========================================
+             CATEGORY HERO
+        ========================================== -->
+
+        <section class="category-hero">
+
+            <div class="category-hero-content">
+
+                <span class="category-eyebrow">
+                    WEDBOOK CATEGORY
+                </span>
+
+                <h1>
+                    {{ category.name }}
+                    <span>Services</span>
+                </h1>
+
+                <p>
+                    Find trusted {{ category.name|lower }}
+                    vendors and services for your special event.
+                    Compare options, explore services and choose
+                    what fits your celebration.
+                </p>
+
+                <div class="category-hero-stats">
+
+                    <div class="category-stat">
+                        <strong>{{ listings|length }}</strong>
+                        <span>Vendors</span>
+                    </div>
+
+                    <div class="category-stat">
+                        <strong>{{ services|length }}</strong>
+                        <span>Services</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="category-hero-visual">
+
+                {% if category.icon %}
+                    <img
+                        src="{{ category.icon.url }}"
+                        alt="{{ category.name }}"
+                    >
+                {% else %}
+                    <div class="category-placeholder-icon">
+                        <iconify-icon
+                            icon="mdi:storefront-outline">
+                        </iconify-icon>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             SERVICES
+        ========================================== -->
+
+        {% if services %}
+
+        <section class="category-services-section">
+
+            <div class="category-section-heading">
+
+                <div>
+                    <span class="section-eyebrow">
+                        EXPLORE SERVICES
+                    </span>
+
+                    <h2>
+                        What are you looking for?
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="category-services-grid">
+
+                {% for service in services %}
+
+                    <a
+                        href="{% url 'listings:search' %}?category={{ category.slug }}&service={{ service.slug }}"
+                        class="category-service-card"
+                    >
+
+                        <div class="service-card-icon">
+                            <iconify-icon
+                                icon="mdi:check-decagram-outline">
+                            </iconify-icon>
+                        </div>
+
+                        <div class="service-card-content">
+
+                            <h3>
+                                {{ service.name }}
+                            </h3>
+
+                            <span>
+                                Explore vendors
+                                <iconify-icon
+                                    icon="mdi:arrow-right">
+                                </iconify-icon>
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+<!-- =========================================
+     VENDOR DISCOVERY
+========================================= -->
+
+<section class="category-detail-vendors">
+
+    <div class="category-detail-section-heading">
+
+        <div>
+            <span class="category-detail-section-eyebrow">
+                FEATURED VENDORS
+            </span>
+
+            <h2>
+                {{ category.name }} vendors
+            </h2>
+
+            <p>
+                Explore businesses offering
+                {{ category.name|lower }} services.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'listings:search' %}?category={{ category.slug }}"
+            class="category-detail-view-all"
+        >
+            View All
+            <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+        </a>
+
+    </div>
+
+
+    <div class="category-detail-vendor-layout">
+
+        <!-- FILTER -->
+
+        <aside class="search-filter-sidebar">
+            
+            {% include "listings/vendor_filters.html" %}
+
+        </aside>
+
+
+        <!-- RESULTS -->
+
+        <div class="category-detail-results">
+
+            <div class="category-detail-results-toolbar">
+
+                <span>
+                    {{ listings|length }}
+                    {% if listings|length == 1 %}
+                        vendor
+                    {% else %}
+                        vendors
+                    {% endif %}
+                    available
+                </span>
+
+                <select class="category-detail-sort">
+
+                    <option>Recommended</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Newest</option>
+
+                </select>
+
+            </div>
+
+
+            {% if listings %}
+
+                <div class="category-detail-vendor-grid">
+
+                    {% for listing in listings %}
+
+                        <a
+                            href="{% url 'listings:listing_detail' listing.id %}"
+                            class="category-detail-vendor-card"
+                        >
+
+                            <!-- IMAGE -->
+
+                            <div class="category-detail-card-image">
+
+                                {% if listing.cover_image %}
+
+                                    <img
+                                        src="{{ listing.cover_image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+
+                                {% else %}
+
+                                    <div class="category-detail-image-placeholder">
+
+                                        <iconify-icon
+                                            icon="mdi:image-outline"
+                                        ></iconify-icon>
+
+                                    </div>
+
+                                {% endif %}
+
+                                <span class="category-detail-card-category">
+                                    {{ category.name }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- CONTENT -->
+
+                            <div class="category-detail-card-content">
+
+                                <h3>
+                                    {{ listing.title }}
+                                </h3>
+
+
+                                <div class="category-detail-location">
+
+                                    <iconify-icon
+                                        icon="mdi:map-marker-outline"
+                                    ></iconify-icon>
+
+                                    <span>
+                                        {{ listing.city.name }},
+                                        {{ listing.state.code }}
+                                    </span>
+
+                                </div>
+
+
+                                {% if listing.services.all %}
+
+                                    <div class="category-detail-services">
+
+                                        {% for service in listing.services.all|slice:":3" %}
+
+                                            <span>
+                                                {{ service.name }}
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="category-detail-card-bottom">
+
+                                    <div class="category-detail-price">
+
+                                        <small>
+                                            Starting from
+                                        </small>
+
+                                        <strong>
+                                            ₹{{ listing.base_price|floatformat:0 }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <span class="category-detail-view-button">
+
+                                        View Details
+
+                                        <iconify-icon
+                                            icon="mdi:arrow-right"
+                                        ></iconify-icon>
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="category-detail-empty">
+
+                    <div class="category-detail-empty-icon">
+
+                        <iconify-icon
+                            icon="mdi:store-search-outline"
+                        ></iconify-icon>
+
+                    </div>
+
+                    <h3>
+                        No vendors available yet
+                    </h3>
+
+                    <p>
+                        We don't have any
+                        {{ category.name|lower }}
+                        vendors listed at the moment.
+                    </p>
+
+                    <a
+                        href="{% url 'listings:search' %}"
+                        class="category-detail-empty-button"
+                    >
+                        Explore All Vendors
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+    </div>
+
+</section>
+
+{% endblock %}

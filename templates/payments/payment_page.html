@@ -1,0 +1,777 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment | WedBook{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/payment.css' %}"
+>
+{% endblock %}
+
+{% block content %}
+
+<main class="payment-page">
+
+    <!-- ================= HERO ================= -->
+
+    <section class="payment-hero">
+
+        <div class="payment-container">
+
+            <div class="payment-breadcrumb">
+
+                <a href="{% url 'bookings:review_booking' %}">
+                    Review Booking
+                </a>
+
+                <span>›</span>
+
+                <strong>Payment</strong>
+
+            </div>
+
+            <div class="payment-heading">
+
+                <span class="payment-eyebrow">
+                    SECURE CHECKOUT
+                </span>
+
+                <h1>
+                    Complete Your Payment
+                </h1>
+
+                <p>
+                    Your booking is almost complete.
+                    Review the amount and continue with secure payment.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <section class="payment-content">
+
+        <div class="payment-container">
+
+            <div class="payment-layout">
+
+
+                <!-- ================= LEFT ================= -->
+
+                <div class="payment-main">
+
+
+                    <!-- LISTING -->
+
+                    <section class="payment-card">
+
+                        <div class="payment-card-heading">
+
+                            <div class="payment-section-icon">
+
+                                <span
+                                    class="iconify"
+                                    data-icon="solar:buildings-2-linear">
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Selected Listing
+                                </h2>
+
+                                <p>
+                                    The service you are booking.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-listing">
+
+                            <div class="payment-listing-image">
+
+                                {% if listing.cover_image %}
+
+                                    <img
+                                        src="{{ listing.cover_image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+
+                                {% elif listing.images.first %}
+
+                                    <img
+                                        src="{{ listing.images.first.image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+
+                                {% else %}
+
+                                    <span
+                                        class="iconify"
+                                        data-icon="solar:gallery-wide-linear">
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="payment-listing-info">
+
+                                <span>
+                                    {{ listing.category.name }}
+                                </span>
+
+                                <h3>
+                                    {{ listing.title }}
+                                </h3>
+
+                                {% if listing.vendor.business_name %}
+
+                                    <p>
+
+                                        <span
+                                            class="iconify"
+                                            data-icon="solar:shop-2-linear">
+                                        </span>
+
+                                        {{ listing.vendor.business_name }}
+
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- EVENT DETAILS -->
+
+                    <section class="payment-card">
+
+                        <div class="payment-card-heading">
+
+                            <div class="payment-section-icon">
+
+                                <span
+                                    class="iconify"
+                                    data-icon="solar:calendar-mark-linear">
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Event Details
+                                </h2>
+
+                                <p>
+                                    Details submitted for this booking.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-details-grid">
+
+
+                            <!-- EVENT DATES -->
+
+                            <div class="payment-detail">
+
+                                <span>
+
+                                    <span
+                                        class="iconify"
+                                        data-icon="solar:calendar-linear">
+                                    </span>
+
+                                    Event Dates
+
+                                </span>
+
+                                <strong>
+
+                                    {{ start_date|date:"d M Y" }}
+
+                                    {% if end_date != start_date %}
+
+                                        <small>
+                                            to
+                                        </small>
+                                        {{ end_date|date:"d M Y" }}
+
+                                    {% endif %}
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- GUESTS -->
+
+                            <div class="payment-detail">
+
+                                <span>
+
+                                    <span
+                                        class="iconify"
+                                        data-icon="solar:users-group-rounded-linear">
+                                    </span>
+
+                                    Guests
+
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.guest_count }}
+                                </strong>
+
+                            </div>
+
+
+                            <!-- CUSTOMER -->
+
+                            <div class="payment-detail">
+
+                                <span>
+
+                                    <span
+                                        class="iconify"
+                                        data-icon="solar:user-linear">
+                                    </span>
+
+                                    Customer
+
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.full_name }}
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- CUSTOMER CONTACT -->
+
+                    <section class="payment-card">
+
+                        <div class="payment-card-heading">
+
+                            <div class="payment-section-icon">
+
+                                <span
+                                    class="iconify"
+                                    data-icon="solar:phone-linear">
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Contact Details
+                                </h2>
+
+                                <p>
+                                    Details associated with this booking.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="contact-list">
+
+                            <div>
+
+                                <span
+                                    class="iconify"
+                                    data-icon="solar:phone-linear">
+                                </span>
+
+                                <span>
+                                    {{ booking_data.phone_number }}
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <span
+                                    class="iconify"
+                                    data-icon="solar:letter-linear">
+                                </span>
+
+                                <span>
+                                    {{ booking_data.email }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- SECURE INFO -->
+
+                    <div class="payment-security-note">
+
+                        <div class="security-icon">
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:shield-check-bold">
+                            </span>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Secure Razorpay Checkout
+                            </strong>
+
+                            <p>
+                                Your payment details are handled securely
+                                by Razorpay. WedBook does not store your
+                                card or UPI credentials.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ================= RIGHT ================= -->
+
+                <aside class="payment-sidebar">
+
+
+                    <section class="payment-summary-card">
+
+                        <div class="summary-top">
+
+                            <span>
+                                PAYMENT SUMMARY
+                            </span>
+
+                            <h2>
+                                Complete Booking
+                            </h2>
+
+                        </div>
+
+
+                        <div class="summary-listing">
+
+                            <div>
+
+                                <span>
+                                    Listing
+                                </span>
+
+                                <strong>
+                                    {{ listing.title }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Booking Amount
+                            </span>
+
+                            <strong>
+                                ₹{{ amount|floatformat:2 }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-divider"></div>
+
+
+                        <div class="summary-total">
+
+                            <span>
+                                Total Payable
+                            </span>
+
+                            <strong>
+                                ₹{{ amount|floatformat:2 }}
+                            </strong>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="payButton"
+                            class="pay-button"
+                        >
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:card-2-bold">
+                            </span>
+
+                            <span>
+                                Pay ₹{{ amount|floatformat:2 }}
+                            </span>
+
+                            <span
+                                class="iconify arrow"
+                                data-icon="solar:arrow-right-bold">
+                            </span>
+
+                        </button>
+
+
+                        <p class="payment-method-note">
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:lock-keyhole-minimalistic-linear">
+                            </span>
+
+                            Cards, UPI & supported payment methods
+
+                        </p>
+
+                    </section>
+
+
+                    <div class="payment-steps">
+
+                        <div class="payment-step active">
+
+                            <span>
+                                1
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Review
+                                </strong>
+
+                                <small>
+                                    Booking details
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-step current">
+
+                            <span>
+                                2
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Payment
+                                </strong>
+
+                                <small>
+                                    Secure checkout
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-step">
+
+                            <span>
+                                3
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Confirmation
+                                </strong>
+
+                                <small>
+                                    Booking confirmed
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </aside>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= ICONIFY ================= -->
+
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+
+<!-- ================= RAZORPAY ================= -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const payButton =
+            document.getElementById("payButton");
+
+
+        payButton.addEventListener(
+            "click",
+            function () {
+
+                payButton.disabled = true;
+
+                payButton.classList.add(
+                    "is-loading"
+                );
+
+
+                const options = {
+
+                    key: "{{ razorpay_key_id }}",
+
+                    amount: "{{ amount_paise }}",
+
+                    currency: "INR",
+
+                    name: "WedBook",
+
+                    description:
+                        "{{ listing.title|escapejs }}",
+
+                    order_id:
+                        "{{ razorpay_order_id }}",
+
+
+                    prefill: {
+
+                        name:
+                            "{{ booking_data.full_name|escapejs }}",
+
+                        email:
+                            "{{ booking_data.email|escapejs }}",
+
+                        contact:
+                            "{{ booking_data.phone_number|escapejs }}"
+
+                    },
+
+
+                    theme: {
+
+                        color: "#8e1b32"
+
+                    },
+
+
+                    handler: function (response) {
+
+                        const formData =
+                            new FormData();
+
+
+                        formData.append(
+                            "csrfmiddlewaretoken",
+                            "{{ csrf_token }}"
+                        );
+
+
+                        formData.append(
+                            "razorpay_order_id",
+                            response.razorpay_order_id
+                        );
+
+
+                        formData.append(
+                            "razorpay_payment_id",
+                            response.razorpay_payment_id
+                        );
+
+
+                        formData.append(
+                            "razorpay_signature",
+                            response.razorpay_signature
+                        );
+
+
+                        fetch(
+                            "{% url 'payments:verify_payment' %}",
+                            {
+                                method: "POST",
+
+                                body: formData,
+
+                                headers: {
+                                    "X-Requested-With":
+                                        "XMLHttpRequest"
+                                }
+                            }
+                        )
+
+                        .then(
+                            response => response.json()
+                        )
+
+                        .then(
+                            data => {
+
+                                if (data.success) {
+
+                                    window.location.href =
+                                        data.redirect_url;
+
+                                } else {
+
+                                    alert(
+                                        data.message ||
+                                        "Payment verification failed."
+                                    );
+
+                                    payButton.disabled =
+                                        false;
+
+                                    payButton.classList.remove(
+                                        "is-loading"
+                                    );
+
+                                }
+
+                            }
+                        )
+
+                        .catch(
+                            function () {
+
+                                alert(
+                                    "Something went wrong while verifying payment."
+                                );
+
+                                payButton.disabled =
+                                    false;
+
+                                payButton.classList.remove(
+                                    "is-loading"
+                                );
+
+                            }
+                        );
+
+                    },
+
+
+                    modal: {
+
+                        ondismiss: function () {
+
+                            payButton.disabled =
+                                false;
+
+                            payButton.classList.remove(
+                                "is-loading"
+                            );
+
+                        }
+
+                    }
+
+                };
+
+
+                const razorpay =
+                    new Razorpay(options);
+
+
+                razorpay.on(
+                    "payment.failed",
+                    function (response) {
+
+                        console.error(
+                            response.error
+                        );
+
+                        alert(
+                            response.error.description ||
+                            "Payment failed. Please try again."
+                        );
+
+                        payButton.disabled =
+                            false;
+
+                        payButton.classList.remove(
+                            "is-loading"
+                        );
+
+                    }
+                );
+
+
+                razorpay.open();
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

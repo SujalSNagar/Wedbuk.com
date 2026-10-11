@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Complete Your Vendor Profile | WedBook{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor-onboarding.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="vendor-onboarding-section">
+
+    <div class="vendor-onboarding-container">
+
+        <div class="vendor-onboarding-card">
+
+            <!-- Brand -->
+            <div class="vendor-onboarding-brand">
+                <span class="vendor-onboarding-ring">
+                    <span class="vendor-onboarding-gem"></span>
+                </span>
+
+                <span>WedBook</span>
+            </div>
+
+
+            <!-- Heading -->
+            <div class="vendor-onboarding-heading">
+
+                <div class="vendor-step-label">
+                    VENDOR PROFILE
+                </div>
+
+                <h1>Tell Us About Your Business</h1>
+
+                <p>
+                    Complete your vendor profile so couples can discover
+                    your services on WedBook.
+                </p>
+
+            </div>
+
+
+            <!-- Form -->
+            <form
+                method="post"
+                class="vendor-onboarding-form"
+                id="vendorOnboardingForm"
+                data-cities-url="{% url 'vendors:cities_by_state' %}"
+            >
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+                    <div class="vendor-form-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+
+                <!-- Business Information -->
+                <div class="vendor-form-section">
+
+                    <div class="vendor-section-heading">
+
+                        <span class="vendor-section-number">
+                            01
+                        </span>
+
+                        <div>
+                            <h2>Business Information</h2>
+                            <p>
+                                Tell couples where and under what name
+                                your business operates.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="vendor-form-grid">
+
+                        <!-- Business Name -->
+                        <div class="vendor-form-group vendor-full-width">
+
+                            <label for="{{ form.business_name.id_for_label }}">
+                                Business Name
+                            </label>
+
+                            <div class="vendor-input-wrapper">
+
+                                <span class="vendor-input-icon">
+                                    ◈
+                                </span>
+
+                                {{ form.business_name }}
+
+                            </div>
+
+                            {% if form.business_name.errors %}
+                                <div class="vendor-field-error">
+                                    {{ form.business_name.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- City -->
+<div class="vendor-form-group">
+    <label for="{{ form.state.id_for_label }}">State</label>
+
+<div class="vendor-input-wrapper">
+    <span class="vendor-input-icon">⌖</span>
+
+    {{ form.state }}
+
+    <span class="vendor-select-arrow">
+        <iconify-icon icon="mdi:chevron-down"></iconify-icon>
+    </span>
+</div>
+
+    {% if form.state.errors %}
+        <div class="vendor-field-error">
+            {{ form.state.errors }}
+        </div>
+    {% endif %}
+</div>
+
+
+<div class="vendor-form-group">
+    <label for="{{ form.city.id_for_label }}">City</label>
+
+<div class="vendor-input-wrapper">
+    <span class="vendor-input-icon">⌖</span>
+
+    {{ form.city }}
+
+    <span class="vendor-select-arrow">
+        <iconify-icon icon="mdi:chevron-down"></iconify-icon>
+    </span>
+</div>
+
+    {% if form.city.errors %}
+        <div class="vendor-field-error">
+            {{ form.city.errors }}
+        </div>
+    {% endif %}
+</div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Services -->
+                <div class="vendor-form-section vendor-services-section">
+
+                    <div class="vendor-section-heading">
+
+                        <span class="vendor-section-number">
+                            02
+                        </span>
+
+                        <div>
+                            <h2>Categories You Provide</h2>
+
+                            <p>
+                                Select all the Categories your business
+                                currently offers.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="services-grid">
+
+                        {% for checkbox in form.categories %}
+
+                            <label class="service-option">
+
+                                {{ checkbox.tag }}
+
+                                <span class="service-option-content">
+
+                                    <span class="service-check">
+                                        ✓
+                                    </span>
+
+                                    <span class="service-name">
+                                        {{ checkbox.choice_label }}
+                                    </span>
+
+                                </span>
+
+                            </label>
+
+                        {% empty %}
+
+                            <div class="no-services-message">
+
+                                <strong>No Category available yet.</strong>
+
+                                <p>
+                                    Please ask the administrator to add
+                                    vendor services before completing
+                                    your profile.
+                                </p>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    {% if form.services.errors %}
+                        <div class="vendor-field-error services-error">
+                            {{ form.categories.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Submit -->
+                <div class="vendor-onboarding-actions">
+
+                    <button
+                        type="submit"
+                        class="vendor-onboarding-submit"
+                    >
+                        Continue to Dashboard
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- Bottom note -->
+            <div class="vendor-onboarding-note">
+
+                <span>✦</span>
+
+                You can update your business information and services
+                later from your vendor dashboard.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script src="{% static 'js/vendor-onboarding.js' %}"></script>
+{% endblock %}

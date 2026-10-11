@@ -1,0 +1,601 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    WedBook — Your Matches
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/budget-results.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="budget-results-page">
+
+    <div class="container">
+
+        <div class="budget-results-header">
+
+            <div>
+
+                <div class="eyebrow eyebrow-gold">
+                    WEDBOOK MATCHES
+                </div>
+
+                <h1>
+                    Options That Fit Your Plan
+                </h1>
+
+                <p>
+                    We found options based on your location,
+                    guest count, budget and selected services.
+                </p>
+
+            </div>
+
+            <a
+                href="{% url 'core:home' %}#budget-planner"
+                class="budget-edit-link"
+            >
+                ← Edit Planner
+            </a>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+<div class="budget-result-summary">
+
+    <div>
+        <span>Budget</span>
+
+        <strong>
+            ₹{{ budget_amount|floatformat:0 }}
+        </strong>
+    </div>
+
+
+    <div>
+        <span>Guests</span>
+
+        <strong>
+            {{ guest_count }}
+        </strong>
+    </div>
+
+
+    {% if selected_date %}
+
+        <div>
+            <span>Date</span>
+
+            <strong>
+                {% if selected_date %}
+
+    {% if selected_end_date and selected_end_date != selected_date %}
+
+        {{ selected_date|date:"d M Y" }}
+        –
+        {{ selected_end_date|date:"d M Y" }}
+
+    {% else %}
+
+        {{ selected_date|date:"d M Y" }}
+
+    {% endif %}
+
+{% else %}
+
+    Any date
+
+{% endif %}
+            </strong>
+        </div>
+
+    {% endif %}
+
+
+    <div>
+        <span>Matches</span>
+
+        <strong>
+            {{ total_matches }}
+        </strong>
+    </div>
+
+</div>
+
+
+        <!-- LISTINGS -->
+
+        {% if listings %}
+
+            <section class="result-section">
+
+                <div class="result-section-heading">
+
+                    <div>
+
+                        <div class="eyebrow eyebrow-gold">
+                            MATCHING SERVICES
+                        </div>
+
+                        <h2>
+                            Services For You
+                        </h2>
+
+                    </div>
+
+                    <span class="result-count">
+                        {{ listings|length }} matches
+                    </span>
+
+                </div>
+
+
+                <div class="budget-result-grid">
+
+{% for listing in listings %}
+
+    <a
+        href="{% url 'listings:listing_detail' listing.id %}"
+        class="budget-result-card"
+    >
+
+        <div class="budget-result-image">
+
+            {% if listing.cover_image %}
+                <img
+                    src="{{ listing.cover_image.url }}"
+                    alt="{{ listing.title }}"
+                >
+            {% else %}
+                <div class="budget-result-placeholder">
+                    WedBook
+                </div>
+            {% endif %}
+
+        </div>
+
+
+        <div class="budget-result-body">
+
+            <span class="budget-result-category">
+                {{ listing.category.name }}
+            </span>
+
+            <h3>
+                {{ listing.title }}
+            </h3>
+
+            <p class="budget-result-vendor">
+                {{ listing.vendor.business_name }}
+            </p>
+
+
+            <!-- LOCATION -->
+            <div class="budget-result-location">
+                <iconify-icon
+                    icon="mdi:map-marker-outline"
+                ></iconify-icon>
+
+                {{ listing.city.name }}
+            </div>
+
+
+            <!-- GUEST CAPACITY -->
+            {% if listing.min_guests or listing.max_guests %}
+
+                <div class="budget-result-capacity">
+
+                    <iconify-icon
+                        icon="mdi:account-group-outline"
+                    ></iconify-icon>
+
+                    <span>
+                        {% if listing.min_guests and listing.max_guests %}
+                            {{ listing.min_guests }}–{{ listing.max_guests }} guests
+
+                        {% elif listing.max_guests %}
+                            Up to {{ listing.max_guests }} guests
+
+                        {% elif listing.min_guests %}
+                            From {{ listing.min_guests }} guests
+                        {% endif %}
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- SERVICES -->
+            {% if listing.services.all %}
+
+                <div class="budget-result-services">
+
+                    {% for service in listing.services.all|slice:":4" %}
+
+                        <span>
+                            {{ service.name }}
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- FOOTER -->
+            <div class="budget-result-meta">
+
+                <strong>
+                    ₹{{ listing.base_price|floatformat:0 }}
+                </strong>
+
+                <span class="budget-result-view">
+                    View Details
+                    <iconify-icon
+                        icon="mdi:arrow-right"
+                    ></iconify-icon>
+                </span>
+
+            </div>
+
+        </div>
+
+    </a>
+
+{% endfor %}
+
+                </div>
+
+            </section>
+
+        {% endif %}
+
+
+        <!-- PACKAGES -->
+
+        {% if packages %}
+
+            <section class="result-section">
+
+                <div class="result-section-heading">
+
+                    <div>
+
+                        <div class="eyebrow eyebrow-gold">
+                            COMPLETE SOLUTIONS
+                        </div>
+
+                        <h2>
+                            Packages That Fit
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="budget-package-grid">
+
+{% for package in packages %}
+
+    <article class="budget-package-card">
+
+        <div class="budget-package-image">
+
+            {% if package.cover_image %}
+
+                <img
+                    src="{{ package.cover_image.url }}"
+                    alt="{{ package.title }}"
+                >
+
+            {% else %}
+
+                <div class="budget-result-placeholder">
+                    WedBook
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="budget-package-body">
+
+            <span class="package-label">
+                PACKAGE
+            </span>
+
+            <h3>
+                {{ package.title }}
+            </h3>
+
+            <p class="budget-package-vendor">
+                {{ package.vendor.business_name }}
+            </p>
+
+
+            <!-- GUEST CAPACITY -->
+            {% if package.min_guests or package.max_guests %}
+
+                <div class="budget-result-capacity">
+
+                    <iconify-icon
+                        icon="mdi:account-group-outline"
+                    ></iconify-icon>
+
+                    <span>
+
+                        {% if package.min_guests and package.max_guests %}
+                            {{ package.min_guests }}–{{ package.max_guests }} guests
+
+                        {% elif package.max_guests %}
+                            Up to {{ package.max_guests }} guests
+
+                        {% elif package.min_guests %}
+                            From {{ package.min_guests }} guests
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- PACKAGE CATEGORIES + SERVICES -->
+            {% if package.package_categories.all %}
+
+                <div class="budget-package-services">
+
+                    {% for package_category in package.package_categories.all %}
+
+                        <div class="package-service-group">
+
+                            <strong>
+                                {{ package_category.category.name }}
+                            </strong>
+
+                            {% for service in package_category.services.all|slice:":4" %}
+
+                                <span>
+                                    {{ service.name }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- DESCRIPTION -->
+            {% if package.description %}
+
+                <p class="budget-package-description">
+                    {{ package.description|truncatewords:18 }}
+                </p>
+
+            {% endif %}
+
+
+            <!-- FOOTER -->
+            <div class="package-result-footer">
+
+                <strong>
+                    ₹{{ package.price|floatformat:0 }}
+                </strong>
+
+                <span class="budget-result-view">
+                    View Details
+                    <iconify-icon
+                        icon="mdi:arrow-right"
+                    ></iconify-icon>
+                </span>
+
+            </div>
+
+        </div>
+
+    </article>
+
+{% endfor %}
+
+                </div>
+
+            </section>
+
+        {% endif %}
+
+
+        {% if not listings and not packages and suggested_budget %}
+
+    <div class="budget-suggestion">
+
+        <div class="budget-suggestion-icon">
+
+            <iconify-icon
+                icon="mdi:lightbulb-on-outline">
+            </iconify-icon>
+
+        </div>
+
+
+        <div class="budget-suggestion-content">
+
+            <div class="budget-suggestion-label">
+                A LITTLE MORE BUDGET
+            </div>
+
+
+            <h3>
+                We found better options with a slightly higher budget
+            </h3>
+
+
+            <p>
+
+                Your current budget is
+                <strong>
+                    ₹{{ budget_amount|floatformat:0 }}
+                </strong>.
+
+                We couldn't find a matching option within this
+                budget.
+
+                {% if suggested_listing_count and suggested_package_count %}
+
+                    If you increase your budget to
+                    <strong>
+                        ₹{{ suggested_budget|floatformat:0 }}
+                    </strong>,
+                    you can explore
+                    <strong>
+                        {{ suggested_listing_count }}
+                    </strong>
+                    {% if suggested_listing_count == 1 %}
+                        service
+                    {% else %}
+                        services
+                    {% endif %}
+
+                    and
+
+                    <strong>
+                        {{ suggested_package_count }}
+                    </strong>
+                    {% if suggested_package_count == 1 %}
+                        package
+                    {% else %}
+                        packages
+                    {% endif %}.
+
+                {% elif suggested_listing_count %}
+
+                    If you increase your budget to
+                    <strong>
+                        ₹{{ suggested_budget|floatformat:0 }}
+                    </strong>,
+                    you can explore
+                    <strong>
+                        {{ suggested_listing_count }}
+                    </strong>
+
+                    {% if suggested_listing_count == 1 %}
+                        service
+                    {% else %}
+                        services
+                    {% endif %}.
+
+                {% elif suggested_package_count %}
+
+                    If you increase your budget to
+                    <strong>
+                        ₹{{ suggested_budget|floatformat:0 }}
+                    </strong>,
+                    you can explore
+                    <strong>
+                        {{ suggested_package_count }}
+                    </strong>
+
+                    {% if suggested_package_count == 1 %}
+                        package
+                    {% else %}
+                        packages
+                    {% endif %}.
+
+                {% endif %}
+
+            </p>
+
+
+            <a
+                href="?state={{ selected_state_id }}&city={{ selected_city_id }}&guests={{ guest_count }}&budget={{ suggested_budget|floatformat:0 }}{% if selected_date %}&date={{ selected_date|date:'Y-m-d' }}{% endif %}{% for category in category_slugs %}&category={{ category }}{% endfor %}"
+                class="budget-suggestion-button"
+            >
+
+                Explore ₹{{ suggested_budget|floatformat:0 }} Options
+
+                <iconify-icon
+                    icon="mdi:arrow-right">
+                </iconify-icon>
+
+            </a>
+
+        </div>
+
+    </div>
+
+{% endif %}
+
+
+        <!-- NO RESULTS -->
+
+        {% if not listings and not packages %}
+
+            <div class="no-budget-results">
+
+                <div class="no-results-icon">
+
+                    <iconify-icon
+                        icon="mdi:store-search-outline">
+                    </iconify-icon>
+
+                </div>
+
+                <h2>
+                    No Matching Options Found
+                </h2>
+
+                <p>
+                        We couldn't find any listings or packages matching your current
+                        location, guest count, date and selected services.
+                        Try changing your requirements or explore all available services.
+                </p>
+
+                <div class="no-results-actions">
+
+                    <a
+                        href="{% url 'core:home' %}#budget-planner"
+                        class="btn btn-gold"
+                    >
+                        Change Your Requirements
+                    </a>
+
+                    <a
+                        href="{% url 'listings:search' %}"
+                        class="btn btn-outline"
+                    >
+                        Explore All Services
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

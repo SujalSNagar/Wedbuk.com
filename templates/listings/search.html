@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Search Vendors | WedBook
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/search.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/vendor-filters.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="search-results-page">
+
+    <div class="container">
+
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <header class="search-results-header">
+
+            <div class="search-results-eyebrow">
+                <span>Find Your Perfect Vendor</span>
+            </div>
+
+            <h1 class="search-results-title">
+                Search Results
+            </h1>
+
+            <p class="search-results-subtitle">
+                Discover trusted wedding vendors, beautiful venues
+                and services for your special occasion.
+            </p>
+
+        </header>
+
+
+        <!-- =====================================================
+             SEARCH SUMMARY
+        ====================================================== -->
+
+        {% if query or selected_city or selected_category or selected_event %}
+
+            <div class="search-summary">
+
+                <div class="search-summary-left">
+
+                    <span>
+                        Showing results
+                    </span>
+
+
+                    {% if query %}
+
+                        <span class="search-query">
+
+                            <iconify-icon
+                                icon="mdi:magnify"
+                            ></iconify-icon>
+
+                            {{ query }}
+
+                        </span>
+
+                    {% endif %}
+
+
+                    {% if selected_city %}
+
+                        <span class="search-query">
+
+                            <iconify-icon
+                                icon="mdi:map-marker-outline"
+                            ></iconify-icon>
+
+                            {{ selected_city }}
+
+                        </span>
+
+                    {% endif %}
+
+
+                    {% if selected_category %}
+
+                        <span class="search-query">
+                            {{ selected_category|title }}
+                        </span>
+
+                    {% endif %}
+
+
+                    {% if selected_event %}
+
+                        <span class="search-query">
+                            {{ selected_event|title }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <span class="result-count">
+
+                    {{ listings|length }}
+                    result{{ listings|length|pluralize }}
+
+                </span>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- =====================================================
+             SEARCH CONTENT
+        ====================================================== -->
+
+        <div class="search-results-layout">
+
+
+            <!-- =================================================
+                 LEFT FILTER SIDEBAR
+            ================================================== -->
+
+            <aside class="search-filter-sidebar">
+
+                {% include "listings/vendor_filters.html" %}
+
+            </aside>
+
+
+
+            <!-- =================================================
+                 RIGHT RESULTS
+            ================================================== -->
+
+            <main class="search-results-main">
+
+
+                {% if listings %}
+
+
+                    <div class="search-results-grid">
+
+
+                        {% for listing in listings %}
+
+
+                            <!-- WHOLE CARD IS CLICKABLE -->
+
+                            <a
+                                href="{% url 'listings:listing_detail' listing.id %}"
+                                class="search-result-card"
+                            >
+
+
+                                <!-- IMAGE -->
+
+                                <div class="search-result-image">
+
+                                    {% if listing.cover_image %}
+
+                                        <img
+                                            src="{{ listing.cover_image.url }}"
+                                            alt="{{ listing.title }}"
+                                            loading="lazy"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="search-no-image">
+
+                                            <iconify-icon
+                                                icon="mdi:image-outline"
+                                            ></iconify-icon>
+
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div class="search-category-badge">
+
+                                        <iconify-icon
+                                            icon="mdi:store-outline"
+                                        ></iconify-icon>
+
+                                        {{ listing.category.name }}
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- BODY -->
+
+                                <div class="search-result-body">
+
+
+                                    <h2 class="search-result-title">
+                                        {{ listing.title }}
+                                    </h2>
+
+
+                                    <!-- VENDOR -->
+
+                                    <p class="search-result-vendor">
+
+                                        {{ listing.vendor.business_name }}
+
+                                    </p>
+
+
+                                    <!-- LOCATION -->
+
+                                    <div class="search-result-location">
+
+                                        <iconify-icon
+                                            icon="mdi:map-marker-outline"
+                                        ></iconify-icon>
+
+                                        <span>
+
+                                            {{ listing.city.name }},
+                                            {{ listing.state.name }}
+
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- GUEST CAPACITY -->
+
+                                    {% if listing.min_guests or listing.max_guests %}
+
+                                        <div class="search-result-capacity">
+
+                                            <iconify-icon
+                                                icon="mdi:account-group-outline"
+                                            ></iconify-icon>
+
+                                            <span>
+
+                                                {% if listing.min_guests and listing.max_guests %}
+
+                                                    {{ listing.min_guests }}–{{ listing.max_guests }}
+                                                    guests
+
+                                                {% elif listing.max_guests %}
+
+                                                    Up to {{ listing.max_guests }}
+                                                    guests
+
+                                                {% elif listing.min_guests %}
+
+                                                    From {{ listing.min_guests }}
+                                                    guests
+
+                                                {% endif %}
+
+                                            </span>
+
+                                        </div>
+
+                                    {% endif %}
+
+
+
+                                    <!-- DESCRIPTION -->
+
+                                    {% if listing.description %}
+
+                                        <p class="search-result-description">
+
+                                            {{ listing.description }}
+
+                                        </p>
+
+                                    {% endif %}
+
+
+
+                                    <!-- SERVICES -->
+
+                                    {% if listing.services.all %}
+
+                                        <div class="search-result-services">
+
+                                            {% for service in listing.services.all|slice:":4" %}
+
+                                                <span class="search-service-tag">
+
+                                                    {{ service.name }}
+
+                                                </span>
+
+                                            {% endfor %}
+
+                                        </div>
+
+                                    {% endif %}
+
+
+
+                                    <!-- FOOTER -->
+
+                                    <div class="search-result-footer">
+
+
+                                        <div>
+
+                                            <span class="search-price-label">
+                                                Starting Price
+                                            </span>
+
+                                            <span class="search-price">
+
+                                                ₹{{ listing.base_price|floatformat:0 }}
+
+                                            </span>
+
+                                        </div>
+
+
+                                        <!-- SPAN ONLY — WHOLE CARD IS CLICKABLE -->
+
+                                        <span class="search-view-button">
+
+                                            View Details
+
+                                            <iconify-icon
+                                                icon="mdi:arrow-right"
+                                            ></iconify-icon>
+
+                                        </span>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </a>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- =================================================
+                         EMPTY STATE
+                    ================================================== -->
+
+                    <div class="search-empty">
+
+
+                        <div class="search-empty-icon">
+
+                            <iconify-icon
+                                icon="mdi:magnify-close"
+                            ></iconify-icon>
+
+                        </div>
+
+
+                        <h2>
+                            No vendors found
+                        </h2>
+
+
+                        <p>
+
+                            We couldn't find any listings matching your
+                            search. Try another vendor name, city,
+                            category, service or keyword.
+
+                        </p>
+
+
+                        <a
+                            href="{% url 'listings:search' %}"
+                            class="search-empty-button"
+                        >
+
+                            <iconify-icon
+                                icon="mdi:refresh"
+                            ></iconify-icon>
+
+                            View All Vendors
+
+                        </a>
+
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </main>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

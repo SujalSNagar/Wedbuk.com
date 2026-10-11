@@ -1,0 +1,1099 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ listing.title }} | WedBook{% endblock %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/listing-detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/listing-calendar.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="listing-detail-page">
+
+    <div class="listing-detail-container">
+
+
+        <!-- ================= BREADCRUMB ================= -->
+
+        <div class="listing-breadcrumb">
+
+            <a href="{% url 'core:home' %}">
+                Home
+            </a>
+
+            <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+
+            <a href="{% url 'listings:search' %}">
+                Listings
+            </a>
+
+            <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+
+            <span>{{ listing.title }}</span>
+
+        </div>
+
+
+        <!-- ================= IMAGE AREA ================= -->
+
+        <div class="listing-gallery-layout">
+
+
+            <!-- MAIN IMAGE -->
+
+            <div class="listing-main-image">
+
+                {% if listing.cover_image %}
+
+                    <img
+                        id="mainListingImage"
+                        src="{{ listing.cover_image.url }}"
+                        alt="{{ listing.title }}"
+                    >
+
+                {% elif listing.images.all %}
+
+                    {% with first_image=listing.images.all|first %}
+
+                        <img
+                            id="mainListingImage"
+                            src="{{ first_image.image.url }}"
+                            alt="{{ listing.title }}"
+                        >
+
+                    {% endwith %}
+
+                {% else %}
+
+                    <div class="listing-detail-placeholder">
+
+                        <iconify-icon
+                            icon="mdi:image-outline"
+                        ></iconify-icon>
+
+                        <span>No Image Available</span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <button
+                    type="button"
+                    class="gallery-expand-button"
+                    id="openGallery"
+                    aria-label="Open image"
+                >
+
+                    <iconify-icon
+                        icon="mdi:arrow-expand"
+                    ></iconify-icon>
+
+                </button>
+
+            </div>
+
+
+            <!-- GALLERY -->
+
+            {% if listing.images.all %}
+
+                <div class="listing-thumbnail-grid">
+
+                    {% if listing.cover_image %}
+
+                        <button
+                            type="button"
+                            class="listing-thumbnail active"
+                            data-image="{{ listing.cover_image.url }}"
+                        >
+
+                            <img
+                                src="{{ listing.cover_image.url }}"
+                                alt="Cover"
+                            >
+
+                        </button>
+
+                    {% endif %}
+
+
+                    {% for image in listing.images.all %}
+
+                        <button
+                            type="button"
+                            class="listing-thumbnail"
+                            data-image="{{ image.image.url }}"
+                        >
+
+                            <img
+                                src="{{ image.image.url }}"
+                                alt="{{ listing.title }}"
+                            >
+
+                        </button>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+
+        <div class="listing-detail-grid">
+
+
+            <!-- ================= LEFT CONTENT ================= -->
+
+            <main class="listing-detail-main">
+
+
+                <!-- TITLE -->
+
+                <div class="listing-title-section">
+
+                    <div class="listing-category-label">
+                        {{ listing.category.name }}
+                    </div>
+
+                    <h1>
+                        {{ listing.title }}
+                    </h1>
+
+
+                    {% if listing.city or listing.state %}
+
+                        <div class="detail-location">
+
+                            <iconify-icon
+                                icon="mdi:map-marker-outline"
+                            ></iconify-icon>
+
+                            <span>
+
+                                {% if listing.city %}
+                                    {{ listing.city.name }}
+                                {% endif %}
+
+                                {% if listing.city and listing.state %}
+                                    ,
+                                {% endif %}
+
+                                {% if listing.state %}
+                                    {{ listing.state.name }}
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ================= DESCRIPTION ================= -->
+
+                <section class="detail-section">
+
+                    <div class="detail-section-heading">
+
+                        <span class="detail-section-icon">
+
+                            <iconify-icon
+                                icon="mdi:text-box-outline"
+                            ></iconify-icon>
+
+                        </span>
+
+                        <h2>
+                            About This Listing
+                        </h2>
+
+                    </div>
+
+
+                    <div class="listing-description">
+
+                        {{ listing.description|linebreaks }}
+
+                    </div>
+
+                </section>
+
+
+                {% if listing.min_guests or listing.max_guests %}
+
+<section class="detail-section">
+
+    <div class="detail-section-heading">
+
+        <span class="detail-section-icon">
+
+            <iconify-icon
+                icon="mdi:account-group-outline">
+            </iconify-icon>
+
+        </span>
+
+        <h2>Guest Capacity</h2>
+
+    </div>
+
+
+    <div class="guest-capacity-detail">
+
+        {% if listing.min_guests and listing.max_guests %}
+
+            {% if listing.min_guests == listing.max_guests %}
+
+                <strong>
+                    {{ listing.min_guests }}
+                </strong>
+
+                <span>
+                    guests
+                </span>
+
+            {% else %}
+
+                <strong>
+                    {{ listing.min_guests }} – {{ listing.max_guests }}
+                </strong>
+
+                <span>
+                    guests
+                </span>
+
+            {% endif %}
+
+        {% elif listing.max_guests %}
+
+            <strong>
+                Up to {{ listing.max_guests }}
+            </strong>
+
+            <span>
+                guests
+            </span>
+
+        {% elif listing.min_guests %}
+
+            <strong>
+                From {{ listing.min_guests }}
+            </strong>
+
+            <span>
+                guests
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endif %} 
+
+
+                <!-- ================= SERVICES ================= -->
+
+                {% if listing.services.all %}
+
+                    <section class="detail-section">
+
+                        <div class="detail-section-heading">
+
+                            <span class="detail-section-icon">
+
+                                <iconify-icon
+                                    icon="mdi:briefcase-outline"
+                                ></iconify-icon>
+
+                            </span>
+
+                            <h2>
+                                Services
+                            </h2>
+
+                        </div>
+
+
+                        <div class="detail-tags">
+
+                            {% for service in listing.services.all %}
+
+                                <span class="detail-tag">
+
+                                    <iconify-icon
+                                        icon="mdi:check-circle-outline"
+                                    ></iconify-icon>
+
+                                    {{ service.name }}
+
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+                <!-- ================= INCLUDED SERVICES ================= -->
+
+                {% if listing.included_services.all %}
+
+                    <section class="detail-section">
+
+                        <div class="detail-section-heading">
+
+                            <span class="detail-section-icon">
+
+                                <iconify-icon
+                                    icon="mdi:package-variant-closed-check"
+                                ></iconify-icon>
+
+                            </span>
+
+                            <h2>
+                                What's Included
+                            </h2>
+
+                        </div>
+
+
+                        <div class="detail-tags">
+
+                            {% for service in listing.included_services.all %}
+
+                                <span class="detail-tag included">
+
+                                    <iconify-icon
+                                        icon="mdi:check"
+                                    ></iconify-icon>
+
+                                    {{ service.name }}
+
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+                <!-- ================= EVENT TYPES ================= -->
+
+                {% if listing.event_types.all %}
+
+                    <section class="detail-section">
+
+                        <div class="detail-section-heading">
+
+                            <span class="detail-section-icon">
+
+                                <iconify-icon
+                                    icon="mdi:calendar-star-outline"
+                                ></iconify-icon>
+
+                            </span>
+
+                            <h2>
+                                Suitable For
+                            </h2>
+
+                        </div>
+
+
+                        <div class="event-type-list">
+
+                            {% for event in listing.event_types.all %}
+
+                                <div class="event-type-item">
+
+                                    {% if event.icon %}
+
+                                        <img
+                                            src="{{ event.icon.url }}"
+                                            alt="{{ event.name }}"
+                                        >
+
+                                    {% else %}
+
+                                        <iconify-icon
+                                            icon="mdi:party-popper"
+                                        ></iconify-icon>
+
+                                    {% endif %}
+
+                                    <span>
+                                        {{ event.name }}
+                                    </span>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+                <!-- ================= LOCATION ================= -->
+
+                <section class="detail-section">
+
+                    <div class="detail-section-heading">
+
+                        <span class="detail-section-icon">
+
+                            <iconify-icon
+                                icon="mdi:map-marker-outline"
+                            ></iconify-icon>
+
+                        </span>
+
+                        <h2>
+                            Location
+                        </h2>
+
+                    </div>
+
+
+                    <div class="address-box">
+
+                        <div class="address-icon">
+
+                            <iconify-icon
+                                icon="mdi:map-marker"
+                            ></iconify-icon>
+
+                        </div>
+
+
+                        <div class="address-content">
+
+                            <strong>
+                                {{ listing.city.name }},
+                                {{ listing.state.name }}
+                            </strong>
+
+                            <p>
+
+                                {{ listing.address_line_1 }}
+
+                                {% if listing.address_line_2 %}
+
+                                    <br>
+
+                                    {{ listing.address_line_2 }}
+
+                                {% endif %}
+
+                                <br>
+
+                                {{ listing.city.name }},
+                                {{ listing.state.name }}
+                                - {{ listing.pincode }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if listing.latitude and listing.longitude %}
+
+                        <div class="map-location-box">
+
+                            <iconify-icon
+                                icon="mdi:map-outline"
+                            ></iconify-icon>
+
+                            <span>
+                                Map location available
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                </section>
+
+
+                <!-- ================= AVAILABILITY PERIOD ================= -->
+
+                {% if listing.availability_periods.all %}
+
+                    <section class="detail-section">
+
+                        <div class="detail-section-heading">
+
+                            <span class="detail-section-icon">
+
+                                <iconify-icon
+                                    icon="mdi:calendar-range-outline"
+                                ></iconify-icon>
+
+                            </span>
+
+                            <h2>
+                                Availability
+                            </h2>
+
+                        </div>
+
+
+                        <div class="availability-periods">
+
+                            {% for period in listing.availability_periods.all %}
+
+                                {% if period.is_active %}
+
+                                    <div class="availability-period">
+
+                                        <div>
+
+                                            <span>
+                                                Available From
+                                            </span>
+
+                                            <strong>
+                                                {{ period.available_from|date:"d M Y" }}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <iconify-icon
+                                            icon="mdi:arrow-right"
+                                        ></iconify-icon>
+
+
+                                        <div>
+
+                                            <span>
+                                                Available Until
+                                            </span>
+
+                                            <strong>
+                                                {{ period.available_until|date:"d M Y" }}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+                <!-- ================= VENDOR ================= -->
+
+                <section class="detail-section vendor-section">
+
+                    <div class="detail-section-heading">
+
+                        <span class="detail-section-icon">
+
+                            <iconify-icon
+                                icon="mdi:store-outline"
+                            ></iconify-icon>
+
+                        </span>
+
+                        <h2>
+                            About The Vendor
+                        </h2>
+
+                    </div>
+
+
+                    <div class="vendor-card">
+
+                        <div class="vendor-avatar">
+
+                            <iconify-icon
+                                icon="mdi:store"
+                            ></iconify-icon>
+
+                        </div>
+
+
+                        <div class="vendor-info">
+
+                            <h3>
+                                {{ listing.vendor.business_name }}
+                            </h3>
+
+                            <p>
+                                {{ listing.vendor.city.name }},
+                                {{ listing.vendor.state.name }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </main>
+
+
+            <!-- ================= RIGHT SIDEBAR ================= -->
+
+            <aside class="listing-booking-sidebar">
+
+                <div class="booking-card">
+
+
+                    <span class="booking-label">
+                        Starting Price
+                    </span>
+
+
+                    <div class="booking-price">
+
+                        <span>₹</span>
+
+                        {{ listing.base_price|floatformat:0 }}
+
+                    </div>
+
+
+                    <p class="booking-price-note">
+                        Final price may vary based on requirements.
+                    </p>
+
+
+                    <div class="booking-divider"></div>
+
+
+                    <div class="booking-feature">
+
+                        <iconify-icon
+                            icon="mdi:calendar-check-outline"
+                        ></iconify-icon>
+
+                        <span>
+                            Check availability
+                        </span>
+
+                    </div>
+
+
+                    <div class="booking-feature">
+
+                        <iconify-icon
+                            icon="mdi:shield-check-outline"
+                        ></iconify-icon>
+
+                        <span>
+                            Trusted vendor
+                        </span>
+
+                    </div>
+
+
+                    <div class="booking-feature">
+
+                        <iconify-icon
+                            icon="mdi:message-text-outline"
+                        ></iconify-icon>
+
+                        <span>
+                            Connect with vendor
+                        </span>
+
+                    </div>
+
+
+                    <!-- CHECK AVAILABILITY BUTTON -->
+
+                    <button
+                        type="button"
+                        class="check-availability-button"
+                    >
+
+                        <iconify-icon
+                            icon="mdi:calendar-search"
+                        ></iconify-icon>
+
+                        Check Availability
+
+                    </button>
+
+
+                    <!-- CONTACT VENDOR -->
+
+                    <button
+                        type="button"
+                        class="contact-vendor-button"
+                    >
+
+                        <iconify-icon
+                            icon="mdi:message-outline"
+                        ></iconify-icon>
+
+                        Contact Vendor
+
+                    </button>
+
+
+                </div>
+
+            </aside>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     AVAILABILITY CALENDAR MODAL
+     Opens when "Check Availability" is clicked
+     ========================================================= -->
+
+<div
+    class="availability-modal"
+    id="availabilityModal"
+    aria-hidden="true"
+>
+
+
+    <!-- MODAL OVERLAY -->
+
+    <div
+        class="availability-modal-overlay"
+        id="availabilityModalOverlay"
+    ></div>
+
+
+    <!-- MODAL DIALOG -->
+
+    <div
+        class="availability-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="availabilityModalTitle"
+    >
+
+
+        <!-- ================= MODAL HEADER ================= -->
+
+        <div class="availability-modal-header">
+
+            <div>
+
+                <span class="availability-modal-eyebrow">
+
+                    <iconify-icon
+                        icon="mdi:calendar-check-outline"
+                    ></iconify-icon>
+
+                    Availability
+
+                </span>
+
+
+                <h2 id="availabilityModalTitle">
+                    Check Booking Availability
+                </h2>
+
+
+                <p>
+                    Select your event start date, then choose an end date.
+                </p>
+
+            </div>
+
+
+            <!-- CLOSE -->
+
+            <button
+                type="button"
+                class="availability-modal-close"
+                id="availabilityModalClose"
+                aria-label="Close availability calendar"
+            >
+
+                <iconify-icon
+                    icon="mdi:close"
+                ></iconify-icon>
+
+            </button>
+
+        </div>
+
+
+        <!-- ================= CALENDAR ================= -->
+
+        <div
+            class="booking-calendar"
+            id="bookingCalendar"
+            data-listing-id="{{ listing.id }}"
+            data-availability-url="{% url 'listings:listing_availability' listing.id %}"
+        >
+
+
+            <!-- MONTH NAVIGATION -->
+
+            <div class="calendar-topbar">
+
+                <button
+                    type="button"
+                    class="calendar-nav-button"
+                    id="calendarPrev"
+                    aria-label="Previous month"
+                >
+
+                    <iconify-icon
+                        icon="mdi:chevron-left"
+                    ></iconify-icon>
+
+                </button>
+
+
+                <h3 id="calendarMonthYear"></h3>
+
+
+                <button
+                    type="button"
+                    class="calendar-nav-button"
+                    id="calendarNext"
+                    aria-label="Next month"
+                >
+
+                    <iconify-icon
+                        icon="mdi:chevron-right"
+                    ></iconify-icon>
+
+                </button>
+
+            </div>
+
+
+            <!-- ================= WEEK DAYS ================= -->
+
+            <div class="calendar-weekdays">
+
+                <span>Sun</span>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+
+            </div>
+
+
+            <!-- ================= CALENDAR DAYS ================= -->
+
+            <div
+                class="calendar-days"
+                id="calendarDays"
+            ></div>
+
+
+            <!-- ================= LEGEND ================= -->
+
+            <div class="calendar-legend">
+
+                <div>
+
+                    <span class="legend-dot available"></span>
+
+                    Available
+
+                </div>
+
+
+                <div>
+
+                    <span class="legend-dot booked"></span>
+
+                    Booked
+
+                </div>
+
+
+                <div>
+
+                    <span class="legend-dot blocked"></span>
+
+                    Not Available
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= RANGE INFORMATION ================= -->
+
+            <div
+                class="calendar-date-info"
+                id="calendarDateInfo"
+            >
+                Select your event start date.
+            </div>
+
+
+            <!-- ================= SELECTED RANGE ================= -->
+
+            <div
+                class="calendar-selected-range"
+                id="calendarSelectedRange"
+                style="display: none;"
+            >
+
+                <div class="selected-range-title">
+                    Selected Dates
+                </div>
+
+
+                <div class="selected-range-dates">
+
+                    <div class="selected-range-date">
+
+                        <span>
+                            Start Date
+                        </span>
+
+                        <strong id="selectedStartDate">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <iconify-icon
+                        icon="mdi:arrow-right"
+                    ></iconify-icon>
+
+
+                    <div class="selected-range-date">
+
+                        <span>
+                            End Date
+                        </span>
+
+                        <strong id="selectedEndDate">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="selected-range-days"
+                    id="selectedRangeDays"
+                >
+                    —
+                </div>
+
+
+                <div
+                    class="selected-range-status"
+                    id="selectedRangeStatus"
+                ></div>
+
+
+<a
+    href="{% url 'bookings:booking_page' listing.id %}"
+    class="continue-booking-button"
+    id="continueBookingButton"
+>
+    Continue Booking
+
+    <iconify-icon
+        icon="mdi:arrow-right"
+    ></iconify-icon>
+</a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE LIGHTBOX
+     ========================================================= -->
+
+<div
+    class="listing-lightbox"
+    id="listingLightbox"
+>
+
+
+    <button
+        type="button"
+        class="lightbox-close"
+        id="closeGallery"
+        aria-label="Close"
+    >
+
+        <iconify-icon
+            icon="mdi:close"
+        ></iconify-icon>
+
+    </button>
+
+
+    <img
+        id="lightboxImage"
+        src=""
+        alt="Listing image"
+    >
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/listing-detail.js' %}"></script>
+
+<script src="{% static 'js/listing-calendar.js' %}"></script>
+
+{% endblock %}

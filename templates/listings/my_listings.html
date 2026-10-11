@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Listings | WedBook{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/my-listings.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<section class="my-listings-page">
+
+    <div class="my-listings-container">
+
+
+        <!-- ================= PAGE HEADER ================= -->
+
+        <div class="my-listings-header">
+
+            <div class="my-listings-heading">
+
+                <span class="dashboard-eyebrow">
+                    <iconify-icon icon="mdi:store-outline"></iconify-icon>
+                    Vendor Dashboard
+                </span>
+
+                <h1>My Listings</h1>
+
+                <p>
+                    Manage your venues, services and offerings from one place.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'listings:add_listing' %}"
+                class="add-listing-button"
+            >
+                <iconify-icon icon="mdi:plus"></iconify-icon>
+                Add Listing
+            </a>
+
+        </div>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        {% if listings %}
+
+        <div class="listing-summary-row">
+
+            <div class="listing-summary-card">
+
+                <div class="summary-icon">
+                    <iconify-icon icon="mdi:format-list-bulleted"></iconify-icon>
+                </div>
+
+                <div>
+                    <span>Total Listings</span>
+                    <strong>{{ listings|length }}</strong>
+                </div>
+
+            </div>
+
+
+            <div class="listing-summary-card">
+
+                <div class="summary-icon">
+                    <iconify-icon icon="mdi:check-circle-outline"></iconify-icon>
+                </div>
+
+                <div>
+                    <span>Active Listings</span>
+
+                    <strong>{{ active_count }}</strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= LISTINGS ================= -->
+
+        {% if listings %}
+
+        <div class="listings-section-header">
+
+            <div>
+                <h2>Your Listings</h2>
+                <p>
+                    Select a listing to view or manage its details.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="listings-grid">
+
+            {% for listing in listings %}
+
+            <article class="listing-card">
+
+
+                <!-- IMAGE -->
+
+                <div class="listing-card-image">
+
+                    {% if listing.cover_image %}
+
+                        <img
+                            src="{{ listing.cover_image.url }}"
+                            alt="{{ listing.title }}"
+                        >
+
+                    {% elif listing.images.all|length %}
+
+                        {% with first_image=listing.images.all|first %}
+
+                            <img
+                                src="{{ first_image.image.url }}"
+                                alt="{{ listing.title }}"
+                            >
+
+                        {% endwith %}
+
+                    {% else %}
+
+                        <div class="listing-image-placeholder">
+
+                            <iconify-icon
+                                icon="mdi:image-outline"
+                            ></iconify-icon>
+
+                            <span>No Image</span>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- CATEGORY -->
+
+                    <span class="listing-category-badge">
+                        {{ listing.category.name }}
+                    </span>
+
+
+                    <!-- STATUS -->
+
+                    {% if listing.is_active %}
+
+                        <span class="listing-status active">
+                            <span class="status-dot"></span>
+                            Active
+                        </span>
+
+                    {% else %}
+
+                        <span class="listing-status inactive">
+                            <span class="status-dot"></span>
+                            Inactive
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- CARD BODY -->
+
+                <div class="listing-card-body">
+
+
+                    <!-- TITLE -->
+
+                    <h3 class="listing-title">
+                        {{ listing.title }}
+                    </h3>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <p class="listing-description">
+                        {{ listing.description|truncatewords:18 }}
+                    </p>
+
+
+                    <!-- PRICE -->
+
+                    <div class="listing-price-row">
+
+                        <div class="listing-price">
+
+                            <span>Starting from</span>
+
+                            <strong>
+                                ₹{{ listing.base_price|floatformat:0 }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOCATION -->
+
+                    {% if listing.city or listing.state %}
+
+                    <div class="listing-location">
+
+                        <iconify-icon
+                            icon="mdi:map-marker-outline"
+                        ></iconify-icon>
+
+                        <span>
+
+                            {% if listing.city %}
+                                {{ listing.city.name }}
+                            {% endif %}
+
+                            {% if listing.city and listing.state %}
+                                ,
+                            {% endif %}
+
+                            {% if listing.state %}
+                                {{ listing.state.name }}
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- SERVICES -->
+
+                    {% if listing.services.all %}
+
+                    <div class="listing-services">
+
+                        {% for service in listing.services.all|slice:":3" %}
+
+                            <span class="service-tag">
+                                {{ service.name }}
+                            </span>
+
+                        {% endfor %}
+
+                        {% if listing.services.all|length > 3 %}
+
+                            <span class="service-more">
+                                +{{ listing.services.all|length|add:"-3" }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="listing-card-actions">
+
+                        <a
+                            href="{% url 'listings:listing_detail' listing.id %}"
+                            class="listing-view-button"
+                        >
+                            <iconify-icon icon="mdi:eye-outline"></iconify-icon>
+                            View
+                        </a>
+
+
+                        <a
+                            href="{% url 'listings:edit_listing' listing.id %}"
+                            class="listing-edit-button"
+                        >
+                            <iconify-icon icon="mdi:pencil-outline"></iconify-icon>
+                            Edit
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- ================= EMPTY STATE ================= -->
+
+        <div class="listings-empty-state">
+
+            <div class="empty-decoration empty-decoration-one"></div>
+            <div class="empty-decoration empty-decoration-two"></div>
+
+
+            <div class="empty-icon">
+
+                <iconify-icon
+                    icon="mdi:store-plus-outline"
+                ></iconify-icon>
+
+            </div>
+
+
+            <span class="empty-eyebrow">
+                Start Selling on WedBook
+            </span>
+
+
+            <h2>
+                Your Listings Are Waiting
+            </h2>
+
+
+            <p>
+                Add your first venue or service and start showcasing
+                your business to customers looking for their perfect event.
+            </p>
+
+
+            <a
+                href="{% url 'listings:add_listing' %}"
+                class="empty-add-button"
+            >
+                <iconify-icon icon="mdi:plus"></iconify-icon>
+                Create Your First Listing
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+{% endblock %}

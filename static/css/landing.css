@@ -1,0 +1,2173 @@
+/* =========================================================
+   WEDBOOK LANDING PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   GENERAL DISCOVERY SECTIONS
+   ========================================================= */
+
+.discovery-section {
+    position: relative;
+    padding: 35px 0;
+    background: var(--cream);
+    overflow: hidden;
+}
+
+.discovery-section:nth-of-type(even) {
+    background: #fffaf3;
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+   ========================================================= */
+
+.discovery-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 42px;
+}
+
+.discovery-heading h2 {
+    margin: 10px 0 12px;
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    line-height: 1.05;
+    color: var(--maroon-900);
+}
+
+.discovery-heading p {
+    max-width: 650px;
+    margin: 0;
+    color: #765c51;
+    line-height: 1.7;
+}
+
+.discovery-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    color: var(--maroon-900);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.discovery-link span {
+    color: var(--gold-dark);
+    transition: transform .2s ease;
+}
+
+.discovery-link:hover span {
+    transform: translateX(5px);
+}
+
+.center-heading {
+    text-align: center;
+}
+
+.center-heading > p {
+    max-width: 650px;
+    margin: 15px auto 0;
+    color: #765c51;
+    line-height: 1.7;
+}
+
+.light-heading h2 {
+    color: #fff8ef;
+}
+
+.light-heading p {
+    color: rgba(255, 248, 239, .72);
+}
+
+
+/* =========================================================
+   POPULAR CITIES
+   ========================================================= */
+
+.city-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.city-card {
+    position: relative;
+    min-height: 145px;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 25px;
+
+    background: #741326;
+    border: 1px solid #ead8c4;
+    border-radius: 20px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 30px rgba(70, 24, 8, .06);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.city-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    right: -35px;
+    bottom: -35px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, .08);
+}
+
+.city-card:hover {
+    transform: translateY(-8px);
+
+    border-color: rgba(201, 145, 58, .65);
+
+    box-shadow:
+        0 18px 38px rgba(70, 24, 8, .12);
+}
+
+.city-card-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, .12);
+
+    color: var(--gold-dark);
+
+    font-size: 25px;
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+}
+
+.city-card:hover .city-card-icon {
+    transform: scale(1.08) rotate(-5deg);
+    background: rgba(201, 145, 58, .2);
+}
+
+.city-card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.city-card-content h3 {
+    margin: 0 0 7px;
+
+    font-family: var(--display);
+    font-size: 1.25rem;
+}
+
+.city-card-content span {
+    color: #a67a64;
+    font-size: .82rem;
+}
+
+.city-arrow {
+    position: absolute;
+
+    right: 20px;
+    bottom: 17px;
+
+    color: var(--gold-dark);
+    font-size: 18px;
+
+    transition: transform .25s ease;
+}
+
+.city-card:hover .city-arrow {
+    transform: translateX(5px);
+}
+
+
+/* =========================================================
+   BUDGET DISCOVERY
+   ========================================================= */
+
+.budget-section {
+    background: #fffaf3;
+}
+
+.budget-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-top: 45px;
+}
+
+.budget-card {
+    position: relative;
+
+    min-height: 210px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px 18px;
+
+    text-align: center;
+
+    border: 1px solid #ead8c4;
+    border-radius: 20px;
+
+    background: #fff;
+
+    color: var(--maroon-900);
+    text-decoration: none;
+
+    box-shadow: 0 8px 25px rgba(70, 24, 8, .05);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.budget-card:hover {
+    transform: translateY(-8px);
+
+    border-color: var(--gold-dark);
+
+    box-shadow:
+        0 18px 35px rgba(70, 24, 8, .11);
+}
+
+.budget-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 50%;
+
+    background: var(--maroon-900);
+    color: var(--gold-light);
+
+    font-size: 25px;
+
+    transition: transform .3s ease;
+}
+
+.budget-card:hover .budget-icon {
+    transform: scale(1.08);
+}
+
+.budget-card h3 {
+    margin: 0;
+
+    font-family: var(--display);
+    font-size: 1.35rem;
+}
+
+.budget-card p {
+    min-height: 42px;
+
+    margin: 9px 0 15px;
+
+    color: #8c6b5d;
+
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+.budget-card > span {
+    color: var(--gold-dark);
+
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   EVENT TYPE
+   ========================================================= */
+
+.event-discovery-section {
+    position: relative;
+
+    padding: 100px 0;
+
+    background:
+        radial-gradient(
+            circle at 15% 30%,
+            rgba(201, 145, 58, .12),
+            transparent 30%
+        ),
+        var(--maroon-900);
+
+    overflow: hidden;
+}
+
+.event-discovery-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    right: -180px;
+    bottom: -220px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(201, 145, 58, .2);
+}
+
+.event-type-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-top: 45px;
+}
+
+.event-type-card {
+    min-height: 190px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    text-align: center;
+
+    border: 1px solid rgba(229, 184, 79, .25);
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, .055);
+
+    color: #fff8ef;
+    text-decoration: none;
+
+    backdrop-filter: blur(5px);
+
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        border-color .3s ease;
+}
+
+.event-type-card:hover {
+    transform: translateY(-8px);
+
+    background: rgba(255, 255, 255, .09);
+
+    border-color: rgba(229, 184, 79, .65);
+}
+
+.event-type-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 50%;
+
+    background: rgba(229, 184, 79, .12);
+
+    color: var(--gold-light);
+
+    font-size: 30px;
+}
+
+.event-type-icon img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.event-type-card h3 {
+    margin: 0 0 10px;
+
+    font-family: var(--display);
+    font-size: 1.2rem;
+}
+
+.event-type-card span {
+    color: var(--gold-light);
+
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PACKAGES
+   ========================================================= */
+
+.packages-discovery-section {
+    padding: 100px 0;
+    background: var(--cream);
+}
+
+.package-home-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 22px;
+}
+
+.package-home-card {
+    overflow: hidden;
+
+    border: 1px solid #ead8c4;
+    border-radius: 20px;
+
+    background: #fffdf9;
+
+    box-shadow: 0 10px 30px rgba(70, 24, 8, .06);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.package-home-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 40px rgba(70, 24, 8, .12);
+}
+
+.package-home-top {
+    min-height: 125px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--maroon-900),
+            #76152c
+        );
+
+    color: #fff8ef;
+}
+
+.package-home-top > span {
+    align-self: flex-start;
+
+    padding: 6px 10px;
+
+    border: 1px solid rgba(229, 184, 79, .35);
+    border-radius: 20px;
+
+    color: var(--gold-light);
+
+    font-size: .65rem;
+    font-weight: 700;
+
+    letter-spacing: .12em;
+}
+
+.package-home-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(229, 184, 79, .13);
+
+    color: var(--gold-light);
+
+    font-size: 28px;
+}
+
+.package-home-body {
+    padding: 25px;
+}
+
+.package-home-body h3 {
+    margin: 0 0 10px;
+
+    font-family: var(--display);
+
+    font-size: 1.45rem;
+
+    color: var(--maroon-900);
+}
+
+.package-home-body p {
+    min-height: 52px;
+
+    margin: 0;
+
+    color: #765c51;
+
+    font-size: .88rem;
+    line-height: 1.6;
+}
+
+.package-home-footer {
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-top: 24px;
+    padding-top: 18px;
+
+    border-top: 1px solid #ead8c4;
+}
+
+.package-home-footer small {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #a67a64;
+
+    font-size: .68rem;
+}
+
+.package-home-footer strong {
+    display: block;
+
+    color: var(--maroon-900);
+
+    font-family: var(--display);
+
+    font-size: 1.35rem;
+}
+
+.package-view-link {
+    color: var(--maroon-900);
+
+    font-size: .82rem;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.package-view-link:hover {
+    color: var(--gold-dark);
+}
+
+
+/* =========================================================
+   TRENDING SERVICES
+   ========================================================= */
+
+.trending-section {
+    padding: 100px 0;
+    background: #fffaf3;
+}
+
+.trending-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 45px;
+}
+
+.trending-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    min-height: 125px;
+
+    padding: 22px;
+
+    border: 1px solid #ead8c4;
+    border-radius: 18px;
+
+    background: #fffdf9;
+
+    color: var(--maroon-900);
+    text-decoration: none;
+
+    box-shadow: 0 8px 25px rgba(70, 24, 8, .05);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.trending-card:hover {
+    transform: translateY(-7px);
+
+    border-color: rgba(201, 145, 58, .65);
+
+    box-shadow:
+        0 18px 35px rgba(70, 24, 8, .11);
+}
+
+.trending-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, .12);
+
+    color: var(--gold-dark);
+
+    font-size: 24px;
+}
+
+.trending-content {
+    min-width: 0;
+}
+
+.trending-content h3 {
+    margin: 0 0 6px;
+
+    font-family: var(--display);
+    font-size: 1.05rem;
+}
+
+.trending-content span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #a67a64;
+    font-size: .75rem;
+}
+
+.trending-content small {
+    color: var(--gold-dark);
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.trending-count {
+    flex-shrink: 0;
+    margin-left: auto;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(201, 145, 58, .15);
+    color: var(--gold-dark);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PLAN BY FUNCTION
+   ========================================================= */
+
+.function-section {
+    padding: 100px 0;
+    background: var(--cream);
+}
+
+.function-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-top: 45px;
+}
+
+.function-card {
+    position: relative;
+
+    min-height: 210px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    text-align: center;
+
+    border: 1px solid #ead8c4;
+    border-radius: 20px;
+
+    background: #fffdf9;
+
+    color: var(--maroon-900);
+    text-decoration: none;
+
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.function-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 18px 35px rgba(70, 24, 8, .1);
+}
+
+.function-number {
+    position: absolute;
+
+    top: 14px;
+    right: 17px;
+
+    color: rgba(201, 145, 58, .25);
+
+    font-family: var(--display);
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.function-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, .12);
+
+    color: var(--gold-dark);
+
+    font-size: 27px;
+}
+
+.function-card h3 {
+    margin: 0 0 7px;
+
+    font-family: var(--display);
+    font-size: 1.2rem;
+}
+
+.function-card span {
+    color: #a67a64;
+    font-size: .76rem;
+}
+
+
+/* =========================================================
+   WEDDING INSPIRATION
+   ========================================================= */
+
+.inspiration-section {
+    padding: 100px 0;
+    background: #fffaf3;
+}
+
+.inspiration-grid {
+    display: grid;
+
+    grid-template-columns: 1.2fr .8fr;
+
+    grid-template-rows: 240px 240px;
+
+    gap: 18px;
+
+    margin-top: 45px;
+}
+
+.inspiration-card {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background: #ead8c4;
+}
+
+.inspiration-large {
+    grid-row: 1 / 3;
+}
+
+.inspiration-wide {
+    grid-column: 2;
+}
+
+.inspiration-card img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform .6s ease;
+}
+
+.inspiration-card:hover img {
+    transform: scale(1.06);
+}
+
+.inspiration-overlay {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 35px 25px 25px;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(43, 7, 20, .85),
+            transparent
+        );
+
+    color: #fff8ef;
+}
+
+.inspiration-overlay h3 {
+    margin: 0 0 6px;
+
+    font-family: var(--display);
+    font-size: 1.35rem;
+}
+
+.inspiration-overlay span {
+    color: var(--gold-light);
+    font-size: .78rem;
+}
+
+
+/* =========================================================
+   BUDGET PLANNER
+   ========================================================= */
+
+.budget-planner-section {
+    padding: 100px 0;
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(201, 145, 58, .1),
+            transparent 30%
+        ),
+        var(--maroon-900);
+}
+
+.budget-planner {
+    max-width: 900px;
+
+    margin: 45px auto 0;
+
+    padding: 35px;
+
+    border: 1px solid rgba(229, 184, 79, .25);
+    border-radius: 24px;
+
+    background: rgba(255, 255, 255, .055);
+
+    backdrop-filter: blur(8px);
+}
+
+.planner-input {
+    margin-bottom: 30px;
+}
+
+.planner-input label {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #fff8ef;
+
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.planner-price-input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 15px 18px;
+
+    border: 1px solid rgba(229, 184, 79, .35);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, .08);
+
+    color: #fff8ef;
+
+    font-family: inherit;
+    font-size: 1rem;
+
+    outline: none;
+}
+
+.planner-price-input:focus {
+    border-color: var(--gold-light);
+}
+
+#weddingBudgetRange {
+    width: 100%;
+
+    margin-top: 15px;
+
+    accent-color: var(--gold-light);
+
+    cursor: pointer;
+}
+
+.planner-breakdown {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+.planner-row {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 17px;
+
+    border: 1px solid rgba(229, 184, 79, .18);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, .045);
+
+    color: #fff8ef;
+
+    font-size: .82rem;
+}
+
+.planner-row strong {
+    color: var(--gold-light);
+}
+
+.planner-remaining {
+    grid-column: 1 / -1;
+
+    margin-top: 8px;
+
+    padding: 17px;
+
+    border-radius: 10px;
+
+    background: rgba(229, 184, 79, .1);
+
+    color: var(--gold-light);
+
+    text-align: center;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   WHY WEDBOOK
+   ========================================================= */
+
+.why-wedbook-section {
+    padding: 100px 0;
+    background: #fffaf3;
+}
+
+.why-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-top: 45px;
+}
+
+.why-card {
+    padding: 30px 24px;
+
+    text-align: center;
+
+    border: 1px solid #ead8c4;
+    border-radius: 20px;
+
+    background: #fffdf9;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.why-card:hover {
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 18px 35px rgba(70, 24, 8, .09);
+}
+
+.why-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, .12);
+
+    color: var(--gold-dark);
+
+    font-size: 27px;
+}
+
+.why-card h3 {
+    margin: 0 0 10px;
+
+    color: var(--maroon-900);
+
+    font-family: var(--display);
+    font-size: 1.18rem;
+}
+
+.why-card p {
+    margin: 0;
+
+    color: #765c51;
+
+    font-size: .84rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+
+.reveal-on-scroll {
+    opacity: 0;
+
+    transform: translateY(35px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-discovery {
+    grid-column: 1 / -1;
+
+    padding: 35px;
+
+    text-align: center;
+
+    color: #8d6b5d;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .city-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .budget-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .event-type-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .trending-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .function-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .discovery-section,
+    .event-discovery-section,
+    .packages-discovery-section,
+    .trending-section,
+    .function-section,
+    .inspiration-section,
+    .budget-planner-section,
+    .why-wedbook-section {
+        padding: 75px 0;
+    }
+
+    .discovery-heading {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .city-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .budget-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .event-type-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .package-home-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .inspiration-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 220px 220px;
+    }
+
+    .inspiration-large {
+        grid-row: 1 / 3;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .city-grid,
+    .budget-grid,
+    .event-type-grid,
+    .package-home-grid,
+    .trending-grid,
+    .function-grid,
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .discovery-section,
+    .event-discovery-section,
+    .packages-discovery-section,
+    .trending-section,
+    .function-section,
+    .inspiration-section,
+    .budget-planner-section,
+    .why-wedbook-section {
+        padding: 60px 0;
+    }
+
+    .discovery-heading h2 {
+        font-size: 2.2rem;
+    }
+
+    .city-card {
+        min-height: 125px;
+    }
+
+    .budget-card {
+        min-height: 180px;
+    }
+
+    .event-type-card {
+        min-height: 165px;
+    }
+
+    .package-home-top {
+        min-height: 105px;
+    }
+
+    .inspiration-grid {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        grid-template-rows: 260px 210px 210px;
+    }
+
+    .inspiration-large {
+        grid-row: auto;
+    }
+
+    .inspiration-wide {
+        grid-column: auto;
+    }
+
+    .budget-planner {
+        padding: 22px;
+    }
+
+    .planner-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .planner-remaining {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal-on-scroll {
+        opacity: 1;
+
+        transform: none;
+
+        transition: none;
+    }
+
+    .city-card,
+    .budget-card,
+    .event-type-card,
+    .package-home-card,
+    .trending-card,
+    .function-card,
+    .inspiration-card img,
+    .why-card {
+        transition: none;
+    }
+}
+
+/* =========================================================
+   FEATURED VENDORS
+========================================================= */
+
+.vendors-section {
+    position: relative;
+    overflow: hidden;
+    background: #fbd1ff4f;
+
+    clip-path: ellipse(90% 100% at 50% 0%);
+}
+
+
+/* ---------------------------------------------------------
+   Decorative soft shape — top/right
+--------------------------------------------------------- */
+
+.vendors-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 900px;
+    height: 420px;
+
+    top: -180px;
+    right: -180px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(141, 27, 49, 0.20),
+        rgba(201, 145, 58, 0.14),
+        transparent 70%
+    );
+
+    border-radius: 62% 38% 55% 45%;
+
+    transform: rotate(-15deg);
+
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   Decorative soft shape — bottom/left
+--------------------------------------------------------- */
+
+.vendors-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 700px;
+    height: 300px;
+
+    bottom: -180px;
+    left: -180px;
+
+    background: radial-gradient(
+        ellipse,
+        rgba(141, 27, 49, 0.13),
+        transparent 70%
+    );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   Keep actual content above decorations
+--------------------------------------------------------- */
+
+.vendors-section .container {
+    position: relative;
+    z-index: 2;
+    padding-top: 10px;
+}
+
+/* =========================================================
+   POPULAR CITIES
+========================================================= */
+
+.cities-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 8% 20%,
+            rgba(178, 82, 112, 0.13),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 92% 75%,
+            rgba(201, 145, 58, 0.12),
+            transparent 28%
+        ),
+        var(--cream);
+}
+
+.cities-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 430px;
+    height: 430px;
+
+    right: -220px;
+    top: -210px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(141, 27, 49, 0.08);
+
+    box-shadow:
+        0 0 0 35px rgba(141, 27, 49, 0.035),
+        0 0 0 70px rgba(141, 27, 49, 0.018);
+
+    pointer-events: none;
+}
+
+.cities-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 270px;
+    height: 170px;
+
+    left: -100px;
+    bottom: -70px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.10);
+
+    pointer-events: none;
+}
+
+.cities-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   BUDGET
+========================================================= */
+
+.budget-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 12% 20%,
+            rgba(194, 91, 120, 0.12),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 88% 80%,
+            rgba(201, 145, 58, 0.12),
+            transparent 28%
+        ),
+        #fffaf3;
+}
+
+.budget-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    left: -190px;
+    top: -180px;
+
+    border-radius: 50%;
+
+    background: rgba(213, 145, 163, 0.10);
+
+    box-shadow:
+        0 0 0 45px rgba(213, 145, 163, 0.035);
+
+    pointer-events: none;
+}
+
+.budget-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 320px;
+    height: 170px;
+
+    right: -120px;
+    bottom: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.10);
+
+    pointer-events: none;
+}
+
+.budget-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   EVENT TYPE
+   Already dark — only add decorative elements
+========================================================= */
+
+.event-discovery-section {
+    position: relative;
+}
+
+.event-discovery-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    left: -250px;
+    top: 20px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(229, 184, 79, 0.13);
+
+    box-shadow:
+        0 0 0 35px rgba(229, 184, 79, 0.035),
+        0 0 0 70px rgba(229, 184, 79, 0.018);
+
+    pointer-events: none;
+}
+
+.event-discovery-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   TRENDING SERVICES
+========================================================= */
+
+.trending-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 7% 78%,
+            rgba(184, 78, 110, 0.14),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 94% 15%,
+            rgba(201, 145, 58, 0.13),
+            transparent 28%
+        ),
+        #fffaf3;
+}
+
+.trending-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    right: -210px;
+    top: -190px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(141, 27, 49, 0.08);
+
+    box-shadow:
+        0 0 0 40px rgba(141, 27, 49, 0.025),
+        0 0 0 80px rgba(141, 27, 49, 0.015);
+
+    pointer-events: none;
+}
+
+.trending-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 170px;
+
+    left: -120px;
+    bottom: -70px;
+
+    border-radius: 50%;
+
+    background: rgba(205, 128, 153, 0.09);
+
+    pointer-events: none;
+}
+
+.trending-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   FEATURED PACKAGES
+========================================================= */
+
+.packages-discovery-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 90% 18%,
+            rgba(184, 78, 110, 0.13),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 8% 85%,
+            rgba(201, 145, 58, 0.12),
+            transparent 28%
+        ),
+        var(--cream);
+}
+
+.packages-discovery-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    right: -180px;
+    top: -180px;
+
+    border-radius: 50%;
+
+    background: rgba(210, 139, 158, 0.08);
+
+    box-shadow:
+        0 0 0 40px rgba(210, 139, 158, 0.025);
+
+    pointer-events: none;
+}
+
+.packages-discovery-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 270px;
+    height: 170px;
+
+    left: -100px;
+    bottom: -70px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.09);
+
+    pointer-events: none;
+}
+
+.packages-discovery-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   PLAN BY FUNCTION
+========================================================= */
+
+.function-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 7% 18%,
+            rgba(184, 78, 110, 0.13),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 93% 82%,
+            rgba(201, 145, 58, 0.12),
+            transparent 27%
+        ),
+        var(--cream);
+}
+
+.function-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 430px;
+    height: 430px;
+
+    left: -240px;
+    bottom: -230px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(141, 27, 49, 0.08);
+
+    box-shadow:
+        0 0 0 40px rgba(141, 27, 49, 0.025),
+        0 0 0 80px rgba(141, 27, 49, 0.015);
+
+    pointer-events: none;
+}
+
+.function-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 330px;
+    height: 180px;
+
+    right: -120px;
+    top: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.09);
+
+    pointer-events: none;
+}
+
+.function-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   INSPIRATION
+========================================================= */
+
+.inspiration-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 6% 15%,
+            rgba(184, 78, 110, 0.12),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 94% 88%,
+            rgba(201, 145, 58, 0.11),
+            transparent 27%
+        ),
+        #fffaf3;
+}
+
+.inspiration-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 330px;
+    height: 330px;
+
+    right: -160px;
+    top: -160px;
+
+    border-radius: 50%;
+
+    background: rgba(213, 145, 163, 0.09);
+
+    pointer-events: none;
+}
+
+.inspiration-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 170px;
+
+    left: -110px;
+    bottom: -70px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.09);
+
+    pointer-events: none;
+}
+
+.inspiration-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   BUDGET PLANNER
+   Dark section — add visible gold glow
+========================================================= */
+
+.budget-planner-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.budget-planner-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    left: -280px;
+    top: -220px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(229, 184, 79, 0.12);
+
+    box-shadow:
+        0 0 0 45px rgba(229, 184, 79, 0.035),
+        0 0 0 90px rgba(229, 184, 79, 0.018);
+
+    pointer-events: none;
+}
+
+.budget-planner-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 430px;
+    height: 430px;
+
+    right: -240px;
+    bottom: -230px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(229, 184, 79, 0.10);
+
+    pointer-events: none;
+}
+
+.budget-planner-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.how-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.how-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    right: -220px;
+    top: -200px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.07);
+
+    box-shadow:
+        0 0 0 45px rgba(201, 145, 58, 0.025);
+
+    pointer-events: none;
+}
+
+.how-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 180px;
+
+    left: -120px;
+    bottom: -90px;
+
+    border-radius: 50%;
+
+    background: rgba(184, 78, 110, 0.07);
+
+    pointer-events: none;
+}
+
+.how-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   WHY WEDBOOK
+========================================================= */
+
+.why-wedbook-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 8% 18%,
+            rgba(184, 78, 110, 0.13),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 92% 80%,
+            rgba(201, 145, 58, 0.12),
+            transparent 27%
+        ),
+        #fffaf3;
+}
+
+.why-wedbook-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    right: -210px;
+    top: -200px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(141, 27, 49, 0.08);
+
+    box-shadow:
+        0 0 0 40px rgba(141, 27, 49, 0.025),
+        0 0 0 80px rgba(141, 27, 49, 0.015);
+
+    pointer-events: none;
+}
+
+.why-wedbook-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 180px;
+
+    left: -110px;
+    bottom: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.09);
+
+    pointer-events: none;
+}
+
+.why-wedbook-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   TESTIMONIALS
+========================================================= */
+
+.testimonials-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(184, 78, 110, 0.13),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(201, 145, 58, 0.12),
+            transparent 27%
+        ),
+        #fff;
+}
+
+.testimonials-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 460px;
+    height: 180px;
+
+    left: 50%;
+    top: -100px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(205, 128, 153, 0.11);
+
+    pointer-events: none;
+}
+
+.testimonials-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 170px;
+
+    right: -100px;
+    bottom: -70px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.10);
+
+    pointer-events: none;
+}
+
+.testimonials-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   VENDOR CTA
+========================================================= */
+
+.vendor-cta-section {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 8% 20%,
+            rgba(184, 78, 110, 0.13),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 92% 80%,
+            rgba(201, 145, 58, 0.13),
+            transparent 27%
+        ),
+        #fffaf3;
+}
+
+.vendor-cta-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    left: -220px;
+    top: -200px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(141, 27, 49, 0.08);
+
+    box-shadow:
+        0 0 0 40px rgba(141, 27, 49, 0.025),
+        0 0 0 80px rgba(141, 27, 49, 0.015);
+
+    pointer-events: none;
+}
+
+.vendor-cta-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 180px;
+
+    right: -110px;
+    bottom: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 145, 58, 0.10);
+
+    pointer-events: none;
+}
+
+.vendor-cta-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .vendors-section::before,
+    .cities-section::before,
+    .budget-section::before,
+    .trending-section::before,
+    .packages-discovery-section::before,
+    .function-section::before,
+    .inspiration-section::before,
+    .why-wedbook-section::before,
+    .testimonials-section::before,
+    .vendor-cta-section::before {
+        opacity: .8;
+    }
+}

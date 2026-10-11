@@ -1,0 +1,388 @@
+/* =========================================
+   CATEGORY VENDORS PAGE
+========================================= */
+
+.category-page {
+    padding-top: 66px;
+}
+
+
+/* =========================================
+   CATEGORY HERO
+========================================= */
+
+.category-hero {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--maroon-900),
+            var(--maroon-800)
+        );
+
+    color: var(--cream);
+
+    padding: 72px 0 78px;
+}
+
+.category-hero-inner {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Back Link */
+
+.back-link {
+    display: inline-block;
+
+    color: #e6c2b5;
+
+    font-size: 0.78rem;
+
+    margin-bottom: 35px;
+
+    transition: color 0.25s ease;
+}
+
+.back-link:hover {
+    color: var(--gold-light);
+}
+
+
+/* Category Heading */
+
+.category-hero h1 {
+    color: var(--gold-light);
+
+    font-size: clamp(
+        2.8rem,
+        5vw,
+        4.25rem
+    );
+
+    line-height: 1.05;
+
+    margin: 16px 0 13px;
+}
+
+
+/* Category Description */
+
+.category-hero p {
+    color: #e6c4b8;
+
+    max-width: 620px;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================
+   RESULTS SECTION
+========================================= */
+
+.category-results {
+    padding: 70px 0 100px;
+
+    background: var(--cream);
+}
+
+
+/* Top Bar */
+
+.results-topbar {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: end;
+
+    gap: 25px;
+
+    margin-bottom: 34px;
+}
+
+
+/* Results Heading */
+
+.results-topbar h2 {
+    font-size: 2.2rem;
+}
+
+
+/* Results Count */
+
+.results-topbar p {
+    color: var(--muted);
+
+    font-size: 0.75rem;
+
+    margin-top: 5px;
+}
+
+
+/* =========================================
+   BROWSE CATEGORIES BUTTON
+========================================= */
+
+.btn-outline-dark {
+    color: var(--maroon-800);
+
+    border: 1px solid #d9bfa9;
+
+    background: transparent;
+
+    min-height: 40px;
+
+    padding: 0 18px;
+
+    font-size: 0.72rem;
+}
+
+.btn-outline-dark:hover {
+    background: var(--cream-2);
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+    text-align: center;
+
+    padding: 70px 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    background: #fffdf9;
+}
+
+.empty-state h3 {
+    font-size: 1.6rem;
+}
+
+.empty-state p {
+    color: var(--muted);
+
+    margin: 8px 0 22px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 560px) {
+
+    .category-page {
+        padding-top: 62px;
+    }
+
+    .category-hero {
+        padding: 48px 0 55px;
+    }
+
+    .results-topbar {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .category-results {
+        padding: 52px 0 70px;
+    }
+
+}
+
+
+/* =========================================
+   CATEGORY PAGE VENDOR CARD FIX
+========================================= */
+
+.category-results .vendor-card {
+    padding: 14px;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+
+/* Image wrapper */
+
+.category-results .vendor-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+
+/* Vendor image */
+
+.category-results .vendor-image-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* Category / badge */
+
+.category-results .vendor-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: #fffdf9;
+    color: var(--maroon-800);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Card body */
+
+.category-results .vendor-card-body {
+    padding: 14px 2px 2px;
+}
+
+
+/* Location */
+
+.category-results .vendor-location {
+    margin-bottom: 6px;
+
+    color: var(--muted);
+
+    font-size: 0.72rem;
+}
+
+
+/* Vendor name */
+
+.category-results .vendor-name {
+    margin: 0 0 8px;
+
+    font-family: var(--display);
+
+    font-size: 1.18rem;
+
+    line-height: 1.2;
+
+    color: var(--maroon-900);
+}
+
+
+/* Rating */
+
+.category-results .vendor-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-bottom: 14px;
+
+    font-size: 0.75rem;
+}
+
+
+/* Rating star */
+
+.category-results .rating-star {
+    color: var(--gold);
+}
+
+
+/* Bottom section */
+
+.category-results .vendor-card-bottom {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding-top: 13px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+/* Price */
+
+.category-results .vendor-price {
+    color: var(--maroon-900);
+
+    font-size: 0.95rem;
+
+    font-weight: 600;
+}
+
+
+/* Book Now */
+
+.category-results .vendor-book-btn {
+    flex-shrink: 0;
+
+    min-height: 40px;
+
+    padding: 0 20px;
+
+    border-radius: 22px;
+
+    font-size: 0.72rem;
+}
+
+
+/* =========================================
+   IMAGE HOVER
+========================================= */
+
+.category-results .vendor-image-wrap img {
+    transition: transform 0.35s ease;
+}
+
+.category-results .vendor-card:hover .vendor-image-wrap img {
+    transform: scale(1.04);
+}
+
+/* =========================================
+   CLICKABLE VENDOR CARD
+========================================= */
+
+.category-results .vendor-card {
+    cursor: pointer;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.category-results .vendor-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 18px 45px rgba(70, 24, 8, 0.13);
+}
+
+.category-results .vendor-card:focus-visible {
+    outline: 2px solid var(--gold);
+
+    outline-offset: 3px;
+}

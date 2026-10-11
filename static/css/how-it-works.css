@@ -1,0 +1,144 @@
+.how-section { position: relative; overflow: hidden; background: linear-gradient(135deg, #670a1b, #800d22, #68091a); color: #fff5eb; padding: 88px 0 84px; }
+.how-section .container { position: relative; z-index: 1; }
+.steps { margin-top: 62px; display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; align-items: start; }
+.step { text-align: center; padding: 0 26px; }
+.step-number { width: 65px; height: 65px; margin: 0 auto 21px; border-radius: 50%; border: 1px solid rgba(216,154,53,.5); background: rgba(216,154,53,.18); display: grid; place-items: center; color: var(--gold-light); font-family: var(--display); font-weight: 700; font-size: 1.05rem; }
+.step h3 { font-size: 1.05rem; color: #fff3e6; margin-bottom: 8px; }
+.step p { max-width: 310px; margin: auto; color: #e2bdb1; font-size: .78rem; line-height: 1.65; }
+.step-line { height: 1px; margin-top: 32px; background: rgba(216,154,53,.35); }
+
+
+/* =========================================================
+   MOBILE — HOW WEDBOOK WORKS
+   ========================================================= */
+
+/* =========================================================
+   HOW WEDBOOK WORKS - MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .how-section {
+        width: 100%;
+        padding: 58px 0 60px;
+        overflow: hidden;
+    }
+
+    .how-section .container {
+        width: min(calc(100% - 28px), var(--container));
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Heading */
+
+    .how-section .center-heading {
+        width: 100%;
+        margin: 0 0 48px;
+        text-align: center;
+    }
+
+    .how-section .center-heading .eyebrow {
+        margin-bottom: 10px;
+        font-size: 0.58rem;
+        letter-spacing: 0.16em;
+    }
+
+    .how-section .center-heading h2 {
+        margin: 0;
+        font-size: 1.55rem;
+        line-height: 1.15;
+    }
+
+
+    /* Steps wrapper */
+
+    .how-section .steps {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        margin: 0;
+    }
+
+
+    /* Hide desktop connecting lines */
+
+    .how-section .step-line {
+        display: none !important;
+    }
+
+
+    /* Individual step */
+
+    .how-section .step {
+        width: 100%;
+        max-width: 320px;
+        min-width: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding: 0;
+        margin: 0;
+
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+
+        text-align: center;
+    }
+
+
+    /* Number circle */
+
+    .how-section .step-number {
+        width: 52px;
+        height: 52px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 0 0 18px;
+
+        border-radius: 50%;
+
+        font-size: 0.72rem;
+        font-weight: 700;
+        line-height: 1;
+
+        flex-shrink: 0;
+    }
+
+
+    /* Step title */
+
+    .how-section .step h3 {
+        width: 100%;
+
+        margin: 0 0 10px;
+
+        font-size: 0.95rem;
+        line-height: 1.25;
+
+        text-align: center;
+    }
+
+
+    /* Step description */
+
+    .how-section .step p {
+        width: 100%;
+        max-width: 300px;
+
+        margin: 0;
+
+        font-size: 0.70rem;
+        line-height: 1.6;
+
+        text-align: center;
+    }
+}

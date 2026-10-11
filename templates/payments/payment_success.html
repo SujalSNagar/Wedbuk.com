@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Booking Confirmed | WedBook{% endblock %}
+
+{% block content %}
+
+<main style="
+    min-height:70vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:140px 20px 80px;
+    background:#fbf7f0;
+">
+
+    <div style="
+        width:min(560px,100%);
+        padding:45px 30px;
+        text-align:center;
+        background:#ffffff;
+        border:1px solid #eadfd5;
+        border-radius:18px;
+        box-shadow:0 10px 35px rgba(74,40,35,.07);
+    ">
+
+        <div style="
+            width:70px;
+            height:70px;
+            margin:0 auto 20px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:50%;
+            color:#ffffff;
+            background:#951c36;
+            font-size:34px;
+        ">
+
+            <span
+                class="iconify"
+                data-icon="solar:check-circle-bold">
+            </span>
+
+        </div>
+
+
+        <span style="
+            display:block;
+            margin-bottom:8px;
+            color:#b07b22;
+            font-size:10px;
+            font-weight:800;
+            letter-spacing:2px;
+        ">
+            PAYMENT SUCCESSFUL
+        </span>
+
+
+        <h1 style="
+            margin:0 0 12px;
+            color:#5b2630;
+            font-family:Georgia,'Times New Roman',serif;
+            font-size:36px;
+        ">
+            Booking Confirmed
+        </h1>
+
+
+        <p style="
+            margin:0 auto 25px;
+            max-width:430px;
+            color:#7f6d6a;
+            font-size:14px;
+            line-height:1.7;
+        ">
+            Your payment was successful and your booking has been confirmed.
+        </p>
+
+
+<div style="
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+">
+
+    <!-- VIEW BOOKING -->
+    <a
+        href="{% url 'bookings:my_bookings' %}"
+        style="
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            padding:13px 22px;
+            border-radius:9px;
+            color:#ffffff;
+            background:#951c36;
+            text-decoration:none;
+            font-size:13px;
+            font-weight:700;
+        "
+    >
+
+        <span
+            class="iconify"
+            data-icon="solar:calendar-mark-bold">
+        </span>
+
+        View My Booking
+
+    </a>
+
+
+    <!-- CONTINUE -->
+    <a
+        href="{% url 'listings:my_listings' %}"
+        style="
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            padding:13px 22px;
+            border-radius:9px;
+            color:#951c36;
+            background:#ffffff;
+            border:1px solid #951c36;
+            text-decoration:none;
+            font-size:13px;
+            font-weight:700;
+        "
+    >
+
+        <span
+            class="iconify"
+            data-icon="solar:home-2-linear">
+        </span>
+
+        Continue
+
+    </a>
+
+</div>
+
+    </div>
+
+</main>
+
+
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+{% endblock %}

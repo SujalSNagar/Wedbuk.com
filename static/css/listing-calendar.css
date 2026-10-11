@@ -1,0 +1,1042 @@
+/* =========================================================
+   WEDBOOK - AVAILABILITY CALENDAR MODAL
+   ========================================================= */
+
+
+/* =========================================================
+   MODAL BACKDROP
+   ========================================================= */
+
+.availability-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(38, 8, 18, 0.72);
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.availability-modal.show {
+    display: flex;
+}
+
+
+/* =========================================================
+   OVERLAY
+   ========================================================= */
+
+.availability-modal-overlay {
+    position: absolute;
+    inset: 0;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   MODAL BOX
+   ========================================================= */
+
+.availability-modal-dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(520px, 100%);
+    max-height: calc(100vh - 48px);
+
+    overflow-y: auto;
+
+    border: 1px solid #ddc9a5;
+    border-radius: 20px;
+
+    background: #fffdf9;
+
+    box-shadow:
+        0 25px 70px rgba(52, 10, 22, 0.28);
+
+    animation: availabilityModalIn .22s ease;
+}
+
+@keyframes availabilityModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   MODAL HEADER
+   ========================================================= */
+
+.availability-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 25px 25px 18px;
+
+    border-bottom: 1px solid #eee2d5;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffdf9,
+            #fff8ed
+        );
+}
+
+.availability-modal-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-bottom: 7px;
+
+    color: #a07632;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.availability-modal-eyebrow iconify-icon {
+    font-size: 15px;
+}
+
+.availability-modal-header h2 {
+    margin: 0;
+
+    color: #561626;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+    line-height: 1.25;
+}
+
+.availability-modal-header p {
+    margin: 7px 0 0;
+
+    color: #81756e;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
+
+.availability-modal-close {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e4d4bb;
+    border-radius: 10px;
+
+    color: #7d1a30;
+    background: #fff;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.availability-modal-close:hover {
+    color: #fff;
+    background: #8d1b31;
+    border-color: #8d1b31;
+}
+
+.availability-modal-close iconify-icon {
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   CALENDAR WRAPPER
+   ========================================================= */
+
+.booking-calendar {
+    padding: 22px 25px 25px;
+}
+
+
+/* =========================================================
+   MONTH TOP BAR
+   ========================================================= */
+
+.calendar-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.calendar-topbar h3 {
+    margin: 0;
+
+    color: #571626;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MONTH NAVIGATION
+   ========================================================= */
+
+.calendar-nav-button {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #dfcba7;
+    border-radius: 10px;
+
+    color: #7d1a30;
+    background: #fffaf2;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.calendar-nav-button:hover {
+    color: #fff;
+    background: #8d1b31;
+    border-color: #8d1b31;
+
+    transform: translateY(-1px);
+}
+
+.calendar-nav-button:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+.calendar-nav-button iconify-icon {
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   WEEK DAYS
+   ========================================================= */
+
+.calendar-weekdays {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 5px;
+
+    margin-bottom: 7px;
+}
+
+.calendar-weekdays span {
+    padding: 7px 0;
+
+    color: #95877d;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-align: center;
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* =========================================================
+   CALENDAR DAYS
+   ========================================================= */
+
+.calendar-days {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+/* =========================================================
+   DAY BUTTON
+   ========================================================= */
+
+.calendar-day {
+    position: relative;
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    color: #5f514a;
+    background: #fff;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+}
+
+
+/* Empty calendar cells */
+
+.calendar-day.empty {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+/* Previous/next month days */
+
+.calendar-day.outside {
+    color: #c5bbb3;
+    background: #faf7f3;
+
+    cursor: default;
+}
+
+
+/* Available */
+
+.calendar-day.available {
+    border-color: #dfcba7;
+
+    color: #6d4d1c;
+    background: #fffaf1;
+}
+
+.calendar-day.available:hover {
+    border-color: #a77d38;
+
+    color: #fff;
+    background: #8d1b31;
+
+    transform: translateY(-1px);
+}
+
+
+/* Booked */
+
+.calendar-day.booked {
+    color: #aaa29c;
+    background: #eeeae7;
+    border-color: #e1dbd6;
+    cursor: not-allowed;
+    text-decoration: none;
+    opacity: 1;
+}
+
+.calendar-day.booked:hover {
+    color: #8f8781;
+    background: #e7e2de;
+    border-color: #d6cec7;
+    transform: none;
+}
+
+/* Blocked / not available */
+
+.calendar-day.blocked {
+    color: #b0a69f;
+    background: #f5f1ed;
+
+    cursor: not-allowed;
+}
+
+.calendar-day.blocked:hover {
+    transform: none;
+}
+
+
+/* Outside availability period */
+
+.calendar-day.unavailable {
+    color: #bbb1aa;
+    background: #f7f4f0;
+
+    cursor: not-allowed;
+}
+
+.calendar-day.unavailable:hover {
+    transform: none;
+}
+
+
+/* Past date */
+
+.calendar-day.past {
+    color: #c4bbb5;
+    background: #faf8f5;
+
+    cursor: not-allowed;
+}
+
+.calendar-day.past:hover {
+    transform: none;
+}
+
+
+/* Today */
+
+.calendar-day.today {
+    border-color: #a77d38;
+}
+
+.calendar-day.today::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: 5px;
+    left: 50%;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #a77d38;
+
+    transform: translateX(-50%);
+}
+
+
+/* Selected */
+
+.calendar-day.selected {
+    color: #fff;
+
+    border-color: #7d142a;
+
+    background: #8d1b31;
+
+    box-shadow:
+        0 5px 14px rgba(141, 27, 49, .20);
+}
+
+.calendar-day.selected::after {
+    background: #e5c987;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.calendar-loading {
+    grid-column: 1 / -1;
+
+    min-height: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #927e70;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   LEGEND
+   ========================================================= */
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    margin-top: 20px;
+    padding-top: 17px;
+
+    border-top: 1px solid #eee2d5;
+}
+
+.calendar-legend > div {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #766a63;
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.legend-dot {
+    width: 9px;
+    height: 9px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+}
+
+.legend-dot.available {
+    background: #a77d38;
+}
+
+.legend-dot.booked {
+    background: #aaa19b;
+}
+
+.legend-dot.blocked {
+    background: #d4c8bd;
+}
+
+
+/* =========================================================
+   DATE INFORMATION
+   ========================================================= */
+
+.calendar-date-info {
+    margin-top: 15px;
+    padding: 13px 14px;
+
+    border: 1px solid #eadbc4;
+    border-radius: 10px;
+
+    color: #75665d;
+    background: #fffaf1;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.calendar-date-info.available-info {
+    color: #674919;
+    border-color: #e2c98d;
+    background: #fff8e8;
+}
+
+.calendar-date-info.booked-info {
+    color: #776e69;
+    border-color: #ddd7d2;
+    background: #f5f2ef;
+}
+
+.calendar-date-info.blocked-info {
+    color: #7c6e66;
+    border-color: #ddd3ca;
+    background: #f6f2ee;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .availability-modal {
+        padding: 12px;
+    }
+
+    .availability-modal-dialog {
+        width: 100%;
+        max-height: calc(100vh - 24px);
+
+        border-radius: 16px;
+    }
+
+    .availability-modal-header {
+        padding: 20px 18px 15px;
+    }
+
+    .availability-modal-header h2 {
+        font-size: 21px;
+    }
+
+    .availability-modal-header p {
+        font-size: 11px;
+    }
+
+    .availability-modal-close {
+        width: 34px;
+        height: 34px;
+    }
+
+    .booking-calendar {
+        padding: 18px;
+    }
+
+    .calendar-topbar h3 {
+        font-size: 18px;
+    }
+
+    .calendar-nav-button {
+        width: 34px;
+        height: 34px;
+    }
+
+    .calendar-days {
+        gap: 4px;
+    }
+
+    .calendar-day {
+        min-height: 42px;
+
+        border-radius: 8px;
+
+        font-size: 11px;
+    }
+
+    .calendar-weekdays {
+        gap: 4px;
+    }
+
+    .calendar-weekdays span {
+        font-size: 9px;
+    }
+
+    .calendar-legend {
+        gap: 10px;
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .availability-modal-header {
+        gap: 10px;
+    }
+
+    .availability-modal-header h2 {
+        font-size: 19px;
+    }
+
+    .booking-calendar {
+        padding: 15px;
+    }
+
+    .calendar-day {
+        min-height: 39px;
+    }
+
+    .calendar-legend > div {
+        font-size: 9px;
+    }
+
+}
+
+
+/* =========================================================
+   DATE RANGE SELECTION
+   ========================================================= */
+.calendar-day.in-range {
+    background: #741326;
+    color: #ffffff;
+    border-color: #741326;
+    border-radius: 0;
+}
+
+.calendar-day.range-start {
+    background: #741326;
+    color: #ffffff;
+    border-color: #741326;
+    border-radius: 9px;
+}
+
+.calendar-day.range-end {
+    background: #741326;
+    color: #ffffff;
+    border-color: #741326;
+    border-radius: 9px;
+}
+
+.calendar-day.range-start.range-end {
+    border-radius: 9px;
+}
+
+/* =========================================================
+   SELECTED RANGE BOX
+   ========================================================= */
+
+.calendar-selected-range {
+    margin-top: 15px;
+    padding: 15px;
+
+    border: 1px solid #dfcba7;
+    border-radius: 11px;
+
+    background: #fffaf1;
+}
+
+
+.selected-range-title {
+    margin-bottom: 10px;
+
+    color: #80612c;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+
+
+.selected-range-dates {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.selected-range-dates > iconify-icon {
+    flex-shrink: 0;
+
+    color: #a77d38;
+
+    font-size: 18px;
+}
+
+
+.selected-range-date {
+    flex: 1;
+
+    padding: 9px 10px;
+
+    border: 1px solid #eadbc4;
+    border-radius: 8px;
+
+    background: #fff;
+}
+
+
+.selected-range-date span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #95877d;
+
+    font-size: 9px;
+}
+
+
+.selected-range-date strong {
+    color: #571626;
+
+    font-size: 12px;
+}
+
+
+.selected-range-days {
+    margin-top: 10px;
+
+    color: #745725;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.selected-range-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    margin-top: 9px;
+
+    color: #6b511e;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+.selected-range-status iconify-icon {
+    color: #9b722d;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   CONTINUE BOOKING
+   ========================================================= */
+
+.continue-booking-button {
+    width: 100%;
+
+    min-height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 13px;
+
+    border: 1px solid #86172e;
+    border-radius: 8px;
+
+    color: #fff;
+    background: #8d1b31;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.continue-booking-button:hover {
+    background: #741326;
+}
+
+
+.continue-booking-button:disabled {
+    border-color: #ddd2c8;
+
+    color: #aaa09a;
+    background: #eeeae6;
+
+    cursor: not-allowed;
+}
+
+
+.continue-booking-button iconify-icon {
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .selected-range-dates {
+        gap: 7px;
+    }
+
+    .selected-range-date {
+        padding: 8px;
+    }
+
+    .selected-range-date strong {
+        font-size: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   COMPACT AVAILABILITY CALENDAR
+   ========================================================= */
+
+.availability-modal {
+    padding: 16px;
+}
+
+.availability-modal-dialog {
+    width: min(500px, 100%);
+    max-height: calc(100vh - 32px);
+}
+
+.availability-modal-header {
+    padding: 18px 20px 13px;
+}
+
+.availability-modal-eyebrow {
+    margin-bottom: 5px;
+    font-size: 9px;
+}
+
+.availability-modal-header h2 {
+    font-size: 21px;
+    line-height: 1.15;
+    margin-bottom: 5px;
+}
+
+.availability-modal-header p {
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* Calendar area */
+.booking-calendar {
+    padding: 15px 20px 17px;
+}
+
+/* Month navigation */
+.calendar-topbar {
+    margin-bottom: 8px;
+}
+
+.calendar-topbar h3 {
+    font-size: 18px;
+}
+
+.calendar-nav-button {
+    width: 36px;
+    height: 36px;
+}
+
+/* Week names */
+.calendar-weekdays {
+    gap: 4px;
+    margin-bottom: 5px;
+}
+
+.calendar-weekdays span {
+    padding: 5px 0;
+    font-size: 9px;
+}
+
+/* Dates */
+.calendar-days {
+    gap: 4px;
+}
+
+.calendar-day {
+    min-height: 39px;
+    border-radius: 8px;
+    font-size: 11px;
+}
+
+/* Legend */
+.calendar-legend {
+    gap: 12px;
+    margin-top: 13px;
+    padding-top: 11px;
+}
+
+.calendar-legend > div {
+    font-size: 9px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+}
+
+/* Date information */
+.calendar-date-info {
+    margin-top: 10px;
+    padding: 9px 11px;
+    font-size: 10px;
+}
+
+/* Selected dates box */
+.calendar-selected-range {
+    margin-top: 10px;
+    padding: 11px;
+    border-radius: 9px;
+}
+
+.selected-range-title {
+    margin-bottom: 7px;
+    font-size: 9px;
+}
+
+.selected-range-dates {
+    gap: 8px;
+}
+
+.selected-range-date {
+    padding: 7px 8px;
+    border-radius: 7px;
+}
+
+.selected-range-date span {
+    margin-bottom: 2px;
+    font-size: 8px;
+}
+
+.selected-range-date strong {
+    font-size: 11px;
+}
+
+.selected-range-dates > iconify-icon {
+    font-size: 16px;
+}
+
+.selected-range-days {
+    margin-top: 7px;
+    font-size: 10px;
+}
+
+.selected-range-status {
+    margin-top: 6px;
+    font-size: 9px;
+}
+
+.selected-range-status iconify-icon {
+    font-size: 13px;
+}
+
+/* Continue button */
+.continue-booking-button {
+    min-height: 38px;
+    margin-top: 9px;
+    font-size: 11px;
+}

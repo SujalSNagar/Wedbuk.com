@@ -1,0 +1,1987 @@
+{% extends 'base.html' %}
+
+
+{% load static %}
+
+{% block title %}
+WedBook — India's Wedding Marketplace
+{% endblock %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/video-section.css' %}">
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/budget-planner.css' %}"
+>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/home-responsive.css' %}"
+>
+{% endblock %}
+
+{% block content %}
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <div class="hero-pattern"></div>
+
+
+    <div class="container hero-inner">
+
+
+        <div class="hero-copy">
+
+
+            <div class="eyebrow eyebrow-light">
+
+                <span></span>
+
+                INDIA'S WEDDING MARKETPLACE
+
+                <span></span>
+
+            </div>
+
+
+            <h1>
+                Your Perfect<br>
+                Wedding, <em>Curated</em><br>
+                for You
+            </h1>
+
+
+            <p>
+                Discover and book trusted vendors for every wedding
+                requirement — from majestic venues and bespoke
+                decoration to bridal beauty and soulful band music.
+                Find the perfect services for your special day.
+            </p>
+
+
+            <!-- SEARCH -->
+
+            <form
+                class="search-box"
+                id="vendor-search"
+                action="{% url 'listings:search' %}"
+                method="get"
+            >
+
+                <label class="search-location">
+
+                    <span class="location-icon">
+
+                        <iconify-icon
+                            icon="mdi:map-marker-outline">
+                        </iconify-icon>
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="search-input"
+                        name="q"
+                        placeholder="Search vendors, venues, cities, services..."
+                        aria-label="Search vendors, venues, cities, services"
+                    >
+
+                </label>
+
+
+                <button
+                    class="btn btn-gold search-button"
+                    type="submit"
+                >
+
+                    <iconify-icon
+                        icon="mdi:magnify">
+                    </iconify-icon>
+
+                    Search
+
+                </button>
+
+            </form>
+
+
+            <!-- STATS -->
+
+            <div class="hero-stats">
+
+
+                <div>
+
+                    <strong>
+                        {{ stats.vendor_count }}<span>+</span>
+                    </strong>
+
+                    <small>
+                        Vendors
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        {{ stats.listing_count }}<span>+</span>
+                    </strong>
+
+                    <small>
+                        Services
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        {{ stats.category_count }}
+                    </strong>
+
+                    <small>
+                        Categories
+                    </small>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- HERO IMAGES -->
+
+        <div
+            class="hero-gallery"
+            aria-label="Wedding venue photos"
+        >
+
+            <img
+                class="hero-img hero-img-1"
+                src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=85"
+                alt="Elegant wedding venue"
+            >
+
+
+            <img
+                class="hero-img hero-img-2"
+                src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=85"
+                alt="Wedding aisle decoration"
+            >
+
+
+            <img
+                class="hero-img hero-img-3"
+                src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=85"
+                alt="Decorated wedding mandap"
+            >
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CATEGORIES
+     ========================================================= -->
+
+<section
+    class="categories-section"
+    id="services"
+>
+
+    <div class="category-wave"></div>
+
+
+    <div class="container">
+
+
+        <div class="category-grid">
+
+
+            {% for category in categories %}
+
+                <a href="{% url 'listings:category_detail' category.slug %}" class="category-card">
+
+                    <span class="category-icon">
+
+                        {% if category.icon %}
+
+                            <img
+                                src="{{ category.icon.url }}"
+                                alt="{{ category.name }}"
+                            >
+
+                        {% else %}
+
+                            ✦
+
+                        {% endif %}
+
+                    </span>
+
+
+                    <strong>
+                        {{ category.name }}
+                    </strong>
+
+
+                    <small>
+                        {{ category.vendor_count }} vendors
+                    </small>
+
+                </a>
+
+
+            {% empty %}
+
+                <p>
+                    No categories available yet.
+                </p>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FEATURED VENDORS
+     ========================================================= -->
+
+<section
+    class="vendors-section section-light"
+    id="vendors"
+>
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <div class="eyebrow eyebrow-gold">
+                    HANDPICKED FOR YOU
+                </div>
+
+                <h2>
+                    Featured Vendors
+                </h2>
+
+            </div>
+
+
+            <a
+                class="view-all"
+                href="{% url 'listings:search' %}"
+            >
+                View All
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        <div class="vendor-grid">
+
+    {% for vendor in featured_vendors %}
+
+        {% with listing=vendor.active_listings.0 %}
+
+            {% if listing %}
+
+                <a
+                    class="vendor-card"
+                    href="{% url 'listings:listing_detail' listing.id %}"
+                >
+
+                    <div class="vendor-image-wrap">
+
+                        {% if listing.cover_image %}
+
+                            <img
+                                src="{{ listing.cover_image.url }}"
+                                alt="{{ listing.title }}"
+                            >
+
+                        {% else %}
+
+                            <div class="vendor-image-placeholder">
+                                WedBook
+                            </div>
+
+                        {% endif %}
+
+                        <span class="vendor-badge">
+                            Featured
+                        </span>
+
+                        <span class="vendor-category">
+                            {{ listing.category.name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="vendor-body">
+
+                        <h3>
+                            {{ vendor.business_name }}
+                        </h3>
+
+
+                        <p class="vendor-location">
+
+                            <iconify-icon
+                                icon="mdi:map-marker-outline">
+                            </iconify-icon>
+
+                            {{ vendor.city }}
+
+                        </p>
+
+
+                        <div class="rating">
+
+                            <span>
+                                ★★★★★
+                            </span>
+
+                            <b>—</b>
+
+                            <span>
+                                Reviews coming soon
+                            </span>
+
+                        </div>
+
+
+                        <div class="vendor-price">
+
+                            <div>
+
+                                <strong>
+                                    ₹{{ listing.base_price }}
+                                </strong>
+
+                                <small>
+                                    starting price
+                                </small>
+
+                            </div>
+
+
+                            
+                            <span class="btn btn-gold enquiry-btn">
+                                View
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            {% endif %}
+
+        {% endwith %}
+
+    {% empty %}
+
+        <p>
+            No vendors available yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+    </div>
+
+</section>
+
+
+
+
+
+{% load static %}
+
+<!-- =========================================================
+     BUDGET PLANNER
+     ========================================================= -->
+
+<section class="budget-planner-section">
+
+    <div class="container">
+
+        
+        <div class="budget-planner">
+            
+            <div class="planner-heading">
+    
+                <div class="eyebrow eyebrow-gold">
+                    PLAN YOUR CELEBRATION
+                </div>
+    
+                <h2>
+                    Find Options That Fit
+                    <span>Your Budget</span>
+                </h2>
+    
+                <p>
+                    Tell us where you're planning, how many guests you're expecting
+                    and what you need. We'll show you options that match your plan.
+                </p>
+    
+            </div>
+
+            <!-- =================================================
+                 LEFT SIDE
+                 ================================================= -->
+
+            <div class="budget-planner-content">
+
+
+                <!-- LOCATION -->
+
+
+<div class="planner-field planner-location-field">
+
+    <label>
+        Event Location
+    </label>
+
+
+    <div class="planner-location-grid">
+
+        <!-- STATE -->
+
+        <div class="planner-select-wrap">
+
+            <select
+                id="plannerState"
+                class="planner-location-select"
+            >
+
+                <option value="">
+                    Select State
+                </option>
+
+                {% for state in states %}
+
+                    <option value="{{ state.id }}">
+                        {{ state.name }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <iconify-icon
+                icon="mdi:chevron-down"
+                class="planner-select-arrow">
+            </iconify-icon>
+
+        </div>
+
+
+        <!-- CITY -->
+
+        <div class="planner-select-wrap">
+
+            <select
+                id="plannerCity"
+                class="planner-location-select"
+                disabled
+            >
+
+                <option value="">
+                    Select City
+                </option>
+
+            </select>
+
+            <iconify-icon
+                icon="mdi:chevron-down"
+                class="planner-select-arrow">
+            </iconify-icon>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="planner-location-hint"
+        id="plannerLocationHint"
+    >
+        Select a state first
+    </div>
+
+</div>
+
+
+                <!-- DATE -->
+
+<div class="planner-field">
+
+    <div class="planner-label-row">
+
+        <label>
+            Event Dates
+        </label>
+
+        <small class="planner-optional">
+            Optional
+        </small>
+
+    </div>
+
+    <div class="planner-date-inputs">
+
+        <!-- START DATE -->
+        <div class="planner-date-input">
+
+            <iconify-icon
+                icon="mdi:calendar-start">
+            </iconify-icon>
+
+            <div class="planner-date-content">
+
+                <small>Start Date</small>
+
+                <input
+                    type="text"
+                    id="plannerDate"
+                    placeholder="Select date" readonly
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- END DATE -->
+        <div class="planner-date-input">
+
+            <iconify-icon
+                icon="mdi:calendar-end">
+            </iconify-icon>
+
+            <div class="planner-date-content">
+
+                <small>End Date</small>
+
+                <input
+                    type="text"
+                    id="plannerEndDate"
+                    placeholder="Select date" readonly
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+                <!-- GUESTS -->
+
+                <div class="planner-field">
+
+                    <div class="planner-label-row">
+
+                        <label for="plannerGuests">
+                            Number of Guests
+                        </label>
+
+                        <strong id="plannerGuestsValue">
+                            200 Guests
+                        </strong>
+
+                    </div>
+
+
+                    <input
+                        type="range"
+                        id="plannerGuests"
+                        min="20"
+                        max="2000"
+                        step="10"
+                        value="200"
+                        class="planner-range"
+                    >
+
+
+                    <div class="planner-range-labels guest-labels">
+
+                        <span style="left:0%;">
+                            20
+                        </span>
+
+                        <span style="left:24.24%;">
+                            500
+                        </span>
+
+                        <span style="left:49.49%;">
+                            1,000
+                        </span>
+
+                        <span style="left:100%;">
+                            2,000+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUDGET -->
+
+                <div class="planner-field">
+
+                    <div class="planner-label-row">
+
+                        <label for="weddingBudget">
+                            Your Total Budget
+                        </label>
+
+                        <strong id="plannerBudgetDisplay">
+                            ₹2,00,000
+                        </strong>
+
+                    </div>
+
+
+                    <div class="planner-price-input">
+
+                        <span>₹</span>
+
+                        <input
+                            type="number"
+                            id="weddingBudget"
+                            value="200000"
+                            min="10000"
+                            max="10000000"
+                            step="1000"
+                            inputmode="numeric"
+                        >
+
+                    </div>
+
+
+                    <input
+                        type="range"
+                        id="weddingBudgetRange"
+                        min="0"
+                        max="1000"
+                        step="1"
+                        value="325"
+                        class="planner-range planner-budget-range"
+                    >
+
+
+                    <div class="planner-range-labels budget-labels">
+
+                        <span style="left:0%;">
+                            ₹10K
+                        </span>
+
+                        <span style="left:33.33%;">
+                            ₹1L
+                        </span>
+
+                        <span style="left:56.63%;">
+                            ₹5L
+                        </span>
+
+                        <span style="left:100%;">
+                            ₹1Cr
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CATEGORIES -->
+
+                <div class="planner-field">
+
+                    <div class="planner-label-row">
+
+                        <label>
+                            What are you looking for?
+                        </label>
+
+                        <button
+                            type="button"
+                            class="planner-select-all"
+                            id="plannerSelectAll">
+                            Select All
+                        </button>
+
+                    </div>
+
+
+                    <div class="planner-service-options">
+
+                        {% for category in categories %}
+
+                            <label class="planner-service-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="planner_category"
+                                    value="{{ category.slug }}"
+                                >
+
+                                <span>
+
+                                    {% if category.icon %}
+
+                                        <img
+                                            src="{{ category.icon.url }}"
+                                            alt=""
+                                        >
+
+                                    {% else %}
+
+                                        <iconify-icon
+                                            icon="mdi:shape-outline">
+                                        </iconify-icon>
+
+                                    {% endif %}
+
+                                    {{ category.name }}
+
+                                </span>
+
+                            </label>
+
+                        {% empty %}
+
+                            <p class="planner-empty">
+                                No categories available yet.
+                            </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div
+                    class="planner-error"
+                    id="plannerError">
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="planner-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-gold planner-submit"
+                        id="plannerFindOptions">
+
+                        Find My Options
+
+                        <iconify-icon
+                            icon="mdi:arrow-right">
+                        </iconify-icon>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="planner-reset"
+                        id="plannerReset">
+
+                        Reset Planner
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SIDE
+                 ================================================= -->
+
+            <div class="planner-breakdown">
+
+
+                <div class="planner-breakdown-header">
+
+                    <div>
+
+                        <span>
+                            YOUR PLAN
+                        </span>
+
+                        <small>
+                            Live summary
+                        </small>
+
+                    </div>
+
+                    <iconify-icon
+                        icon="mdi:clipboard-text-outline">
+                    </iconify-icon>
+
+                </div>
+
+
+                <!-- TOTAL BUDGET -->
+
+                <div class="planner-total">
+
+                    <small>
+                        Your Budget
+                    </small>
+
+                    <strong id="plannerTotal">
+                        ₹2,00,000
+                    </strong>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="planner-summary-item">
+
+                    <span>
+                        Location
+                    </span>
+
+                    <strong id="plannerLocationSummary">
+                        Select city
+                    </strong>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="planner-summary-item">
+
+                    <span>
+                        Date
+                    </span>
+
+                    <strong id="plannerDateSummary">
+                        Not selected
+                    </strong>
+
+                </div>
+
+
+                <!-- GUESTS -->
+
+                <div class="planner-summary-item">
+
+                    <span>
+                        Guests
+                    </span>
+
+                    <strong id="plannerGuestSummary">
+                        200
+                    </strong>
+
+                </div>
+
+
+                <!-- CATEGORIES -->
+
+                <div class="planner-summary-block">
+
+                    <div class="planner-budget-heading">
+                        Selected Categories
+                    </div>
+
+                    <div
+                        class="planner-selected-services"
+                        id="plannerSelectedServices">
+
+                        <span class="planner-no-selection">
+                            Select what you need
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMATION -->
+
+                <div class="planner-note">
+
+                    <iconify-icon
+                        icon="mdi:information-outline">
+                    </iconify-icon>
+
+                    <p>
+                        We don't decide how much each service should cost.
+                        Your complete budget is used to find real listings
+                        and packages that fit your requirements.
+                    </p>
+
+                </div>
+
+
+                <div class="planner-match-note">
+
+                    <iconify-icon
+                        icon="mdi:sparkles">
+                    </iconify-icon>
+
+                    <span>
+                        We'll match location, guest capacity,
+                        budget and availability.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section> 
+
+
+
+
+
+
+{% load static %}
+
+
+
+
+<!-- =========================================================
+     POPULAR CITIES
+     ========================================================= -->
+
+<section
+    class="discovery-section cities-section"
+    id="popular-cities"
+>
+
+    <div class="container">
+
+
+        <div class="discovery-heading reveal-on-scroll">
+
+            <div>
+
+                <div class="eyebrow eyebrow-gold">
+                    FIND VENDORS WHERE YOU ARE
+                </div>
+
+                <h2>
+                    Popular Wedding Cities
+                </h2>
+
+                <p>
+                    Explore wedding venues, decorators, photographers
+                    and other event services in popular cities.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'listings:search' %}"
+                class="discovery-link"
+            >
+                Explore All
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        <div class="city-grid">
+
+
+            {% for city in popular_cities %}
+
+                <a
+                    href="{% url 'listings:search' %}?city={{ city.name|urlencode }}"
+                    class="city-card reveal-on-scroll"
+                >
+
+                    <div class="city-card-icon">
+
+                        <iconify-icon
+                            icon="mdi:map-marker-outline">
+                        </iconify-icon>
+
+                    </div>
+
+
+                    <div class="city-card-content">
+
+                        <h3>
+                            {{ city.name }}
+                        </h3>
+
+                        <span>
+                            {{ city.listing_count }} vendors
+                        </span>
+
+                    </div>
+
+
+                    <span class="city-arrow">
+                        →
+                    </span>
+
+                </a>
+
+            {% empty %}
+
+                <p class="empty-discovery">
+                    Popular cities will appear here as vendors are added.
+                </p>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     BUDGET
+     ========================================================= -->
+
+<section
+    class="discovery-section budget-section"
+>
+
+    <div class="container">
+
+
+        <div class="center-heading reveal-on-scroll">
+
+            <div class="eyebrow eyebrow-gold">
+                FIND SOMETHING THAT FITS
+            </div>
+
+            <h2>
+                Explore by Budget
+            </h2>
+
+            <p>
+                Start with a budget range and discover services
+                that match what you want to spend.
+            </p>
+
+        </div>
+
+
+        <div class="budget-grid">
+
+
+            {% for budget in budget_ranges %}
+
+                <a
+                    href="{% url 'listings:search' %}?min_price={{ budget.min_price }}{% if budget.max_price %}&max_price={{ budget.max_price }}{% endif %}"
+                    class="budget-card reveal-on-scroll"
+                >
+
+                    <div class="budget-icon">
+
+                        <iconify-icon
+                            icon="mdi:currency-inr">
+                        </iconify-icon>
+
+                    </div>
+
+
+                    <h3>
+                        {{ budget.short_label }}
+                    </h3>
+
+
+                    <p>
+                        {{ budget.description }}
+                    </p>
+
+
+                    <span>
+                        Explore →
+                    </span>
+
+                </a>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     EVENT TYPES
+     ========================================================= -->
+
+<section
+    class="event-discovery-section"
+>
+
+    <div class="container">
+
+
+        <div class="discovery-heading light-heading reveal-on-scroll">
+
+            <div>
+
+                <div class="eyebrow eyebrow-light">
+                    CELEBRATE YOUR WAY
+                </div>
+
+                <h2>
+                    Explore by Occasion
+                </h2>
+
+                <p>
+                    Find vendors and services for every kind of celebration.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="event-type-grid">
+
+
+            {% for event_type in event_types %}
+
+                <a
+                    href="{% url 'listings:search' %}?event={{ event_type.slug }}"
+                    class="event-type-card reveal-on-scroll"
+                >
+
+                    <div class="event-type-icon">
+
+                        {% if event_type.icon %}
+
+                            <img
+                                src="{{ event_type.icon.url }}"
+                                alt="{{ event_type.name }}"
+                            >
+
+                        {% else %}
+
+                            <iconify-icon
+                                icon="mdi:party-popper">
+                            </iconify-icon>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <h3>
+                        {{ event_type.name }}
+                    </h3>
+
+
+                    <span>
+                        Explore vendors →
+                    </span>
+
+                </a>
+
+            {% empty %}
+
+                <p>
+                    Event types will appear here.
+                </p>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="discovery-section trending-section">
+
+    <div class="container">
+
+        <div class="discovery-heading reveal-on-scroll">
+
+            <div>
+
+                <div class="eyebrow eyebrow-gold">
+                    WHAT PEOPLE ARE LOOKING FOR
+                </div>
+
+                <h2>
+                    Trending Services
+                </h2>
+
+                <p>
+                    Explore popular services available
+                    from WedBook vendors.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="trending-grid">
+
+            {% for service in trending_services %}
+
+                <a
+                    href="{% url 'listings:search' %}?service={{ service.slug }}"
+                    class="trending-card reveal-on-scroll"
+                >
+
+<div class="trending-icon">
+    <iconify-icon icon="mdi:sparkles"></iconify-icon>
+</div>
+
+<div class="trending-content">
+    <h3>{{ service.name }}</h3>
+    <span>{{ service.category.name }}</span>
+</div>
+
+<strong class="trending-count">{{ service.listing_count }}</strong>
+
+                </a>
+
+            {% empty %}
+
+                <p class="empty-discovery">
+                    Trending services will appear here.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FEATURED PACKAGES
+     ========================================================= -->
+
+<section
+    class="packages-discovery-section"
+    id="packages"
+>
+
+    <div class="container">
+
+
+        <div class="discovery-heading reveal-on-scroll">
+
+            <div>
+
+                <div class="eyebrow eyebrow-gold">
+                    COMPLETE EVENT SOLUTIONS
+                </div>
+
+                <h2>
+                    Featured Packages
+                </h2>
+
+                <p>
+                    Explore bundled services designed to make
+                    event planning simpler.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'listings:search' %}?type=package"
+                class="discovery-link"
+            >
+                Explore Packages
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        <div class="package-home-grid">
+
+
+            {% for package in featured_packages %}
+
+                <article
+                    class="package-home-card reveal-on-scroll"
+                >
+
+
+                    <div class="package-home-top">
+
+                        <div class="package-home-icon">
+
+                            <iconify-icon
+                                icon="mdi:gift-outline">
+                            </iconify-icon>
+
+                        </div>
+
+
+                        <span>
+                            PACKAGE
+                        </span>
+
+                    </div>
+
+
+                    <div class="package-home-body">
+
+                        <h3>
+                            {{ package.title }}
+                        </h3>
+
+
+                        <p>
+                            {{ package.description|truncatewords:18 }}
+                        </p>
+
+
+                        <div class="package-home-footer">
+
+                            <div>
+
+                                <small>
+                                    Starting from
+                                </small>
+
+                                <strong>
+                                    ₹{{ package.package_price|floatformat:0 }}
+                                </strong>
+
+                            </div>
+
+
+                            <a
+                                href="{% url 'listings:search' %}?type=package"
+                                class="package-view-link"
+                            >
+                                Explore →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+            {% empty %}
+
+                <div class="empty-discovery">
+                    Packages will appear here once vendors add them.
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="inspiration-section">
+
+    <div class="container">
+
+        <div class="discovery-heading reveal-on-scroll">
+
+            <div>
+
+                <div class="eyebrow eyebrow-gold">
+                    GET INSPIRED
+                </div>
+
+                <h2>
+                    Wedding Inspiration
+                </h2>
+
+                <p>
+                    Explore ideas for your venue, décor,
+                    photography, bridal look and celebrations.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="inspiration-grid">
+
+
+            <a class="inspiration-card inspiration-large" href="#">
+                <img
+                    src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=85"
+                    alt="Wedding decoration"
+                >
+
+                <div class="inspiration-overlay">
+                    <span>DECORATION</span>
+                    <h3>Elegant Wedding Décor</h3>
+                </div>
+            </a>
+
+
+            <a class="inspiration-card" href="#">
+                <img
+                    src="https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=900&q=85"
+                    alt="Bridal makeup"
+                >
+
+                <div class="inspiration-overlay">
+                    <span>BRIDAL</span>
+                    <h3>Bridal Looks</h3>
+                </div>
+            </a>
+
+
+            <a class="inspiration-card" href="#">
+                <img
+                    src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=85"
+                    alt="Wedding photography"
+                >
+
+                <div class="inspiration-overlay">
+                    <span>PHOTOGRAPHY</span>
+                    <h3>Wedding Moments</h3>
+                </div>
+            </a>
+
+
+            <a class="inspiration-card" href="#">
+                <img
+                    src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=900&q=85"
+                    alt="Wedding celebration"
+                >
+
+                <div class="inspiration-overlay">
+                    <span>CELEBRATION</span>
+                    <h3>Beautiful Celebrations</h3>
+                </div>
+            </a>
+
+
+            <a class="inspiration-card inspiration-wide" href="#">
+                <img
+                    src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85"
+                    alt="Wedding venue"
+                >
+
+                <div class="inspiration-overlay">
+                    <span>VENUES</span>
+                    <h3>Find Your Perfect Venue</h3>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HOW IT WORKS
+     ========================================================= -->
+
+<section
+    class="how-section"
+    id="how-it-works"
+>
+
+    <div class="section-pattern"></div>
+
+
+    <div class="container">
+
+
+        <div class="center-heading reveal-on-scroll">
+
+            <div class="eyebrow eyebrow-gold">
+                SIMPLE &amp; TRANSPARENT
+            </div>
+
+            <h2>
+                How WedBook Works
+            </h2>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step reveal-on-scroll">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Choose Your Services
+                </h3>
+
+                <p>
+                    Browse our categories and discover services
+                    based on your event, location and budget.
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <div class="step reveal-on-scroll">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Compare &amp; Shortlist
+                </h3>
+
+                <p>
+                    Explore vendor services, compare prices,
+                    view details and shortlist the options
+                    that fit your requirements.
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <div class="step reveal-on-scroll">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Book &amp; Confirm
+                </h3>
+
+                <p>
+                    Select your preferred service, choose your
+                    event date and confirm your booking securely
+                    through WedBook.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     WHY WEDBOOK
+     ========================================================= -->
+
+<section
+    class="why-wedbook-section"
+>
+
+    <div class="container">
+
+
+        <div class="center-heading reveal-on-scroll">
+
+            <div class="eyebrow eyebrow-gold">
+                MADE FOR MODERN EVENT PLANNING
+            </div>
+
+            <h2>
+                Why Choose WedBook?
+            </h2>
+
+            <p>
+                Everything you need to discover, compare and
+                plan your celebration in one place.
+            </p>
+
+        </div>
+
+
+        <div class="why-grid">
+
+
+            <article class="why-card reveal-on-scroll">
+
+                <div class="why-icon">
+                    <iconify-icon
+                        icon="mdi:store-check-outline">
+                    </iconify-icon>
+                </div>
+
+                <h3>
+                    Discover Vendors
+                </h3>
+
+                <p>
+                    Explore vendors across multiple wedding
+                    and event categories.
+                </p>
+
+            </article>
+
+
+            <article class="why-card reveal-on-scroll">
+
+                <div class="why-icon">
+                    <iconify-icon
+                        icon="mdi:filter-variant">
+                    </iconify-icon>
+                </div>
+
+                <h3>
+                    Easy Comparison
+                </h3>
+
+                <p>
+                    Filter services by city, category,
+                    price, event type and more.
+                </p>
+
+            </article>
+
+
+            <article class="why-card reveal-on-scroll">
+
+                <div class="why-icon">
+                    <iconify-icon
+                        icon="mdi:calendar-check-outline">
+                    </iconify-icon>
+                </div>
+
+                <h3>
+                    Plan Around Your Date
+                </h3>
+
+                <p>
+                    Find services according to your event
+                    date and availability.
+                </p>
+
+            </article>
+
+
+            <article class="why-card reveal-on-scroll">
+
+                <div class="why-icon">
+                    <iconify-icon
+                        icon="mdi:map-marker-radius-outline">
+                    </iconify-icon>
+                </div>
+
+                <h3>
+                    City-wise Discovery
+                </h3>
+
+                <p>
+                    Find wedding and event services close
+                    to your chosen city.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TESTIMONIALS
+     ========================================================= -->
+
+<section
+    class="testimonials-section section-light"
+    id="testimonials"
+>
+
+    <div class="container">
+
+
+        <div class="center-heading testimonials-heading reveal-on-scroll">
+
+            <div class="eyebrow eyebrow-gold">
+                REAL COUPLES, REAL STORIES
+            </div>
+
+            <h2>
+                They Said "Yes" to WedBook
+            </h2>
+
+        </div>
+
+
+        <div class="testimonial-grid">
+
+
+            <article class="testimonial-card reveal-on-scroll">
+
+                <div class="stars">
+                    ★★★★★
+                </div>
+
+                <blockquote>
+                    "We found everything we needed for our
+                    wedding in one place. The experience was
+                    simple and convenient."
+                </blockquote>
+
+                <div class="person">
+
+                    <span>
+                        PS
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Priya &amp; Arjun Sharma
+                        </strong>
+
+                        <small>
+                            Delhi → Jaipur Wedding
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="testimonial-card reveal-on-scroll">
+
+                <div class="stars">
+                    ★★★★★
+                </div>
+
+                <blockquote>
+                    "Finding the right wedding vendors became
+                    much easier. We could compare different
+                    services before making our decision."
+                </blockquote>
+
+                <div class="person">
+
+                    <span>
+                        MI
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Meera &amp; Vikram Iyer
+                        </strong>
+
+                        <small>
+                            Chennai Heritage Wedding
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="testimonial-card reveal-on-scroll">
+
+                <div class="stars">
+                    ★★★★★
+                </div>
+
+                <blockquote>
+                    "WedBook helped us discover vendors we
+                    would never have found on our own. It made
+                    planning our wedding much easier."
+                </blockquote>
+
+                <div class="person">
+
+                    <span>
+                        SK
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Sunita &amp; Rahul Kapoor
+                        </strong>
+
+                        <small>
+                            Lucknow Garden Wedding
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     VENDOR CTA
+     ========================================================= -->
+
+<section
+    class="vendor-cta-section section-light"
+    id="vendor-cta"
+>
+
+    <div class="container">
+
+
+        <div class="vendor-cta reveal-on-scroll">
+
+            <div class="section-pattern"></div>
+
+
+            <div class="eyebrow eyebrow-gold">
+                GROW WITH WEDBOOK
+            </div>
+
+
+            <h2>
+                Are You a Wedding Vendor?
+            </h2>
+
+
+            <p>
+                Join WedBook and reach couples planning
+                their dream wedding across India.
+            </p>
+
+
+            <div class="cta-actions">
+
+
+                <a
+                    class="btn btn-gold btn-large"
+                    href="{% url 'accounts:register' %}"
+                >
+                    Register Your Business — Free
+                </a>
+
+
+                <a
+                    class="btn btn-outline btn-large"
+                    href="#how-it-works"
+                >
+                    Learn More →
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/video-section.js' %}"></script>
+
+<script>
+    window.citiesByStateUrl = "{% url 'listings:cities_by_state' %}";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+
+<script
+    src="{% static 'js/budget-planner.js' %}">
+</script>
+{% endblock %}

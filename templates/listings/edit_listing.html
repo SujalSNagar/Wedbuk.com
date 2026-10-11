@@ -1,0 +1,1585 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit Listing | WedBook{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/listing-form.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div
+    class="listing-form-page"
+    id="listingFormPage"
+    data-cities-url="{% url 'listings:cities_by_state' %}"
+    data-category-attributes-url="{% url 'listings:category_attributes' %}"
+    data-existing-gallery="{{ listing.images.count }}"
+    data-existing-videos="{{ listing.videos.count }}"
+>
+
+    <div class="listing-form-container">
+
+        <!-- ================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ================================================= -->
+
+        <div class="listing-form-header">
+
+            <div class="listing-form-header-icon">
+                <span
+                    class="iconify"
+                    data-icon="solar:pen-new-square-bold"
+                ></span>
+            </div>
+
+            <div>
+
+                <h1>Edit Listing</h1>
+
+                <p>
+                    Update your listing information and keep it up to date.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FORM -->
+        <!-- ================================================= -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="listingForm"
+            novalidate
+        >
+
+            {% csrf_token %}
+
+
+            <!-- ================================================= -->
+            <!-- FORM ERRORS -->
+            <!-- ================================================= -->
+
+            {% if form.non_field_errors %}
+
+            <div class="listing-form-alert">
+
+                <div class="listing-form-alert-icon">
+
+                    <span
+                        class="iconify"
+                        data-icon="solar:danger-triangle-bold"
+                    ></span>
+
+                </div>
+
+                <div>
+
+                    {% for error in form.non_field_errors %}
+
+                    <p>{{ error }}</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- BASIC INFORMATION -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:document-text-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Basic Information</h2>
+
+                        <p>
+                            Update the main information of your listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <!-- CATEGORY -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.category.id_for_label }}">
+                            Category
+                            <span>*</span>
+                        </label>
+
+                        {{ form.category }}
+
+                        {% if form.category.errors %}
+
+                        <div class="field-error">
+                            {{ form.category.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.title.id_for_label }}">
+                            Listing Title
+                            <span>*</span>
+                        </label>
+
+                        {{ form.title }}
+
+                        {% if form.title.errors %}
+
+                        <div class="field-error">
+                            {{ form.title.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.base_price.id_for_label }}">
+                            Starting Price
+                            <span>*</span>
+                        </label>
+
+                        {{ form.base_price }}
+
+                        {% if form.base_price.errors %}
+
+                        <div class="field-error">
+                            {{ form.base_price.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="listing-field listing-field-full">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        Description
+                        <span>*</span>
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+
+                    <div class="field-error">
+                        {{ form.description.errors.0 }}
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- CATEGORY ATTRIBUTES -->
+            <!-- ================================================= -->
+
+            <section
+                class="listing-form-card category-attributes-card {% if not dynamic_attribute_fields %}is-hidden{% endif %}"
+                id="categoryAttributesCard"
+            >
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:widget-5-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Category Details</h2>
+
+                        <p>
+                            Update additional information for this category.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="form-grid"
+                    id="categoryAttributesGrid"
+                >
+
+                    {% for attribute, field in dynamic_attribute_fields %}
+
+                    <div class="listing-field">
+
+                        <label for="{{ field.id_for_label }}">
+
+                            {{ field.label }}
+
+                            {% if attribute.unit %}
+
+                            <span class="attribute-unit">
+                                ({{ attribute.unit }})
+                            </span>
+
+                            {% endif %}
+
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+
+                        <small class="field-help">
+                            {{ field.help_text }}
+                        </small>
+
+                        {% endif %}
+
+                        {% if field.errors %}
+
+                        <div class="field-error">
+                            {{ field.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- SERVICES -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:settings-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Services</h2>
+
+                        <p>
+                            Update the services included with this listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="selection-grid">
+
+                    {% for checkbox in form.services %}
+
+                    <label class="selection-card">
+
+                        {{ checkbox.tag }}
+
+                        <span class="selection-card-content">
+
+                            <span class="selection-card-title">
+                                {{ checkbox.choice_label }}
+                            </span>
+
+                        </span>
+
+                        <span class="selection-card-check">
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:check-circle-bold"
+                            ></span>
+
+                        </span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+
+                {% if form.services.errors %}
+
+                <div class="field-error">
+                    {{ form.services.errors.0 }}
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- EVENT TYPES -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:calendar-mark-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Event Types</h2>
+
+                        <p>
+                            Update the events suitable for this listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="selection-grid">
+
+                    {% for checkbox in form.event_types %}
+
+                    <label class="selection-card">
+
+                        {{ checkbox.tag }}
+
+                        <span class="selection-card-content">
+
+                            <span class="selection-card-title">
+                                {{ checkbox.choice_label }}
+                            </span>
+
+                        </span>
+
+                        <span class="selection-card-check">
+
+                            <span
+                                class="iconify"
+                                data-icon="solar:check-circle-bold"
+                            ></span>
+
+                        </span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- GUEST CAPACITY -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:users-group-rounded-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Guest Capacity</h2>
+
+                        <p>
+                            Define the minimum and maximum number of guests.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.min_guests.id_for_label }}">
+                            Minimum Guests
+                        </label>
+
+                        {{ form.min_guests }}
+
+                        {% if form.min_guests.errors %}
+
+                        <div class="field-error">
+                            {{ form.min_guests.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.max_guests.id_for_label }}">
+                            Maximum Guests
+                        </label>
+
+                        {{ form.max_guests }}
+
+                        {% if form.max_guests.errors %}
+
+                        <div class="field-error">
+                            {{ form.max_guests.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- LOCATION -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:map-point-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Location</h2>
+
+                        <p>
+                            Update the location of your listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field listing-field-full">
+
+                        <label for="{{ form.address_line_1.id_for_label }}">
+                            Address
+                            <span>*</span>
+                        </label>
+
+                        {{ form.address_line_1 }}
+
+                        {% if form.address_line_1.errors %}
+
+                        <div class="field-error">
+                            {{ form.address_line_1.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field listing-field-full">
+
+                        <label for="{{ form.address_line_2.id_for_label }}">
+                            Address Line 2
+                        </label>
+
+                        {{ form.address_line_2 }}
+
+                        {% if form.address_line_2.errors %}
+
+                        <div class="field-error">
+                            {{ form.address_line_2.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.state.id_for_label }}">
+                            State
+                            <span>*</span>
+                        </label>
+
+                        {{ form.state }}
+
+                        {% if form.state.errors %}
+
+                        <div class="field-error">
+                            {{ form.state.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.city.id_for_label }}">
+                            City
+                            <span>*</span>
+                        </label>
+
+                        {{ form.city }}
+
+                        {% if form.city.errors %}
+
+                        <div class="field-error">
+                            {{ form.city.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.pincode.id_for_label }}">
+                            Pincode
+                            <span>*</span>
+                        </label>
+
+                        {{ form.pincode }}
+
+                        {% if form.pincode.errors %}
+
+                        <div class="field-error">
+                            {{ form.pincode.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.latitude.id_for_label }}">
+                            Latitude
+                        </label>
+
+                        {{ form.latitude }}
+
+                        {% if form.latitude.errors %}
+
+                        <div class="field-error">
+                            {{ form.latitude.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.longitude.id_for_label }}">
+                            Longitude
+                        </label>
+
+                        {{ form.longitude }}
+
+                        {% if form.longitude.errors %}
+
+                        <div class="field-error">
+                            {{ form.longitude.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+<!-- ================================================= -->
+<!-- COVER IMAGE -->
+<!-- ================================================= -->
+
+<section class="listing-form-card">
+
+    <div class="form-card-header">
+
+        <div class="form-card-icon">
+
+            <span
+                class="iconify"
+                data-icon="solar:gallery-add-bold"
+            ></span>
+
+        </div>
+
+        <div>
+
+            <h2>Cover Image</h2>
+
+            <p>
+                Replace the main image if required.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CURRENT COVER ================= -->
+
+    {% if listing.cover_image %}
+
+    <div class="current-cover-wrapper">
+
+        <div class="current-cover-image">
+
+            <img
+                src="{{ listing.cover_image.url }}"
+                alt="{{ listing.title }}"
+            >
+
+
+            <!-- REMOVE CURRENT COVER -->
+
+            <button
+                type="button"
+                class="media-existing-delete-btn cover-remove-btn"
+                id="removeCurrentCover"
+                data-delete-url="{% url 'listings:delete_cover_image' listing.id %}"
+
+                title="Remove cover image"
+            >
+
+                <span
+                    class="iconify"
+                    data-icon="solar:trash-bin-trash-bold"
+                ></span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================= REPLACE COVER ================= -->
+
+    <div class="media-upload-layout edit-cover-upload-layout">
+
+        <div class="media-upload-selector">
+
+            <div class="listing-field">
+
+                <label>
+                    Replace Cover Image
+                </label>
+
+
+                <div class="custom-file-box">
+
+                    <label
+                        for="id_cover_image"
+                        class="custom-file-button"
+                    >
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:gallery-add-bold"
+                        ></span>
+
+                        Choose Image
+
+                    </label>
+
+
+                    <span
+                        id="coverFileName"
+                        class="selected-file-name"
+                    >
+                        No file chosen
+                    </span>
+
+                </div>
+
+
+                <!-- REAL FILE INPUT -->
+
+                <input
+                    type="file"
+                    name="{{ form.cover_image.html_name }}"
+                    id="id_cover_image"
+                    class="media-file-input"
+                    accept="image/*"
+                >
+
+
+                <!-- DJANGO CLEAR CHECKBOX -->
+
+                <input
+                    type="checkbox"
+                    name="{{ form.cover_image.html_name }}-clear"
+                    id="id_cover_image-clear"
+                    class="media-clear-checkbox"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- NEW COVER PREVIEW -->
+
+        <div
+            id="coverPreview"
+            class="media-preview-box cover-preview-box"
+        ></div>
+
+    </div>
+
+
+    {% if form.cover_image.errors %}
+
+    <div class="field-error">
+
+        {{ form.cover_image.errors.0 }}
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- GALLERY IMAGES -->
+<!-- ================================================= -->
+
+<section class="listing-form-card">
+
+    <div class="form-card-header">
+
+        <div class="form-card-icon">
+
+            <span
+                class="iconify"
+                data-icon="solar:gallery-wide-bold"
+            ></span>
+
+        </div>
+
+        <div>
+
+            <h2>Gallery Images</h2>
+
+            <p>
+                Manage your listing gallery. Maximum 8 images.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= EXISTING GALLERY ================= -->
+
+    {% if listing.images.exists %}
+
+    <div class="existing-gallery-grid">
+
+{% for image in listing.images.all %}
+
+<div class="existing-gallery-item" data-media-item>
+
+    <img src="{{ image.image.url }}" alt="{{ listing.title }}">
+
+    <button
+        type="submit"
+        form="deleteImageForm{{ image.id }}"
+        class="gallery-delete-btn"
+        title="Delete image"
+        onclick="return confirm('Delete this image?');"
+    >
+        <span class="iconify" data-icon="solar:trash-bin-trash-bold"></span>
+    </button>
+
+</div>
+
+{% endfor %}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================= ADD NEW GALLERY ================= -->
+
+    {% if listing.images.count < 8 %}
+
+    <div class="media-upload-layout">
+
+        <div class="media-upload-selector">
+
+            <div class="listing-field">
+
+                <label>
+                    Add More Images
+                </label>
+
+
+                <div class="custom-file-box">
+
+                    <label
+                        for="galleryImages"
+                        class="custom-file-button"
+                    >
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:gallery-wide-bold"
+                        ></span>
+
+                        Choose Images
+
+                    </label>
+
+
+                    <span
+                        id="galleryFileName"
+                        class="selected-file-name"
+                    >
+                        No file chosen
+                    </span>
+
+                </div>
+
+
+                <input
+                    type="file"
+                    name="gallery_images"
+                    id="galleryImages"
+                    class="media-file-input"
+                    accept="image/*"
+                    multiple
+                >
+
+
+                <small
+                    class="field-help"
+                    id="galleryCountText"
+                >
+                    {{ listing.images.count }} of 8 images used.
+You can add {{ remaining_image_slots }} more images.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="galleryPreview"
+            class="media-preview-box gallery-preview"
+        ></div>
+
+    </div>
+
+    {% else %}
+
+    <div class="listing-form-info">
+
+        <span
+            class="iconify"
+            data-icon="solar:info-circle-bold"
+        ></span>
+
+        <span>
+            Maximum 8 gallery images already added.
+        </span>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- VIDEOS -->
+<!-- ================================================= -->
+
+<section class="listing-form-card">
+
+    <div class="form-card-header">
+
+        <div class="form-card-icon">
+
+            <span
+                class="iconify"
+                data-icon="solar:video-frame-bold"
+            ></span>
+
+        </div>
+
+        <div>
+
+            <h2>Videos</h2>
+
+            <p>
+                Manage your listing videos.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= EXISTING VIDEOS ================= -->
+
+    {% if listing.videos.exists %}
+
+    <div class="existing-video-grid">
+
+        {% for video in listing.videos.all %}
+
+        <div
+            class="existing-video-item"
+            data-media-item
+        >
+
+            <video
+                controls
+                preload="metadata"
+            >
+
+                <source
+                    src="{{ video.video.url }}"
+                >
+
+                Your browser does not support video playback.
+
+            </video>
+
+
+            <div class="existing-video-footer">
+
+    <span>Video {{ forloop.counter }}</span>
+
+    <button
+        type="submit"
+        form="deleteVideoForm{{ video.id }}"
+        class="gallery-delete-btn"
+        title="Delete video"
+        onclick="return confirm('Delete this video?');"
+    >
+        <span class="iconify" data-icon="solar:trash-bin-trash-bold"></span>
+    </button>
+
+</div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ================= ADD NEW VIDEOS ================= -->
+
+    {% if listing.videos.count < 2 %}
+
+    <div class="media-upload-layout">
+
+        <div class="media-upload-selector">
+
+            <div class="listing-field">
+
+                <label>
+                    Add More Videos
+                </label>
+
+
+                <div class="custom-file-box">
+
+                    <label
+                        for="galleryVideos"
+                        class="custom-file-button"
+                    >
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:video-frame-bold"
+                        ></span>
+
+                        Choose Videos
+
+                    </label>
+
+
+                    <span
+                        id="videoFileName"
+                        class="selected-file-name"
+                    >
+                        No file chosen
+                    </span>
+
+                </div>
+
+
+                <input
+                    type="file"
+                    name="gallery_videos"
+                    id="galleryVideos"
+                    class="media-file-input"
+                    accept="video/mp4,video/webm,video/quicktime,video/x-msvideo"
+                    multiple
+                >
+
+
+                <small
+                    class="field-help"
+                    id="videoCountText"
+                >
+
+                    {{ listing.videos.count }} of 2 videos used.
+                    Each video must be 10 MB or smaller.
+                    Supported formats: MP4, WebM, MOV and AVI.
+
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="videoPreview"
+            class="media-preview-box video-preview-grid"
+        ></div>
+
+    </div>
+
+    {% else %}
+
+    <div class="listing-form-info">
+
+        <span
+            class="iconify"
+            data-icon="solar:info-circle-bold"
+        ></span>
+
+        <span>
+            Maximum 2 videos already added.
+        </span>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+            <!-- ================================================= -->
+            <!-- AVAILABILITY -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:calendar-add-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Availability</h2>
+
+                        <p>
+                            Manage when this listing is available.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+{% if listing.availability_periods.exists %}
+
+<div class="availability-list">
+
+    {% for availability in listing.availability_periods.all %}
+
+    <div class="availability-item">
+
+        <div class="availability-item-icon">
+            <span class="iconify" data-icon="solar:calendar-bold"></span>
+        </div>
+
+        <div class="availability-item-content">
+
+            <div class="form-grid">
+
+                <div class="listing-field">
+                    <label for="availFrom{{ availability.id }}">From</label>
+                    <input
+                        type="date"
+                        id="availFrom{{ availability.id }}"
+                        name="availability_from_{{ availability.id }}"
+                        value="{{ availability.available_from|date:'Y-m-d' }}"
+                        class="form-control"
+                    >
+                </div>
+
+                <div class="listing-field">
+                    <label for="availUntil{{ availability.id }}">Until</label>
+                    <input
+                        type="date"
+                        id="availUntil{{ availability.id }}"
+                        name="availability_until_{{ availability.id }}"
+                        value="{{ availability.available_until|date:'Y-m-d' }}"
+                        class="form-control"
+                    >
+                </div>
+
+            </div>
+
+            <label class="field-help">
+                <input
+                    type="checkbox"
+                    name="availability_active_{{ availability.id }}"
+                    {% if availability.is_active %}checked{% endif %}
+                >
+                Active
+            </label>
+
+        </div>
+
+        <button
+            type="submit"
+            form="deleteAvailabilityForm{{ availability.id }}"
+            class="gallery-delete-btn"
+            title="Delete availability"
+            onclick="return confirm('Delete this availability period?');"
+        >
+            <span class="iconify" data-icon="solar:trash-bin-trash-bold"></span>
+        </button>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field">
+
+                        <label for="availableFrom">
+                            Add Available From
+                        </label>
+
+                        <input
+                            type="date"
+                            name="available_from"
+                            id="availableFrom"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="availableUntil">
+                            Add Available Until
+                        </label>
+
+                        <input
+                            type="date"
+                            name="available_until"
+                            id="availableUntil"
+                            class="form-control"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- BLOCKED DATES -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:calendar-remove-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Blocked Dates</h2>
+
+                        <p>
+                            Dates on which this listing cannot be booked.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if listing.blocked_dates.exists %}
+
+                <div class="blocked-date-list">
+
+                    {% for blocked_date in listing.blocked_dates.all %}
+
+                    <div class="blocked-date-item">
+
+                        <div class="form-grid">
+
+    <div class="listing-field">
+        <label for="blockedDate{{ blocked_date.id }}">Date</label>
+        <input
+            type="date"
+            id="blockedDate{{ blocked_date.id }}"
+            name="blocked_date_{{ blocked_date.id }}"
+            value="{{ blocked_date.date|date:'Y-m-d' }}"
+            class="form-control"
+        >
+    </div>
+
+    <div class="listing-field">
+        <label for="blockedReason{{ blocked_date.id }}">Reason</label>
+        <input
+            type="text"
+            id="blockedReason{{ blocked_date.id }}"
+            name="blocked_reason_{{ blocked_date.id }}"
+            value="{{ blocked_date.reason }}"
+            class="form-control"
+            placeholder="Optional reason"
+        >
+    </div>
+
+</div>
+
+
+                    <button
+    type="submit"
+    form="deleteBlockedDateForm{{ blocked_date.id }}"
+    class="gallery-delete-btn"
+    title="Delete blocked date"
+    onclick="return confirm('Remove this blocked date?');"
+>
+    <span
+        class="iconify"
+        data-icon="solar:trash-bin-trash-bold"
+    ></span>
+</button>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="form-grid">
+
+                    <div class="listing-field">
+
+                        <label for="blockedDate">
+                            Add Blocked Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="new_blocked_date"
+                            id="blockedDate"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <div class="listing-field">
+
+                        <label for="blockedDateReason">
+                            Reason
+                        </label>
+
+                        <input
+                            type="text"
+                            name="blocked_date_reason"
+                            id="blockedDateReason"
+                            class="form-control"
+                            placeholder="Optional reason"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ACTIVE STATUS -->
+            <!-- ================================================= -->
+
+            <section class="listing-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+
+                        <span
+                            class="iconify"
+                            data-icon="solar:eye-bold"
+                        ></span>
+
+                    </div>
+
+                    <div>
+
+                        <h2>Listing Status</h2>
+
+                        <p>
+                            Choose whether customers can see this listing.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label class="status-toggle">
+
+                    {{ form.is_active }}
+
+                    <span class="status-toggle-content">
+
+                        <strong>
+                            Active Listing
+                        </strong>
+
+                        <small>
+                            Customers can view and book this listing.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ACTIONS -->
+            <!-- ================================================= -->
+
+            <div class="listing-form-actions">
+
+                <a
+                    href="{% url 'listings:my_listings' %}"
+                    class="btn-outline"
+                >
+
+                    <span
+                        class="iconify"
+                        data-icon="solar:arrow-left-linear"
+                    ></span>
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-gold btn-large"
+                    id="saveListingBtn"
+                >
+
+                    <span
+                        class="iconify"
+                        data-icon="solar:check-circle-bold"
+                    ></span>
+
+                    Update Listing
+
+                </button>
+
+            </div>
+
+        </form>
+
+        {% for image in listing.images.all %}
+<form
+    id="deleteImageForm{{ image.id }}"
+    method="POST"
+    action="{% url 'listings:delete_listing_image' image.id %}"
+    hidden
+>
+    {% csrf_token %}
+</form>
+{% endfor %}
+
+{% for video in listing.videos.all %}
+<form
+    id="deleteVideoForm{{ video.id }}"
+    method="POST"
+    action="{% url 'listings:delete_listing_video' video.id %}"
+    hidden
+>
+    {% csrf_token %}
+</form>
+{% endfor %}
+
+        {% for availability in listing.availability_periods.all %}
+        <form
+            id="deleteAvailabilityForm{{ availability.id }}"
+            method="POST"
+            action="{% url 'listings:delete_availability' availability.id %}"
+            hidden
+        >
+            {% csrf_token %}
+        </form>
+        {% endfor %}
+
+        {% for blocked_date in listing.blocked_dates.all %}
+        <form
+            id="deleteBlockedDateForm{{ blocked_date.id }}"
+            method="POST"
+            action="{% url 'listings:delete_blocked_date' blocked_date.id %}"
+            hidden
+        >
+            {% csrf_token %}
+        </form>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+<script src="{% static 'js/listing-form.js' %}"></script>
+
+{% endblock %}

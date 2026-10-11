@@ -1,0 +1,866 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Vendor Dashboard | WedBook
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/vendor-dashboard.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<main class="vendor-dashboard">
+
+    <!-- =========================================
+         DASHBOARD HEADER
+    ========================================== -->
+
+    <section class="dashboard-hero">
+
+        <div class="dashboard-container">
+
+            <div class="dashboard-hero-content">
+
+                <div class="dashboard-welcome">
+
+                    <span class="dashboard-eyebrow">
+                        VENDOR DASHBOARD
+                    </span>
+
+                    <h1>
+                        Welcome,
+                        <span>{{ full_name }}</span>
+                    </h1>
+
+                    <p>
+                        Manage your business, services and listings
+                        from one place.
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-hero-actions">
+
+                    <a
+                        href="{% url 'vendors:edit_profile' %}"
+                        class="dashboard-btn dashboard-btn-light"
+                    >
+                        <iconify-icon icon="mdi:pencil-outline"></iconify-icon>
+                        Edit Profile
+                    </a>
+
+                    <a
+                        href="{% url 'listings:add_listing' %}"
+                        class="dashboard-btn dashboard-btn-gold"
+                    >
+                        <iconify-icon icon="mdi:plus"></iconify-icon>
+                        Add Listing
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         DASHBOARD CONTENT
+    ========================================== -->
+
+    <section class="dashboard-content">
+
+        <div class="dashboard-container">
+
+
+            <!-- =====================================
+                 QUICK STATS
+            ====================================== -->
+
+            <div class="dashboard-stats">
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        <iconify-icon icon="mdi:storefront-outline"></iconify-icon>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <strong>{{ active_listings }}</strong>
+                        <span>Active Listings</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        <iconify-icon icon="mdi:calendar-check-outline"></iconify-icon>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <strong>{{ total_bookings }}</strong>
+                        <span>Total Bookings</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        <iconify-icon icon="mdi:message-text-outline"></iconify-icon>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <strong>{{ enquiries_count }}</strong>
+                        <span>Enquiries</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        <iconify-icon icon="mdi:star-outline"></iconify-icon>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <strong>
+    {% if average_rating %}
+        {{ average_rating|floatformat:1 }}
+    {% else %}
+        —
+    {% endif %}
+</strong>
+
+<span>Average Rating</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 MAIN GRID
+            ====================================== -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- =================================
+                     BUSINESS PROFILE
+                ================================== -->
+
+                <div class="dashboard-card profile-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                BUSINESS PROFILE
+                            </span>
+
+                            <h2>
+                                {{ vendor_profile.business_name }}
+                            </h2>
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'vendors:edit_profile' %}"
+                            class="card-edit-btn"
+                            aria-label="Edit profile"
+                        >
+                            <iconify-icon icon="mdi:pencil-outline"></iconify-icon>
+                        </a>
+
+                    </div>
+
+
+                    <div class="business-profile">
+
+
+                        <div class="business-avatar">
+
+                            <span>
+                                {{ vendor_profile.business_name|first|upper }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="business-main">
+
+                            <h3>
+                                {{ vendor_profile.business_name }}
+                            </h3>
+
+                            <p class="business-location">
+
+                                <iconify-icon icon="mdi:map-marker-outline"></iconify-icon>
+
+                                {{ vendor_profile.city }},
+                                {{ vendor_profile.state }}
+
+                            </p>
+
+
+                            <span class="profile-status">
+
+                                <span class="status-dot"></span>
+
+                                Vendor Account Active
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-divider"></div>
+
+
+                    <div class="contact-details">
+
+
+                        <div class="contact-item">
+
+                            <div class="contact-icon">
+                                <iconify-icon icon="mdi:phone-outline"></iconify-icon>
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Phone Number
+                                </span>
+
+                                <strong>
+                                    {{ phone_number }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="contact-item">
+
+                            <div class="contact-icon">
+                                <iconify-icon icon="mdi:email-outline"></iconify-icon>
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Email Address
+                                </span>
+
+                                <strong>
+                                    {{ email }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     SERVICES CARD
+                ================================== -->
+
+                <div class="dashboard-card services-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                YOUR SERVICES
+                            </span>
+
+                            <h2>
+                                Services You Provide
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="services-list">
+
+                        {% for category in vendor_profile.categories.all %}
+
+                            <div class="service-chip">
+
+                                <span class="service-chip-icon">
+
+                                    <iconify-icon icon="mdi:check"></iconify-icon>
+
+                                </span>
+
+                                <span>
+                                    {{ category.name }}
+                                </span>
+
+                            </div>
+
+                        {% empty %}
+
+                            <div class="empty-services">
+
+                                <iconify-icon
+                                    icon="mdi:briefcase-outline"
+                                ></iconify-icon>
+
+                                <p>
+                                    No services added yet.
+                                </p>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="service-card-footer">
+
+                        <a
+                            href="{% url 'vendors:edit_profile' %}"
+                        >
+
+                            Manage Services
+
+                            <iconify-icon
+                                icon="mdi:arrow-right"
+                            ></iconify-icon>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     LOCATION CARD
+                ================================== -->
+
+                <div class="dashboard-card location-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                BUSINESS LOCATION
+                            </span>
+
+                            <h2>
+                                Where You Operate
+                            </h2>
+
+                        </div>
+
+                        <div class="location-header-icon">
+
+                            <iconify-icon
+                                icon="mdi:map-marker"
+                            ></iconify-icon>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="location-box">
+
+                        <div class="location-large-icon">
+
+                            <iconify-icon
+                                icon="mdi:map-marker-outline"
+                            ></iconify-icon>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                {{ vendor_profile.city }}
+                            </strong>
+
+                            <span>
+                                {{ vendor_profile.state }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="location-note">
+
+                        <iconify-icon
+                            icon="mdi:information-outline"
+                        ></iconify-icon>
+
+                        <p>
+                            Customers will be able to discover your
+                            business based on this location.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     GET STARTED CARD
+                ================================== -->
+
+                <div class="dashboard-card getting-started-card">
+
+                    <div class="getting-started-decoration"></div>
+
+
+                    <div class="getting-started-content">
+
+                        <span class="card-eyebrow">
+                            NEXT STEP
+                        </span>
+
+                        <h2>
+                            Start Adding Your Listings
+                        </h2>
+
+                        <p>
+                            Add your venues, services or packages
+                            so customers can discover and book
+                            your business.
+                        </p>
+
+
+                        <a
+                            href="{% url 'listings:add_listing' %}"
+                            class="dashboard-btn dashboard-btn-gold"
+                        >
+
+                            <iconify-icon icon="mdi:plus"></iconify-icon>
+                            {% if listings %}
+                                Add Listing
+                            {% else %}
+                                Add Your First Listing
+                            {% endif %}
+                        </a>
+
+                    </div>
+
+
+                    <div class="getting-started-icon">
+
+                        <iconify-icon
+                            icon="mdi:storefront-outline"
+                        ></iconify-icon>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <!-- =====================================
+     MY LISTINGS
+====================================== -->
+
+<div class="dashboard-card dashboard-listings-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-eyebrow">
+                YOUR BUSINESS
+            </span>
+
+            <h2>
+                My Listings
+            </h2>
+
+        </div>
+
+
+        <a
+            href="{% url 'listings:my_listings' %}"
+            class="dashboard-view-all"
+        >
+
+            View All
+
+            <iconify-icon
+                icon="mdi:arrow-right"
+            ></iconify-icon>
+
+        </a>
+
+    </div>
+
+
+    {% if latest_listings %}
+
+        <div class="dashboard-listings-grid">
+
+            {% for listing in latest_listings %}
+
+                <div class="dashboard-listing-item">
+
+
+                    <div class="dashboard-listing-image">
+
+                        {% if listing.cover_image %}
+
+                            <img
+                                src="{{ listing.cover_image.url }}"
+                                alt="{{ listing.title }}"
+                            >
+
+                        {% else %}
+
+                            <div class="dashboard-listing-placeholder">
+
+                                <iconify-icon
+                                    icon="mdi:image-outline"
+                                ></iconify-icon>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <div class="dashboard-listing-info">
+
+                        <span>
+                            {{ listing.category.name }}
+                        </span>
+
+                        <h3>
+                            {{ listing.title }}
+                        </h3>
+
+                        <p>
+
+                            <iconify-icon
+                                icon="mdi:map-marker-outline"
+                            ></iconify-icon>
+
+                            {{ listing.city.name }},
+                            {{ listing.state.name }}
+
+                        </p>
+
+
+                        <strong>
+                            ₹{{ listing.base_price }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <a
+                        href="{% url 'listings:edit_listing' listing.id %}"
+                        class="dashboard-listing-edit"
+                        title="Edit Listing"
+                    >
+
+                        <iconify-icon
+                            icon="mdi:pencil-outline"
+                        ></iconify-icon>
+
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% if total_listings > 3 %}
+
+            <div class="dashboard-listings-footer">
+
+                <span>
+                    Showing 3 of {{ total_listings }} listings
+                </span>
+
+                <a
+                    href="{% url 'listings:my_listings' %}"
+                >
+                    Manage all listings
+
+                    <iconify-icon
+                        icon="mdi:arrow-right"
+                    ></iconify-icon>
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+    {% else %}
+
+        <div class="dashboard-no-listings">
+
+            <div>
+
+                <iconify-icon
+                    icon="mdi:store-plus-outline"
+                ></iconify-icon>
+
+            </div>
+
+            <h3>
+                No listings yet
+            </h3>
+
+            <p>
+                Add your first listing so customers
+                can discover your business.
+            </p>
+
+            <a
+                href="{% url 'listings:add_listing' %}"
+                class="dashboard-btn dashboard-btn-gold"
+            >
+
+                <iconify-icon
+                    icon="mdi:plus"
+                ></iconify-icon>
+
+                Add Your First Listing
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+            <!-- =====================================
+                 RECENT BOOKINGS
+            ====================================== -->
+
+            <div class="dashboard-card bookings-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            ACTIVITY
+                        </span>
+
+                        <h2>
+                            Recent Bookings
+                        </h2>
+
+                    </div>
+
+
+                    <a
+                        href="#"
+                        class="view-all-link"
+                    >
+                        View All
+                        <iconify-icon
+                            icon="mdi:arrow-right"
+                        ></iconify-icon>
+                    </a>
+
+                </div>
+
+
+                <div class="recent-bookings-list">
+
+    {% for booking in recent_bookings %}
+
+        <div class="recent-booking-item">
+
+            <div class="recent-booking-icon">
+                <iconify-icon
+                    icon="mdi:calendar-check-outline"
+                ></iconify-icon>
+            </div>
+
+<div class="recent-booking-info">
+
+    <h3>
+        {{ booking.item_name }}
+    </h3>
+
+    <div class="booking-customer-name">
+        <iconify-icon icon="mdi:account-outline"></iconify-icon>
+        <strong>{{ booking.group.full_name }}</strong>
+    </div>
+
+    <div class="booking-details">
+
+        <div class="booking-detail">
+            <iconify-icon icon="mdi:calendar-outline"></iconify-icon>
+
+            <span>
+                <strong>Event Date</strong>
+                {{ booking.group.event_start_date }}
+
+                {% if booking.group.event_end_date != booking.group.event_start_date %}
+                    – {{ booking.group.event_end_date }}
+                {% endif %}
+            </span>
+        </div>
+
+        {% if booking.group.guest_count %}
+        <div class="booking-detail">
+            <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
+
+            <span>
+                <strong>Guests</strong>
+                {{ booking.group.guest_count }}
+            </span>
+        </div>
+        {% endif %}
+
+        {% if booking.group.phone_number %}
+        <div class="booking-detail">
+            <iconify-icon icon="mdi:phone-outline"></iconify-icon>
+
+            <span>
+                <strong>Phone</strong>
+                {{ booking.group.phone_number }}
+            </span>
+        </div>
+        {% endif %}
+
+        {% if booking.group.email %}
+        <div class="booking-detail">
+            <iconify-icon icon="mdi:email-outline"></iconify-icon>
+
+            <span>
+                <strong>Email</strong>
+                {{ booking.group.email }}
+            </span>
+        </div>
+        {% endif %}
+
+        {% if booking.group.notes %}
+        <div class="booking-detail booking-notes">
+            <iconify-icon icon="mdi:note-text-outline"></iconify-icon>
+
+            <span>
+                <strong>Notes</strong>
+                {{ booking.group.notes }}
+            </span>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+            <div class="recent-booking-status">
+
+                <span class="booking-status {{ booking.status }}">
+                    {{ booking.get_status_display }}
+                </span>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-bookings">
+
+            <div class="empty-bookings-icon">
+
+                <iconify-icon
+                    icon="mdi:calendar-blank-outline"
+                ></iconify-icon>
+
+            </div>
+
+            <h3>
+                No bookings yet
+            </h3>
+
+            <p>
+                Your recent customer bookings will
+                appear here.
+            </p>
+
+            <a
+                href="{% url 'listings:add_listing' %}"
+                class="text-action"
+            >
+                Add a Listing
+
+                <iconify-icon
+                    icon="mdi:arrow-right"
+                ></iconify-icon>
+
+            </a>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}

@@ -1,0 +1,1861 @@
+/* =========================================================
+   WEDBOOK HOMEPAGE
+   FINAL RESPONSIVE LAYOUT
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL HOMEPAGE SAFETY
+   ========================================================= */
+
+.hero,
+.categories-section,
+.vendors-section,
+.discovery-section,
+.event-discovery-section,
+.packages-discovery-section,
+.trending-section,
+.function-section,
+.inspiration-section,
+.why-wedbook-section,
+.testimonials-section,
+.vendor-cta-section,
+.budget-planner-section {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+
+.hero *,
+.categories-section *,
+.vendors-section *,
+.discovery-section *,
+.event-discovery-section *,
+.packages-discovery-section *,
+.trending-section *,
+.function-section *,
+.inspiration-section *,
+.why-wedbook-section *,
+.testimonials-section *,
+.vendor-cta-section *,
+.budget-planner-section * {
+    box-sizing: border-box;
+}
+
+
+.hero img,
+.categories-section img,
+.vendors-section img,
+.discovery-section img,
+.event-discovery-section img,
+.packages-discovery-section img,
+.trending-section img,
+.function-section img,
+.inspiration-section img,
+.why-wedbook-section img,
+.testimonials-section img,
+.vendor-cta-section img {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 1101px) {
+
+    /* -----------------------------------------
+       HERO
+       ----------------------------------------- */
+
+    .hero-inner {
+        min-height: 650px;
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1.05fr)
+            minmax(360px, .95fr);
+
+        align-items: center;
+
+        gap: 55px;
+    }
+
+
+    .hero-copy {
+        min-width: 0;
+    }
+
+
+    .hero-gallery {
+        position: relative;
+
+        width: 100%;
+        height: 470px;
+
+        min-width: 0;
+    }
+
+
+    /* -----------------------------------------
+       CATEGORIES
+       ----------------------------------------- */
+
+    .category-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr));
+
+        gap: 14px;
+    }
+
+
+    /* -----------------------------------------
+       FEATURED VENDORS
+       ----------------------------------------- */
+
+    .vendor-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 20px;
+    }
+
+
+    /* -----------------------------------------
+       POPULAR CITIES
+       ----------------------------------------- */
+
+    .city-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+
+
+    /* -----------------------------------------
+       BUDGET
+       ----------------------------------------- */
+
+    .budget-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+
+
+    .budget-card {
+        min-height: 150px;
+    }
+
+
+    /* -----------------------------------------
+       EVENT TYPES
+       ----------------------------------------- */
+
+    .event-type-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+
+
+    .event-type-card {
+        min-height: 170px;
+    }
+
+
+    /* -----------------------------------------
+       PACKAGES
+       ----------------------------------------- */
+
+    .package-home-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 20px;
+    }
+
+
+    /* -----------------------------------------
+       TRENDING
+       ----------------------------------------- */
+
+    .trending-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+
+
+    /* -----------------------------------------
+       PLAN BY FUNCTION
+       ----------------------------------------- */
+
+    .function-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+
+
+    /* -----------------------------------------
+       WHY WEDBOOK
+       ----------------------------------------- */
+
+    .why-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 18px;
+    }
+
+
+    /* -----------------------------------------
+       INSPIRATION
+       ----------------------------------------- */
+
+    .inspiration-grid {
+        grid-template-columns: 1.2fr .8fr;
+
+        grid-template-rows:
+            240px
+            240px;
+
+        gap: 16px;
+    }
+
+
+    /* -----------------------------------------
+       SECTION SPACING
+       ----------------------------------------- */
+
+    .discovery-section,
+    .event-discovery-section,
+    .packages-discovery-section,
+    .trending-section,
+    .function-section,
+    .inspiration-section,
+    .why-wedbook-section,
+    .testimonials-section {
+        padding-top: 85px;
+        padding-bottom: 85px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+
+    /* -----------------------------------------
+       HERO
+       ----------------------------------------- */
+
+    .hero-inner {
+        min-height: 600px;
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(280px, .75fr);
+
+        align-items: center;
+
+        gap: 30px;
+    }
+
+
+    .hero-gallery {
+        position: relative;
+
+        width: 100%;
+        height: 390px;
+    }
+
+
+    /* -----------------------------------------
+       GRIDS
+       ----------------------------------------- */
+
+    .category-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+
+    .vendor-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 18px;
+    }
+
+
+    .city-grid,
+    .budget-grid,
+    .event-type-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 14px;
+    }
+
+
+    .package-home-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 18px;
+    }
+
+
+    .trending-grid,
+    .function-grid,
+    .why-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+
+
+    .inspiration-grid {
+        grid-template-columns: 1fr 1fr;
+
+        grid-template-rows:
+            220px
+            220px;
+
+        gap: 14px;
+    }
+
+
+    /* -----------------------------------------
+       SECTION SPACING
+       ----------------------------------------- */
+
+    .discovery-section,
+    .event-discovery-section,
+    .packages-discovery-section,
+    .trending-section,
+    .function-section,
+    .inspiration-section,
+    .why-wedbook-section,
+    .testimonials-section {
+        padding-top: 65px;
+        padding-bottom: 65px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /* -----------------------------------------
+       PAGE
+       ----------------------------------------- */
+
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+
+    .container {
+        width: calc(100% - 28px);
+
+        max-width: 100%;
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    /* =====================================================
+       HERO
+       ===================================================== */
+
+    .hero {
+        overflow: hidden;
+    }
+
+
+    .hero-inner {
+        min-height: 0;
+
+        display: block;
+
+        padding-top: 42px;
+        padding-bottom: 42px;
+
+        position: relative;
+    }
+
+
+    .hero-copy {
+        position: relative;
+
+        z-index: 3;
+
+        width: 100%;
+
+        max-width: 100%;
+    }
+
+
+    .hero h1 {
+        max-width: 100%;
+
+        font-size: clamp(
+            2.25rem,
+            9vw,
+            3.4rem
+        );
+
+        line-height: .94;
+
+        margin-bottom: 18px;
+    }
+
+
+    .hero-copy > p {
+        max-width: 100%;
+
+        font-size: .82rem;
+
+        line-height: 1.7;
+    }
+
+
+    /* -----------------------------------------
+       HERO SEARCH
+       ----------------------------------------- */
+
+    .search-box {
+        width: 100%;
+
+        max-width: 100%;
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        padding: 8px;
+    }
+
+
+    .search-location {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    .search-location input {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    .search-button {
+        width: 100%;
+    }
+
+
+    /* -----------------------------------------
+       HERO STATS
+       ----------------------------------------- */
+
+    .hero-stats {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 8px;
+
+        width: 100%;
+
+        margin-top: 22px;
+    }
+
+
+    .hero-stats > div {
+        min-width: 0;
+
+        text-align: left;
+    }
+
+
+    .hero-stats strong {
+        font-size: 1.05rem;
+    }
+
+
+    .hero-stats small {
+        font-size: .58rem;
+    }
+
+
+    /* -----------------------------------------
+       HERO IMAGE
+       ----------------------------------------- */
+
+    .hero-gallery {
+        position: absolute;
+
+        right: 0;
+        bottom: 18px;
+
+        width: 105px;
+        height: 145px;
+
+        z-index: 1;
+
+        opacity: .92;
+
+        pointer-events: none;
+    }
+
+
+    .hero-img {
+        position: absolute;
+
+        object-fit: cover;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 8px 22px rgba(0, 0, 0, .18);
+    }
+
+
+    .hero-img-1 {
+        width: 76px;
+        height: 108px;
+
+        right: 0;
+        top: 0;
+
+        z-index: 3;
+    }
+
+
+    .hero-img-2 {
+        width: 68px;
+        height: 90px;
+
+        left: 0;
+        bottom: 0;
+
+        z-index: 2;
+    }
+
+
+    .hero-img-3 {
+        display: none;
+    }
+
+
+    /* =====================================================
+       CATEGORIES
+       ===================================================== */
+
+    .categories-section {
+        padding-top: 10px;
+        padding-bottom: 35px;
+    }
+
+
+    .category-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+
+        width: 100%;
+    }
+
+
+    .category-card {
+        min-width: 0;
+
+        min-height: 92px;
+
+        padding: 12px 8px;
+
+        border-radius: 12px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        text-align: center;
+    }
+
+
+    .category-icon {
+        width: 34px;
+        height: 34px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .category-card strong {
+        font-size: .72rem;
+
+        line-height: 1.15;
+    }
+
+
+    .category-card small {
+        margin-top: 4px;
+
+        font-size: .56rem;
+    }
+
+
+    /* =====================================================
+       FEATURED VENDORS
+       ===================================================== */
+
+    .vendors-section {
+        padding-top: 48px;
+        padding-bottom: 55px;
+
+        clip-path: none;
+    }
+
+
+    .section-heading {
+        margin-bottom: 18px;
+    }
+
+
+    .section-heading h2 {
+        font-size: 2rem;
+
+        line-height: 1;
+    }
+
+
+    .vendor-grid {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+
+        width: 100%;
+    }
+
+
+    .vendor-card {
+        width: 100%;
+
+        min-width: 0;
+
+        border-radius: 16px;
+
+        overflow: hidden;
+    }
+
+
+    .vendor-image-wrap {
+        width: 100%;
+
+        height: 205px;
+    }
+
+
+    .vendor-image-wrap img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+    }
+
+
+    .vendor-body {
+        padding: 15px;
+    }
+
+
+    .vendor-body h3 {
+        font-size: 1.15rem;
+    }
+
+
+    /* =====================================================
+       SHARED DISCOVERY SECTIONS
+       ===================================================== */
+
+    .discovery-section,
+    .event-discovery-section,
+    .packages-discovery-section,
+    .trending-section,
+    .function-section,
+    .inspiration-section,
+    .why-wedbook-section,
+    .testimonials-section {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
+
+    .discovery-heading {
+        margin-bottom: 22px;
+    }
+
+
+    .discovery-heading h2,
+    .center-heading h2 {
+        font-size: 2rem;
+
+        line-height: 1.05;
+    }
+
+
+    .discovery-heading p,
+    .center-heading p {
+        font-size: .78rem;
+
+        line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       POPULAR CITIES
+       ===================================================== */
+
+/* =====================================================
+   POPULAR CITIES
+   ===================================================== */
+
+.city-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+.city-card {
+    min-width: 0;
+
+    min-height: 88px;
+
+    height: 88px;
+
+    padding: 12px;
+
+    gap: 10px;
+
+    border-radius: 14px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.city-card-icon {
+    width: 40px;
+
+    height: 40px;
+
+    flex: 0 0 40px;
+
+    font-size: 19px;
+}
+
+.city-card-content {
+    min-width: 0;
+
+    flex: 1;
+
+    overflow: hidden;
+}
+
+.city-card-content h3 {
+    margin: 0 0 3px;
+
+    font-size: .9rem;
+
+    line-height: 1.15;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.city-card-content span {
+    display: block;
+
+    font-size: .56rem;
+
+    line-height: 1.2;
+}
+
+.city-arrow {
+    flex-shrink: 0;
+
+    font-size: .85rem;
+}
+
+
+    /* =====================================================
+       BUDGET
+       ===================================================== */
+
+    .budget-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    .budget-card {
+        min-width: 0;
+
+        min-height: 135px;
+
+        padding: 16px 10px;
+
+        border-radius: 14px;
+    }
+
+
+    .budget-icon {
+        width: 38px;
+        height: 38px;
+
+        font-size: 17px;
+
+        margin-bottom: 9px;
+    }
+
+
+    .budget-card h3 {
+        font-size: .92rem;
+
+        line-height: 1.15;
+    }
+
+
+    .budget-card p {
+        font-size: .62rem;
+
+        line-height: 1.35;
+
+        margin-bottom: 7px;
+    }
+
+
+    .budget-card > span {
+        font-size: .62rem;
+    }
+
+
+    /* =====================================================
+       EVENT TYPES
+       ===================================================== */
+
+    .event-type-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    .event-type-card {
+        min-width: 0;
+
+        min-height: 135px;
+
+        padding: 16px 10px;
+
+        border-radius: 14px;
+    }
+
+
+    .event-type-icon {
+        width: 42px;
+        height: 42px;
+
+        margin-bottom: 9px;
+
+        font-size: 20px;
+    }
+
+
+    .event-type-icon img {
+        width: 27px;
+        height: 27px;
+    }
+
+
+    .event-type-card h3 {
+        font-size: .9rem;
+
+        line-height: 1.15;
+    }
+
+
+    .event-type-card span {
+        font-size: .62rem;
+    }
+
+
+    /* =====================================================
+       PACKAGES
+       ===================================================== */
+
+    .package-home-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    .package-home-card {
+        min-width: 0;
+
+        border-radius: 14px;
+    }
+
+
+    .package-home-top {
+        min-height: 90px;
+
+        padding: 14px;
+    }
+
+
+    /* =====================================================
+       TRENDING
+       ===================================================== */
+
+    .trending-grid {
+        display: grid;
+        grid-template-columns: 1fr;      /* mobile pe 1 column, text ko jagah milti hai */
+        gap: 10px;
+        width: 100%;
+        margin-top: 22px;
+    }
+
+    .trending-card {
+        position: relative;
+        min-width: 0;
+        min-height: 84px;
+        height: auto;                    /* fixed height hatayi */
+        padding: 14px 16px;
+        gap: 14px;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .trending-icon {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        font-size: 20px;
+    }
+
+    .trending-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .trending-content h3 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        line-height: 1.25;
+        overflow-wrap: break-word;
+    }
+
+    .trending-content span {
+        display: block;
+        margin: 0;
+        font-size: .76rem;
+        line-height: 1.2;
+        white-space: normal;
+    }
+
+    .trending-count {
+        flex-shrink: 0;
+        min-width: 26px;
+        height: 26px;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background: rgba(201, 145, 58, .15);
+        color: var(--gold-dark);
+        font-size: .72rem;
+        font-weight: 700;
+    }
+
+    /* =====================================================
+       PLAN BY FUNCTION
+       ===================================================== */
+
+    .function-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    .function-card {
+        min-width: 0;
+
+        min-height: 145px;
+
+        padding: 15px 10px;
+
+        border-radius: 14px;
+    }
+
+
+    .function-icon {
+        width: 42px;
+        height: 42px;
+
+        font-size: 20px;
+
+        margin-bottom: 9px;
+    }
+
+
+    .function-card h3 {
+        font-size: .9rem;
+    }
+
+
+    .function-card span {
+        font-size: .62rem;
+    }
+
+
+    /* =====================================================
+       INSPIRATION
+       ===================================================== */
+
+    .inspiration-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        grid-template-rows:
+            150px
+            150px;
+
+        gap: 10px;
+
+        margin-top: 24px;
+    }
+
+
+    .inspiration-large {
+        grid-row: 1 / 3;
+    }
+
+
+    .inspiration-wide {
+        grid-column: auto;
+    }
+
+
+    .inspiration-card {
+        min-width: 0;
+
+        border-radius: 12px;
+    }
+
+
+    /* =====================================================
+       WHY WEDBOOK
+       ===================================================== */
+
+    .why-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+
+        margin-top: 25px;
+    }
+
+
+    .why-card {
+        min-width: 0;
+
+        padding: 20px 12px;
+
+        border-radius: 14px;
+    }
+
+
+    .why-icon {
+        width: 44px;
+        height: 44px;
+
+        font-size: 20px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .why-card h3 {
+        font-size: .9rem;
+
+        line-height: 1.2;
+    }
+
+
+    .why-card p {
+        font-size: .64rem;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================================
+       BUDGET PLANNER
+       ===================================================== */
+
+    .budget-planner {
+        padding: 18px;
+    }
+
+
+    /* =====================================================
+       TESTIMONIALS
+       ===================================================== */
+
+    .testimonials-section .testimonials-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    /* =====================================================
+       VENDOR CTA
+       ===================================================== */
+
+    .vendor-cta-section {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+
+    .vendor-cta {
+        padding: 28px 18px;
+    }
+
+
+    .cta-actions {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .cta-actions .btn {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .container {
+        width: calc(100% - 22px);
+    }
+
+
+    .hero h1 {
+        font-size: 2.15rem;
+    }
+
+
+    .hero-copy > p {
+        font-size: .78rem;
+    }
+
+
+    .category-grid,
+    .budget-grid,
+    .event-type-grid,
+    .package-home-grid,
+    .trending-grid,
+    .function-grid,
+    .why-grid {
+        gap: 7px;
+    }
+
+
+    .category-card {
+        min-height: 86px;
+
+        padding: 9px 6px;
+    }
+
+
+    .budget-card,
+    .event-type-card {
+        min-height: 125px;
+    }
+
+
+    .vendor-image-wrap {
+        height: 185px;
+    }
+
+
+    .inspiration-grid {
+        grid-template-rows:
+            135px
+            135px;
+    }
+
+}
+
+
+
+@media (min-width: 801px) {
+    .hero {
+        height: auto;
+        min-height: 625px;
+        overflow: hidden;
+    }
+
+    .hero-inner {
+        height: auto;
+        min-height: 625px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 54px;
+        align-items: center;
+    }
+
+    .hero-copy {
+        min-width: 0;
+        padding-block: 62px 50px;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.4rem, 4vw, 3.8rem);
+        line-height: .99;
+    }
+
+    .hero-gallery {
+        position: relative;
+        width: 100%;
+        min-width: 0;
+        height: 500px;
+    }
+
+    .hero-img {
+        position: absolute;
+        object-fit: cover;
+    }
+
+    .hero-img-1 {
+        width: 55%;
+        height: 208px;
+        left: 0;
+        top: 72px;
+    }
+
+    .hero-img-2 {
+        width: 47%;
+        height: 208px;
+        right: 0;
+        top: 104px;
+    }
+
+    .hero-img-3 {
+        width: 100%;
+        height: 174px;
+        left: 0;
+        bottom: 42px;
+    }
+}
+
+
+.categories-section {
+    overflow: visible;
+    position: relative;
+    z-index: 5;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 14px;
+}
+
+
+
+
+/* =========================================================
+   BUDGET PLANNER - COMPACT MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /* ---------- OUTER ---------- */
+
+    .budget-planner-section {
+        padding: 24px 10px 30px;
+    }
+
+    .budget-planner-section .budget-planner {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px 14px 0;
+        column-gap: 0;
+        border-radius: 18px;
+    }
+
+    /* ---------- HEADING ---------- */
+
+    .budget-planner-section .planner-heading {
+        margin-bottom: 18px;
+    }
+
+    .budget-planner-section .planner-heading .eyebrow {
+        margin-bottom: 6px;
+        font-size: .62rem;
+    }
+
+    .budget-planner-section .planner-heading h2 {
+        font-size: 1.6rem;
+        line-height: 1.08;
+    }
+
+    .budget-planner-section .planner-heading h2 span {
+        display: inline;           /* "Your Budget" nayi line me nahi jayega */
+    }
+
+    .budget-planner-section .planner-heading p {
+        margin-top: 8px;
+        font-size: .72rem;
+        line-height: 1.5;
+    }
+
+    /* ---------- LEFT SIDE ---------- */
+
+    .budget-planner-section .budget-planner-content {
+        padding-bottom: 18px;
+    }
+
+    .budget-planner-section .planner-field {
+        margin-bottom: 14px;
+    }
+
+    .budget-planner-section .planner-field label {
+        margin-bottom: 6px;
+        font-size: .76rem;
+    }
+
+    .budget-planner-section .planner-label-row {
+        margin-bottom: 6px;
+    }
+
+    .budget-planner-section .planner-label-row strong {
+        font-size: .78rem;
+    }
+
+    .budget-planner-section .planner-optional {
+        font-size: .64rem;
+    }
+
+    /* ---------- LOCATION: State + City side by side ---------- */
+
+    .budget-planner-section .planner-location-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .budget-planner-section .planner-location-select {
+        height: 40px;
+        padding: 0 28px 0 10px;
+        font-size: .75rem;
+        border-radius: 9px;
+    }
+
+    .budget-planner-section .planner-select-arrow {
+        right: 8px;
+        font-size: 15px;
+    }
+
+    .budget-planner-section .planner-location-hint {
+        margin-top: 4px;
+        font-size: .62rem;
+    }
+
+    /* ---------- DATES: Start + End side by side ---------- */
+
+    .budget-planner-section .planner-date-inputs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .budget-planner-section .planner-date-input {
+        gap: 0;
+        padding: 7px 9px;
+        border-radius: 9px;
+    }
+
+    .budget-planner-section .planner-date-input > iconify-icon {
+        display: none;             /* jagah bachane ke liye icon hata diya */
+    }
+
+    .budget-planner-section .planner-date-content {
+        gap: 1px;
+    }
+
+    .budget-planner-section .planner-date-content small {
+        font-size: .6rem;
+        color: rgba(255, 255, 255, .7);
+    }
+
+    .budget-planner-section .planner-date-content input {
+        font-size: .72rem;
+        height: 22px;
+    }
+
+    /* ---------- SLIDERS ---------- */
+
+    .budget-planner-section .planner-range {
+        height: 5px;
+    }
+
+    .budget-planner-section .planner-range::-webkit-slider-thumb {
+        width: 16px;
+        height: 16px;
+        border-width: 2px;
+    }
+
+    .budget-planner-section .planner-range-labels {
+        height: 16px;
+        margin-top: 6px;
+    }
+
+    .budget-planner-section .planner-range-labels span {
+        font-size: .6rem;
+        color: rgba(255, 255, 255, .78);
+    }
+
+    /* ---------- BUDGET INPUT ---------- */
+
+    .budget-planner-section .planner-price-input {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 9px;
+    }
+
+    .budget-planner-section .planner-price-input input {
+        font-size: .85rem;
+    }
+
+    /* ---------- CATEGORIES: 2 columns ---------- */
+
+    .budget-planner-section .planner-select-all {
+        padding: 3px 9px;
+        font-size: .62rem;
+    }
+
+    .budget-planner-section .planner-service-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .budget-planner-section .planner-service-option span {
+        min-height: 38px;
+        gap: 6px;
+        padding: 6px 8px;
+        border-radius: 9px;
+        font-size: .68rem;
+        line-height: 1.15;
+    }
+
+    .budget-planner-section .planner-service-option span iconify-icon {
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+
+    .budget-planner-section .planner-service-option span img {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* ---------- BUTTONS ---------- */
+
+    .budget-planner-section .planner-error {
+        min-height: 12px;
+        font-size: .68rem;
+    }
+
+    .budget-planner-section .planner-actions {
+        gap: 4px;
+        margin-top: 4px;
+    }
+
+    .budget-planner-section .planner-submit {
+        min-height: 42px;
+        font-size: .8rem;
+    }
+
+    .budget-planner-section .planner-reset {
+        padding: 6px;
+        font-size: .68rem;
+    }
+
+    /* ---------- RIGHT SIDE: YOUR PLAN ---------- */
+
+    .budget-planner-section .planner-breakdown {
+        display: block;
+        padding: 16px 0 20px;
+    }
+
+    .budget-planner-section .planner-breakdown-header {
+        min-height: 0;
+        padding-bottom: 10px;
+    }
+
+    .budget-planner-section .planner-breakdown-header span {
+        font-size: .64rem;
+    }
+
+    .budget-planner-section .planner-breakdown-header small {
+        font-size: .6rem;
+    }
+
+    .budget-planner-section .planner-breakdown-header > iconify-icon {
+        font-size: 18px;
+    }
+
+    .budget-planner-section .planner-total {
+        padding: 12px 0 8px;
+    }
+
+    .budget-planner-section .planner-total small {
+        font-size: .64rem;
+    }
+
+    .budget-planner-section .planner-total strong {
+        font-size: 1.7rem;
+    }
+
+    .budget-planner-section .planner-summary-item {
+        min-height: 0;
+        padding: 7px 0;
+        gap: 10px;
+    }
+
+    .budget-planner-section .planner-summary-item span,
+    .budget-planner-section .planner-summary-item strong {
+        font-size: .74rem;
+    }
+
+    .budget-planner-section .planner-summary-block {
+        margin-top: 4px;
+        padding-top: 9px;
+    }
+
+    .budget-planner-section .planner-budget-heading {
+        margin-bottom: 6px;
+        font-size: .66rem;
+    }
+
+    .budget-planner-section .planner-selected-services {
+        gap: 5px;
+    }
+
+    .budget-planner-section .planner-selected-services span {
+        padding: 4px 8px;
+        font-size: .62rem;
+    }
+
+    /* Lamba note mobile pe hide, sirf chhota match note rakha */
+    .budget-planner-section .planner-note {
+        display: none;
+    }
+
+    .budget-planner-section .planner-match-note {
+        margin-top: 10px;
+        font-size: .68rem;
+        line-height: 1.4;
+    }
+
+    .budget-planner-section .planner-match-note iconify-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+}
+
+
+/* =========================================================
+   CUSTOM DROPDOWN (State / City)
+   ========================================================= */
+
+.planner-location-select.is-enhanced {
+    display: none;
+}
+
+.planner-dd-btn {
+    width: 100%;
+    height: 40px;
+    padding: 0 30px 0 11px;
+    box-sizing: border-box;
+
+    display: block;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    border: 1px solid rgba(229, 184, 79, .30);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .065);
+    color: #fff;
+
+    font-family: inherit;
+    font-size: .76rem;
+    cursor: pointer;
+}
+
+.planner-dd-btn.is-placeholder {
+    color: rgba(255, 255, 255, .7);
+}
+
+.planner-dd-btn:focus,
+.planner-dd-btn:hover:not(:disabled) {
+    border-color: var(--gold-light);
+    outline: none;
+}
+
+.planner-dd-btn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.planner-dd-list {
+    position: absolute;
+    z-index: 80;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+
+    display: none;
+    max-height: 190px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 5px;
+    list-style: none;
+
+    border: 1px solid rgba(229, 184, 79, .3);
+    border-radius: 10px;
+    background: #5f0a1a;
+    box-shadow: 0 14px 30px rgba(20, 0, 10, .45);
+}
+
+.planner-dd-list.show {
+    display: block;
+}
+
+.planner-dd-list li {
+    padding: 9px 10px;
+    border-radius: 7px;
+    color: #fff;
+    font-size: .76rem;
+    cursor: pointer;
+}
+
+.planner-dd-list li:hover,
+.planner-dd-list li.selected {
+    background: rgba(229, 184, 79, .16);
+    color: var(--gold-light);
+}
+
+
+/* =========================================================
+   FLATPICKR - CALENDAR PLANNER KE ANDAR, FULL WIDTH
+   ========================================================= */
+
+.planner-date-inputs {
+    position: relative;              /* calendar isi ke hisaab se position hoga */
+}
+
+/* flatpickr ka wrapper positioned na rahe, taaki calendar .planner-date-inputs
+   ke hisaab se chale, chhote date box ke hisaab se nahi */
+.planner-date-content .flatpickr-wrapper {
+    position: static;
+    display: block;
+    width: 100%;
+}
+
+.flatpickr-calendar.static {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    z-index: 100;
+
+    background: #5f0a1a;
+    border: 1px solid rgba(229, 184, 79, .35);
+    border-radius: 12px;
+    box-shadow: 0 14px 30px rgba(20, 0, 10, .45);
+}
+
+/* andar ke fixed widths hatao, taaki calendar poori width le */
+.flatpickr-calendar.static .flatpickr-innerContainer,
+.flatpickr-calendar.static .flatpickr-rContainer,
+.flatpickr-calendar.static .flatpickr-days,
+.flatpickr-calendar.static .dayContainer {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.flatpickr-calendar.static .flatpickr-day {
+    max-width: none;
+    height: 36px;
+    line-height: 36px;
+}
+
+/* chhoti arrow hata do */
+.flatpickr-calendar.static::before,
+.flatpickr-calendar.static::after {
+    display: none;
+}
+
+
+
+.planner-date-content .flatpickr-input,
+.planner-date-content input.form-control {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    font-size: .72rem;
+    cursor: pointer;
+}
+
+.planner-date-content input::placeholder {
+    color: rgba(255, 255, 255, .6);
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year,
+span.flatpickr-weekday {
+    background: transparent;
+    color: #fff;
+    fill: #fff;
+}
+
+.flatpickr-months .flatpickr-prev-month svg,
+.flatpickr-months .flatpickr-next-month svg {
+    fill: var(--gold-light);
+}
+
+.flatpickr-day {
+    color: #fff;
+}
+
+.flatpickr-day:hover {
+    background: rgba(229, 184, 79, .2);
+    border-color: transparent;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+    color: #3a0510;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: rgba(255, 255, 255, .3);
+}
+
+.budget-planner-section,
+.budget-planner-section .budget-planner {
+    overflow: visible;
+}

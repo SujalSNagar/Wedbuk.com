@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Filter Results | WedBook
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/vendor-filters.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/filter-results.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="filter-results-page">
+
+    <div class="container">
+
+        <div class="filter-results-layout">
+
+
+            <!-- FILTERS -->
+
+            <aside>
+
+                {% include "listings/vendor_filters.html" %}
+
+            </aside>
+
+
+            <!-- RESULTS -->
+
+            <section class="filter-results-content">
+
+
+                <div class="filter-results-heading">
+
+                    <h1>
+                        Find Your Perfect Event Venue
+                    </h1>
+
+                    <p>
+                        Explore venues, services and
+                        packages matching your preferences.
+                    </p>
+
+                    <div class="filter-results-count">
+
+                        <iconify-icon
+                            icon="mdi:check-circle-outline"
+                        ></iconify-icon>
+
+                        {{ total_matches }}
+                        matching options
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LISTINGS -->
+
+                {% if listings %}
+
+                    <section class="filter-result-section">
+
+                        <div class="filter-result-section-heading">
+
+                            <h2>
+                                Venues & Services
+                            </h2>
+
+                            <span>
+                                {{ listings|length }}
+                                results
+                            </span>
+
+                        </div>
+
+
+                        <div class="filter-result-grid">
+
+                            {% for listing in listings %}
+
+                                <article
+                                    class="filter-result-card"
+                                >
+
+                                    {% with image=listing.images.all|first %}
+
+                                        {% if image %}
+
+                                            <img
+                                                src="{{ image.image.url }}"
+                                                alt="{{ listing.title }}"
+                                                class="filter-result-image"
+                                            >
+
+                                        {% endif %}
+
+                                    {% endwith %}
+
+
+                                    <div
+                                        class="filter-result-card-body"
+                                    >
+
+                                        <h3>
+                                            {{ listing.title }}
+                                        </h3>
+
+                                        <p>
+                                            {{ listing.vendor.business_name }}
+                                        </p>
+
+                                        <strong>
+                                            ₹{{ listing.base_price|floatformat:0 }}
+                                        </strong>
+
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+
+                <!-- PACKAGES -->
+
+                {% if packages %}
+
+                    <section class="filter-result-section">
+
+                        <div class="filter-result-section-heading">
+
+                            <h2>
+                                Packages
+                            </h2>
+
+                            <span>
+                                {{ packages|length }}
+                                results
+                            </span>
+
+                        </div>
+
+
+                        <div class="filter-result-grid">
+
+                            {% for package in packages %}
+
+                                <article
+                                    class="filter-result-card"
+                                >
+
+                                    {% if package.cover_image %}
+
+                                        <img
+                                            src="{{ package.cover_image.url }}"
+                                            alt="{{ package.title }}"
+                                            class="filter-result-image"
+                                        >
+
+                                    {% endif %}
+
+
+                                    <div
+                                        class="filter-result-card-body"
+                                    >
+
+                                        <h3>
+                                            {{ package.title }}
+                                        </h3>
+
+                                        <p>
+                                            {{ package.vendor.business_name }}
+                                        </p>
+
+                                        <strong>
+                                            ₹{{ package.price|floatformat:0 }}
+                                        </strong>
+
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+
+                <!-- EMPTY -->
+
+                {% if not listings and not packages %}
+
+                    <div class="filter-empty">
+
+                        <h2>
+                            No matching options found
+                        </h2>
+
+                        <p>
+                            Try changing or removing
+                            one or more filters.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+{% endblock %}

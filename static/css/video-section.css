@@ -1,0 +1,578 @@
+/* =========================================================
+   WEDBOOK CINEMATIC VIDEO STORY
+   ========================================================= */
+
+.wedbook-video-story {
+    position: relative;
+    height: 500vh;
+    width: 100%;
+    overflow: clip;
+    margin-top: 50px;
+}
+
+
+/* ---------------------------------------------------------
+   STICKY VIEWPORT
+   --------------------------------------------------------- */
+
+.wedbook-video-sticky {
+    position: sticky;
+    top: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    min-height: 620px;
+
+    overflow: hidden;
+
+    background: #241017;
+}
+
+
+/* ---------------------------------------------------------
+   VIDEO
+   --------------------------------------------------------- */
+
+.wedbook-story-video {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    background: #241017;
+}
+
+
+/* ---------------------------------------------------------
+   MAIN DARK OVERLAY
+   --------------------------------------------------------- */
+
+.wedbook-video-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(36, 16, 23, 0.38) 0%,
+            rgba(36, 16, 23, 0.20) 38%,
+            rgba(36, 16, 23, 0.06) 72%,
+            rgba(36, 16, 23, 0.16) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   BOTTOM CINEMATIC GRADIENT
+   --------------------------------------------------------- */
+
+.wedbook-video-overlay::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 38%;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(36, 16, 23, 0.82),
+            transparent
+        );
+}
+
+
+/* ---------------------------------------------------------
+   GOLDEN GLOW
+   --------------------------------------------------------- */
+
+.wedbook-video-glow {
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    left: -250px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(201, 145, 58, 0.14) 0%,
+            rgba(201, 145, 58, 0.05) 38%,
+            transparent 72%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   CONTENT
+   --------------------------------------------------------- */
+
+.wedbook-video-content {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    padding-left: clamp(30px, 9vw, 150px);
+
+    padding-right: 30px;
+
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   STORY TEXT
+   --------------------------------------------------------- */
+
+.wedbook-story-text {
+    position: absolute;
+
+    width: min(700px, 75vw);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(45px)
+        scale(0.97);
+
+    transition:
+        opacity 0.75s ease,
+        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.75s ease;
+
+    pointer-events: none;
+}
+
+
+.wedbook-story-text.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* ---------------------------------------------------------
+   LABEL
+   --------------------------------------------------------- */
+
+.wedbook-story-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+    color: #e2b968;
+}
+
+
+.wedbook-story-label::before {
+    content: "";
+
+    width: 34px;
+
+    height: 1px;
+
+    background: #e2b968;
+}
+
+
+/* ---------------------------------------------------------
+   HEADING
+   --------------------------------------------------------- */
+
+.wedbook-story-text h2 {
+    margin: 0;
+
+    max-width: 720px;
+
+    font-size: clamp(42px, 5.5vw, 82px);
+
+    line-height: 1.03;
+
+    font-weight: 500;
+
+    letter-spacing: -2px;
+
+    color: #fff;
+}
+
+
+.wedbook-story-text h2 strong {
+    display: block;
+
+    font-weight: 700;
+
+    color: #e2b968;
+}
+
+
+/* ---------------------------------------------------------
+   DESCRIPTION
+   --------------------------------------------------------- */
+
+.wedbook-story-text p {
+    max-width: 550px;
+
+    margin: 25px 0 0;
+
+    font-size: clamp(16px, 1.5vw, 20px);
+
+    line-height: 1.7;
+
+    color: rgba(255, 255, 255, 0.86);
+}
+
+
+/* ---------------------------------------------------------
+   WEDBOOK LOGO TEXT
+   --------------------------------------------------------- */
+
+.wedbook-story-logo {
+    margin-bottom: 24px;
+
+    font-size: clamp(30px, 4vw, 54px);
+
+    font-weight: 800;
+
+    letter-spacing: 7px;
+
+    color: #e2b968;
+}
+
+
+/* ---------------------------------------------------------
+   CTA
+   --------------------------------------------------------- */
+
+.wedbook-story-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+    padding: 14px 25px;
+
+    border-radius: 5px;
+
+    background: #e2b968;
+
+    color: #4a1624;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+
+    pointer-events: auto;
+}
+
+
+.wedbook-story-button:hover {
+    transform: translateY(-3px);
+
+    background: #f0cf86;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+.wedbook-story-button iconify-icon {
+    font-size: 19px;
+}
+
+
+/* ---------------------------------------------------------
+   PROGRESS BAR
+   --------------------------------------------------------- */
+
+.wedbook-video-progress {
+    position: absolute;
+
+    z-index: 10;
+
+    top: 50%;
+
+    right: 34px;
+
+    width: 2px;
+
+    height: 130px;
+
+    transform: translateY(-50%);
+
+    background: rgba(255, 255, 255, 0.22);
+
+    overflow: hidden;
+}
+
+
+.wedbook-video-progress span {
+    display: block;
+
+    width: 100%;
+
+    height: 0%;
+
+    background: #e2b968;
+
+    transition: height 0.15s linear;
+}
+
+
+/* ---------------------------------------------------------
+   SCROLL INDICATOR
+   --------------------------------------------------------- */
+
+.wedbook-scroll-indicator {
+    position: absolute;
+
+    z-index: 10;
+
+    left: 50%;
+
+    bottom: 30px;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    transition: opacity 0.4s ease;
+}
+
+
+.wedbook-scroll-indicator iconify-icon {
+    font-size: 22px;
+
+    animation:
+        wedbookScrollArrow 1.5s ease-in-out infinite;
+}
+
+
+@keyframes wedbookScrollArrow {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(6px);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   TABLET
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+    .wedbook-video-content {
+        padding-left: 7vw;
+    }
+
+    .wedbook-story-text {
+        width: 75vw;
+    }
+
+    .wedbook-video-progress {
+        right: 22px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+    .wedbook-video-story {
+        height: 460vh;
+    }
+
+
+    .wedbook-video-sticky {
+        min-height: 600px;
+    }
+
+
+    .wedbook-video-overlay {
+        background:
+            linear-gradient(
+                90deg,
+                rgba(36, 16, 23, 0.76),
+                rgba(36, 16, 23, 0.42)
+            );
+    }
+
+
+    .wedbook-video-overlay::after {
+        height: 45%;
+    }
+
+
+    .wedbook-video-content {
+        align-items: flex-end;
+
+        padding:
+            0 25px 105px;
+    }
+
+
+    .wedbook-story-text {
+        width: calc(100vw - 50px);
+    }
+
+
+    .wedbook-story-label {
+        margin-bottom: 16px;
+
+        font-size: 10px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .wedbook-story-text h2 {
+        font-size: clamp(36px, 11vw, 52px);
+
+        line-height: 1.06;
+
+        letter-spacing: -1px;
+    }
+
+
+    .wedbook-story-text p {
+        margin-top: 18px;
+
+        font-size: 15px;
+
+        line-height: 1.6;
+    }
+
+
+    .wedbook-story-logo {
+        font-size: 32px;
+
+        letter-spacing: 5px;
+    }
+
+
+    .wedbook-story-button {
+        margin-top: 22px;
+
+        padding: 13px 21px;
+    }
+
+
+    .wedbook-video-progress {
+        top: auto;
+
+        right: 18px;
+
+        bottom: 105px;
+
+        height: 90px;
+
+        transform: none;
+    }
+
+
+    .wedbook-scroll-indicator {
+        bottom: 25px;
+
+        font-size: 9px;
+
+        letter-spacing: 1.5px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   REDUCE MOTION ACCESSIBILITY
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .wedbook-story-text {
+        transition: none;
+    }
+
+    .wedbook-scroll-indicator iconify-icon {
+        animation: none;
+    }
+}

@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Edit Business Profile | WedBook
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/vendor-edit-profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<main class="vendor-edit-page">
+
+
+    <!-- =========================================
+         PAGE HEADER
+    ========================================== -->
+
+    <section class="edit-page-hero">
+
+        <div class="edit-container">
+
+            <div class="edit-hero-content">
+
+                <div>
+
+                    <span class="edit-eyebrow">
+                        BUSINESS PROFILE
+                    </span>
+
+                    <h1>
+                        Edit Your
+                        <span>Business Profile</span>
+                    </h1>
+
+                    <p>
+                        Keep your business information and services
+                        up to date so customers can find you easily.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'vendors:dashboard' %}"
+                    class="back-dashboard-btn"
+                >
+                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+
+                    Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         EDIT CONTENT
+    ========================================== -->
+
+    <section class="edit-content">
+
+        <div class="edit-container">
+
+
+            <form
+                method="post"
+                class="vendor-edit-form"
+                id="vendorEditForm"
+                data-cities-url="{% url 'vendors:cities_by_state' %}"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- =====================================
+                     BUSINESS INFORMATION
+                ====================================== -->
+
+                <div class="edit-card">
+
+                    <div class="edit-card-header">
+
+                        <div class="edit-section-icon">
+
+                            <iconify-icon
+                                icon="mdi:storefront-outline"
+                            ></iconify-icon>
+
+                        </div>
+
+                        <div>
+
+                            <span class="edit-card-eyebrow">
+                                BUSINESS INFORMATION
+                            </span>
+
+                            <h2>
+                                Your Business Details
+                            </h2>
+
+                            <p>
+                                Basic information customers will see
+                                about your business.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="edit-form-divider"></div>
+
+
+                    <!-- BUSINESS NAME -->
+
+                    <div class="edit-form-group full-width">
+
+                        <label for="{{ form.business_name.id_for_label }}">
+                            Business Name
+                        </label>
+
+                        <div class="edit-input-wrapper">
+
+                            <iconify-icon
+                                icon="mdi:store-outline"
+                                class="edit-input-icon"
+                            ></iconify-icon>
+
+                            {{ form.business_name }}
+
+                        </div>
+
+
+                        {% if form.business_name.errors %}
+
+                            <div class="edit-field-error">
+
+                                {{ form.business_name.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- STATE + CITY -->
+
+                    <div class="edit-form-row">
+
+
+                        <div class="edit-form-group">
+
+                            <label for="{{ form.state.id_for_label }}">
+                                State
+                            </label>
+
+                            <div class="edit-input-wrapper">
+
+                                <iconify-icon
+                                    icon="mdi:map-marker-outline"
+                                    class="edit-input-icon"
+                                ></iconify-icon>
+
+                                {{ form.state }}
+
+                                <span class="edit-select-arrow">
+
+                                    <iconify-icon
+                                        icon="mdi:chevron-down"
+                                    ></iconify-icon>
+
+                                </span>
+
+                            </div>
+
+
+                            {% if form.state.errors %}
+
+                                <div class="edit-field-error">
+
+                                    {{ form.state.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <div class="edit-form-group">
+
+                            <label for="{{ form.city.id_for_label }}">
+                                City
+                            </label>
+
+                            <div class="edit-input-wrapper">
+
+                                <iconify-icon
+                                    icon="mdi:city-variant-outline"
+                                    class="edit-input-icon"
+                                ></iconify-icon>
+
+                                {{ form.city }}
+
+                                <span class="edit-select-arrow">
+
+                                    <iconify-icon
+                                        icon="mdi:chevron-down"
+                                    ></iconify-icon>
+
+                                </span>
+
+                            </div>
+
+
+                            {% if form.city.errors %}
+
+                                <div class="edit-field-error">
+
+                                    {{ form.city.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =====================================
+                     SERVICES
+                ====================================== -->
+
+                <div class="edit-card">
+
+                    <div class="edit-card-header">
+
+                        <div class="edit-section-icon">
+
+                            <iconify-icon
+                                icon="mdi:briefcase-outline"
+                            ></iconify-icon>
+
+                        </div>
+
+                        <div>
+
+                            <span class="edit-card-eyebrow">
+                                SERVICES
+                            </span>
+
+                            <h2>
+                                Services You Provide
+                            </h2>
+
+                            <p>
+                                Select all services your business
+                                currently offers.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="edit-form-divider"></div>
+
+
+                    <div class="services-selection">
+
+                        {% for checkbox in form.services %}
+
+                            <label class="edit-service-option">
+
+                                {{ checkbox.tag }}
+
+                                <span class="edit-service-box">
+
+                                    <span class="edit-service-check">
+
+                                        <iconify-icon
+                                            icon="mdi:check"
+                                        ></iconify-icon>
+
+                                    </span>
+
+
+                                    <span class="edit-service-name">
+
+                                        {{ checkbox.choice_label }}
+
+                                    </span>
+
+                                </span>
+
+                            </label>
+
+                        {% empty %}
+
+                            <div class="edit-empty-services">
+
+                                <iconify-icon
+                                    icon="mdi:briefcase-remove-outline"
+                                ></iconify-icon>
+
+                                <p>
+                                    No active services are available.
+                                </p>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    {% if form.services.errors %}
+
+                        <div class="edit-field-error">
+
+                            {{ form.services.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- =====================================
+                     ACCOUNT INFORMATION
+                ====================================== -->
+
+                <div class="edit-card account-info-card">
+
+                    <div class="edit-card-header">
+
+                        <div class="edit-section-icon">
+
+                            <iconify-icon
+                                icon="mdi:account-outline"
+                            ></iconify-icon>
+
+                        </div>
+
+                        <div>
+
+                            <span class="edit-card-eyebrow">
+                                ACCOUNT INFORMATION
+                            </span>
+
+                            <h2>
+                                Your Account Details
+                            </h2>
+
+                            <p>
+                                These details are linked to your WedBook
+                                account and cannot be changed here.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="edit-form-divider"></div>
+
+
+                    <div class="account-info-grid">
+
+
+                        <div class="account-info-item">
+
+                            <div class="account-info-icon">
+
+                                <iconify-icon
+                                    icon="mdi:phone-outline"
+                                ></iconify-icon>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Phone Number
+                                </span>
+
+                                <strong>
+                                    {{ request.user.phone_number }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="account-info-item">
+
+                            <div class="account-info-icon">
+
+                                <iconify-icon
+                                    icon="mdi:email-outline"
+                                ></iconify-icon>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Email Address
+                                </span>
+
+                                <strong>
+                                    {{ request.user.email }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =====================================
+                     FORM ACTIONS
+                ====================================== -->
+
+                <div class="edit-form-actions">
+
+                    <a
+                        href="{% url 'vendors:dashboard' %}"
+                        class="edit-cancel-btn"
+                    >
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="edit-save-btn"
+                    >
+
+                        <iconify-icon
+                            icon="mdi:content-save-outline"
+                        ></iconify-icon>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/vendor-onboarding.js' %}"></script>
+
+{% endblock %}

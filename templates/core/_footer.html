@@ -1,0 +1,137 @@
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+
+        <!-- ABOUT -->
+
+        <div class="footer-about">
+
+            <a
+                class="brand"
+                href="{% url 'core:home' %}"
+                aria-label="WedBook Home"
+            >
+
+                <span class="brand-ring">
+                    <span class="brand-gem"></span>
+                </span>
+
+                <span>WedBook</span>
+
+            </a>
+
+
+            <p>
+                India's trusted marketplace for wedding vendors.
+                Making your special day truly unforgettable.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICES -->
+
+        <div>
+
+            <h4>SERVICES</h4>
+
+
+            {% for category in footer_categories %}
+
+                <a
+                    href="{% url 'listings:search' %}?category={{ category.slug }}"
+                >
+                    {{ category.name }}
+                </a>
+
+            {% empty %}
+
+                <a href="{% url 'core:home' %}#services">
+                    Services
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- COMPANY -->
+
+        <div>
+
+            <h4>COMPANY</h4>
+
+            <a href="#">
+                About Us
+            </a>
+
+            <a href="#">
+                Careers
+            </a>
+
+            <a href="#">
+                Press
+            </a>
+
+            <a href="{% url 'core:home' %}#blog">
+                Blog
+            </a>
+
+            <a href="#">
+                Contact
+            </a>
+
+        </div>
+
+
+        <!-- SUPPORT -->
+
+        <div>
+
+            <h4>SUPPORT</h4>
+
+            <a href="#">
+                Help Center
+            </a>
+
+            <a href="#">
+                Terms of Use
+            </a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Vendor Guidelines
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+        <span>
+            © 2026 WedBook Technologies Pvt. Ltd.
+            All rights reserved.
+        </span>
+
+
+        <div class="app-links">
+
+            <a href="#">
+                 App Store
+            </a>
+
+            <a href="#">
+                ▶ Play Store
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>

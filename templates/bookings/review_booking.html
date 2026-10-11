@@ -1,0 +1,550 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Review Booking | WedBook{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/review-booking.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<main class="review-page">
+
+    <!-- PAGE HEADER -->
+    <section class="review-hero">
+        <div class="container">
+
+            <div class="review-breadcrumb">
+                <a href="{% url 'bookings:booking_page' listing.id %}">
+                    Booking Details
+                </a>
+
+                <span class="breadcrumb-arrow">
+                    <span class="iconify"
+                          data-icon="solar:alt-arrow-right-linear"></span>
+                </span>
+
+                <span>Review Booking</span>
+            </div>
+
+            <div class="review-heading">
+                <span class="review-eyebrow">FINAL REVIEW</span>
+
+                <h1>Review Your Booking</h1>
+
+                <p>
+                    Please check your booking details carefully before
+                    proceeding to payment.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- MAIN CONTENT -->
+    <section class="review-content">
+        <div class="container">
+
+            <div class="review-layout">
+
+                <!-- LEFT SIDE -->
+                <div class="review-main">
+
+
+                    <!-- SELECTED LISTING -->
+                    <div class="review-card listing-review-card">
+
+                        <div class="card-heading">
+                            <div>
+                                <span class="section-number">01</span>
+                                <h2>Selected Listing</h2>
+                            </div>
+                        </div>
+
+                        <div class="listing-review">
+
+                            <div class="listing-image">
+
+                                {% if listing.cover_image %}
+                                    <img
+                                        src="{{ listing.cover_image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+                                {% elif listing.images.first %}
+                                    <img
+                                        src="{{ listing.images.first.image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+                                {% else %}
+                                    <div class="listing-image-placeholder">
+                                        <span class="iconify"
+                                              data-icon="solar:gallery-wide-bold"></span>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+                            <div class="listing-info">
+
+                                <span class="listing-category">
+                                    {{ listing.category.name }}
+                                </span>
+
+                                <h3>{{ listing.title }}</h3>
+
+                                {% if listing.vendor.business_name %}
+                                    <div class="listing-vendor">
+                                        <span class="iconify"
+                                              data-icon="solar:shop-2-linear"></span>
+
+                                        {{ listing.vendor.business_name }}
+                                    </div>
+                                {% endif %}
+
+                                {% if listing.city or listing.state %}
+                                    <div class="listing-location">
+                                        <span class="iconify"
+                                              data-icon="solar:map-point-linear"></span>
+
+                                        {% if listing.city %}
+                                            {{ listing.city.name }}
+                                        {% endif %}
+
+                                        {% if listing.state %}
+                                            {% if listing.city %}, {% endif %}
+                                            {{ listing.state.name }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EVENT DETAILS -->
+                    <div class="review-card">
+
+                        <div class="card-heading">
+                            <div>
+                                <span class="section-number">02</span>
+                                <h2>Event Details</h2>
+                            </div>
+
+                            <a
+                                href="{% url 'bookings:booking_page' listing.id %}"
+                                class="edit-link"
+                            >
+                                <span class="iconify"
+                                      data-icon="solar:pen-2-linear"></span>
+                                Edit
+                            </a>
+                        </div>
+
+
+                        <div class="details-grid">
+
+                            <!-- START DATE -->
+<div class="detail-item">
+
+    <span class="detail-label">
+        <span class="iconify"
+              data-icon="solar:calendar-mark-linear"></span>
+        Start Date
+    </span>
+
+    <strong>
+        {% if start_date %}
+            {{ start_date|date:"d M Y" }}
+        {% else %}
+            —
+        {% endif %}
+    </strong>
+
+</div>
+
+
+<!-- END DATE -->
+<div class="detail-item">
+
+    <span class="detail-label">
+        <span class="iconify"
+              data-icon="solar:calendar-linear"></span>
+        End Date
+    </span>
+
+    <strong>
+        {% if end_date %}
+            {{ end_date|date:"d M Y" }}
+        {% else %}
+            —
+        {% endif %}
+    </strong>
+
+</div>
+
+
+                            <!-- GUESTS -->
+                            <div class="detail-item">
+
+                                <span class="detail-label">
+                                    <span class="iconify"
+                                          data-icon="solar:users-group-rounded-linear"></span>
+                                    Guests
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.guest_count }}
+                                    {% if booking_data.guest_count == 1 %}
+                                        Guest
+                                    {% else %}
+                                        Guests
+                                    {% endif %}
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- REQUIREMENTS -->
+                        {% if booking_data.customer_note %}
+
+                            <div class="requirements-box">
+
+                                <span class="detail-label">
+                                    <span class="iconify"
+                                          data-icon="solar:notes-linear"></span>
+                                    Additional Requirements
+                                </span>
+
+                                <p>
+                                    {{ booking_data.customer_note }}
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- CUSTOMER DETAILS -->
+                    <div class="review-card">
+
+                        <div class="card-heading">
+
+                            <div>
+                                <span class="section-number">03</span>
+                                <h2>Customer Details</h2>
+                            </div>
+
+                            <a
+                                href="{% url 'bookings:booking_page' listing.id %}"
+                                class="edit-link"
+                            >
+                                <span class="iconify"
+                                      data-icon="solar:pen-2-linear"></span>
+                                Edit
+                            </a>
+
+                        </div>
+
+
+                        <div class="customer-details">
+
+                            <div class="customer-detail">
+
+                                <span class="detail-label">
+                                    <span class="iconify"
+                                          data-icon="solar:user-linear"></span>
+                                    Full Name
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.full_name }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="customer-detail">
+
+                                <span class="detail-label">
+                                    <span class="iconify"
+                                          data-icon="solar:phone-linear"></span>
+                                    Phone Number
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.phone_number }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="customer-detail">
+
+                                <span class="detail-label">
+                                    <span class="iconify"
+                                          data-icon="solar:letter-linear"></span>
+                                    Email Address
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.email }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAYMENT INFORMATION -->
+                    <div class="secure-note">
+
+                        <div class="secure-icon">
+                            <span class="iconify"
+                                  data-icon="solar:shield-check-bold"></span>
+                        </div>
+
+                        <div>
+                            <strong>Secure Checkout</strong>
+
+                            <p>
+                                Your booking details are securely handled.
+                                You will be redirected to payment after
+                                confirming your booking.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT SIDE -->
+                <aside class="review-sidebar">
+
+                    <div class="summary-card">
+
+                        <div class="summary-header">
+                            <span class="summary-eyebrow">
+                                BOOKING SUMMARY
+                            </span>
+
+                            <h2>Your Booking</h2>
+                        </div>
+
+
+                        <!-- LISTING -->
+                        <div class="summary-listing">
+
+                            <div class="summary-listing-image">
+
+                                {% if listing.cover_image %}
+                                    <img
+                                        src="{{ listing.cover_image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+                                {% elif listing.images.first %}
+                                    <img
+                                        src="{{ listing.images.first.image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+                                {% endif %}
+
+                            </div>
+
+                            <div>
+                                <span>
+                                    {{ listing.category.name }}
+                                </span>
+
+                                <h3>
+                                    {{ listing.title }}
+                                </h3>
+                            </div>
+
+                        </div>
+
+
+                        <!-- SUMMARY ROWS -->
+                        <div class="summary-details">
+
+                            <div class="summary-row">
+
+    <span>
+        <span class="iconify"
+              data-icon="solar:calendar-mark-linear"></span>
+        Event Dates
+    </span>
+
+    <strong>
+
+        {% if start_date %}
+            {{ start_date|date:"d M Y" }}
+
+            {% if end_date %}
+                <br>
+                <small>
+                    to
+                    {{ end_date|date:"d M Y" }}
+                </small>
+            {% endif %}
+
+        {% else %}
+            —
+        {% endif %}
+
+    </strong>
+
+</div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    <span class="iconify"
+                                          data-icon="solar:users-group-rounded-linear"></span>
+                                    Guests
+                                </span>
+
+                                <strong>
+                                    {{ booking_data.guest_count }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    <span class="iconify"
+                                          data-icon="solar:tag-price-linear"></span>
+                                    Starting Price
+                                </span>
+
+                                <strong>
+                                    ₹{{ listing.base_price|floatformat:0 }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TOTAL -->
+                        <div class="summary-total">
+
+                            <div>
+                                <span>Estimated Total</span>
+
+                                <small>
+                                    Final amount may vary based on
+                                    selected services.
+                                </small>
+                            </div>
+
+                            <strong>
+                                ₹{{ listing.base_price|floatformat:0 }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- PROCEED -->
+                        <form
+                            method="POST"
+                            action="{% url 'payments:payment' %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="confirm-booking-btn"
+                            >
+                                <span>
+                                    Confirm & Proceed to Payment
+                                </span>
+
+                                <span class="iconify"
+                                      data-icon="solar:arrow-right-bold"></span>
+                            </button>
+
+                        </form>
+
+
+                        <p class="payment-note">
+
+                            <span class="iconify"
+                                  data-icon="solar:lock-keyhole-minimalistic-linear"></span>
+
+                            Secure payment powered by WedBook
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- QUICK INFO -->
+                    <div class="quick-info-card">
+
+                        <h3>Before You Continue</h3>
+
+                        <div class="quick-info-item">
+
+                            <span class="iconify"
+                                  data-icon="solar:check-circle-linear"></span>
+
+                            <span>
+                                Check your event dates carefully.
+                            </span>
+
+                        </div>
+
+                        <div class="quick-info-item">
+
+                            <span class="iconify"
+                                  data-icon="solar:check-circle-linear"></span>
+
+                            <span>
+                                Make sure the guest count is correct.
+                            </span>
+
+                        </div>
+
+                        <div class="quick-info-item">
+
+                            <span class="iconify"
+                                  data-icon="solar:check-circle-linear"></span>
+
+                            <span>
+                                Verify your contact information.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
+{% endblock %}

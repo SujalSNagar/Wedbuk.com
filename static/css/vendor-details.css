@@ -1,0 +1,639 @@
+/* =========================================
+   VENDOR DETAIL PAGE
+========================================= */
+
+.vendor-details-page {
+    padding-top: 66px;
+    background: var(--cream);
+}
+
+
+/* =========================================
+   BACK LINK
+========================================= */
+
+.vendor-detail-top {
+    padding: 28px 0 8px;
+}
+
+.vendor-back-link {
+    display: inline-flex;
+    align-items: center;
+
+    color: var(--maroon-800);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    transition: color 0.25s ease;
+}
+
+.vendor-back-link:hover {
+    color: var(--gold);
+}
+
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.vendor-detail-main {
+    padding: 20px 0 90px;
+}
+
+.vendor-detail-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        360px;
+
+    gap: 38px;
+
+    align-items: start;
+}
+
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.vendor-detail-content {
+    min-width: 0;
+}
+
+
+/* =========================================
+   LARGE IMAGE
+========================================= */
+
+.vendor-detail-image {
+    position: relative;
+
+    width: 100%;
+    height: 500px;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background: var(--cream-2);
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+}
+
+.vendor-detail-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* Badge */
+
+.vendor-detail-badge {
+    position: absolute;
+
+    top: 18px;
+    right: 18px;
+
+    background: #fff8ed;
+
+    color: var(--maroon-800);
+
+    padding: 7px 13px;
+
+    border-radius: 999px;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================
+   MAIN INFORMATION
+========================================= */
+
+.vendor-main-info {
+    padding: 28px 4px 30px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.vendor-detail-category {
+    display: inline-block;
+
+    margin-bottom: 9px;
+
+    color: var(--gold);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.2px;
+}
+
+.vendor-main-info h1 {
+    margin: 0 0 12px;
+
+    color: var(--maroon-900);
+
+    font-family: var(--display);
+
+    font-size: clamp(
+        2rem,
+        4vw,
+        3.2rem
+    );
+
+    line-height: 1.1;
+}
+
+
+/* =========================================
+   META
+========================================= */
+
+.vendor-meta {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    color: #916e60;
+
+    font-size: 0.78rem;
+}
+
+.vendor-meta-rating {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.detail-star {
+    color: var(--gold);
+
+    font-size: 0.9rem;
+}
+
+.vendor-meta-rating strong {
+    color: var(--maroon-900);
+}
+
+.meta-divider {
+    color: #c9aa93;
+}
+
+
+/* =========================================
+   PRICE
+========================================= */
+
+.vendor-detail-price {
+    margin-top: 18px;
+
+    color: var(--maroon-800);
+
+    font-family: var(--display);
+
+    font-size: 1.65rem;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   DETAIL SECTIONS
+========================================= */
+
+.detail-section {
+    padding: 38px 4px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-eyebrow {
+    margin-bottom: 9px;
+
+    color: var(--gold);
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.detail-section h2 {
+    margin: 0 0 15px;
+
+    color: var(--maroon-900);
+
+    font-family: var(--display);
+
+    font-size: 1.75rem;
+}
+
+.detail-section > p {
+    max-width: 760px;
+
+    color: #765b50;
+
+    font-size: 0.86rem;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================
+   SERVICES
+========================================= */
+
+.service-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.service-item {
+    padding: 10px 15px;
+
+    border: 1px solid #ead4bd;
+
+    border-radius: 999px;
+
+    background: #fffdf9;
+
+    color: var(--maroon-800);
+
+    font-size: 0.73rem;
+    font-weight: 600;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+.service-item:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--gold);
+
+    background: var(--gold-pale);
+}
+
+
+/* =========================================
+   FEATURES
+========================================= */
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+.feature-item {
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: #fffdf9;
+
+    color: #765b50;
+
+    font-size: 0.75rem;
+}
+
+.feature-item::before {
+    content: "✓";
+
+    margin-right: 8px;
+
+    color: var(--gold);
+
+    font-weight: 700;
+}
+
+
+/* =========================================
+   LOCATION
+========================================= */
+
+.location-box {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 18px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    background: #fffdf9;
+}
+
+.location-icon {
+    font-size: 1.15rem;
+}
+
+.location-box strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--maroon-900);
+
+    font-size: 0.82rem;
+}
+
+.location-box p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 0.73rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   BOOKING SIDEBAR
+========================================= */
+
+.vendor-booking-card {
+    position: sticky;
+
+    top: 92px;
+
+    padding: 28px;
+
+    border: 1px solid #ead4bd;
+
+    border-radius: 20px;
+
+    background: #fffdf9;
+
+    box-shadow:
+        0 15px 45px rgba(70, 24, 8, 0.10);
+}
+
+.booking-card-label {
+    margin-bottom: 9px;
+
+    color: var(--gold);
+
+    font-size: 0.63rem;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.vendor-booking-card h2 {
+    margin: 0 0 10px;
+
+    color: var(--maroon-900);
+
+    font-family: var(--display);
+
+    font-size: 1.65rem;
+
+    line-height: 1.2;
+}
+
+.vendor-booking-card > p {
+    margin-bottom: 24px;
+
+    color: var(--muted);
+
+    font-size: 0.76rem;
+
+    line-height: 1.7;
+}
+
+
+/* Booking Price */
+
+.booking-price {
+    margin-bottom: 20px;
+}
+
+.booking-price small {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--muted);
+
+    font-size: 0.65rem;
+}
+
+.booking-price strong {
+    color: var(--maroon-800);
+
+    font-family: var(--display);
+
+    font-size: 1.45rem;
+}
+
+
+/* Booking Button */
+
+.detail-book-btn {
+    width: 100%;
+
+    min-height: 48px;
+
+    border-radius: 999px;
+
+    font-size: 0.78rem;
+}
+
+
+/* Note */
+
+.booking-note {
+    margin-top: 11px;
+
+    text-align: center;
+
+    color: #a17a68;
+
+    font-size: 0.63rem;
+}
+
+.booking-divider {
+    height: 1px;
+
+    margin: 23px 0;
+
+    background: var(--border);
+}
+
+.booking-point {
+    margin-top: 11px;
+
+    color: #765b50;
+
+    font-size: 0.72rem;
+}
+
+
+/* =========================================
+   BOTTOM CTA
+========================================= */
+
+.detail-bottom-cta {
+    padding: 0 0 90px;
+
+    background: var(--cream);
+}
+
+.detail-cta-box {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 55px 35px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--maroon-900),
+            var(--maroon-800)
+        );
+
+    color: var(--cream);
+
+    box-shadow: var(--shadow);
+}
+
+.detail-cta-box h2 {
+    margin: 8px 0 9px;
+
+    color: var(--gold-light);
+
+    font-family: var(--display);
+
+    font-size: clamp(
+        1.8rem,
+        4vw,
+        2.7rem
+    );
+}
+
+.detail-cta-box p {
+    margin-bottom: 23px;
+
+    color: #e5c7ba;
+
+    font-size: 0.78rem;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .vendor-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .vendor-booking-card {
+        position: static;
+    }
+
+    .vendor-detail-image {
+        height: 430px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .vendor-details-page {
+        padding-top: 62px;
+    }
+
+    .vendor-detail-top {
+        padding: 20px 0 5px;
+    }
+
+    .vendor-detail-main {
+        padding: 15px 0 60px;
+    }
+
+    .vendor-detail-image {
+        height: 280px;
+
+        border-radius: 16px;
+    }
+
+    .vendor-detail-badge {
+        top: 12px;
+        right: 12px;
+    }
+
+    .vendor-main-info {
+        padding: 23px 2px 25px;
+    }
+
+    .vendor-main-info h1 {
+        font-size: 2rem;
+    }
+
+    .detail-section {
+        padding: 30px 2px;
+    }
+
+    .detail-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vendor-booking-card {
+        padding: 22px;
+        border-radius: 16px;
+    }
+
+    .detail-cta-box {
+        padding: 42px 20px;
+        border-radius: 16px;
+    }
+
+}

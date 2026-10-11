@@ -1,0 +1,814 @@
+/* =========================================================
+   VENDOR ONBOARDING
+   ========================================================= */
+
+.vendor-onboarding-section {
+    min-height: calc(100vh - 120px);
+    padding: 100px 20px 90px;
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(155, 109, 37, 0.10),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            rgba(104, 31, 52, 0.08),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #fffaf2 0%,
+            #fdf5e9 50%,
+            #fffaf4 100%
+        );
+}
+
+
+.vendor-onboarding-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.vendor-onboarding-card {
+    background: #ffffff;
+    border: 1px solid #e4d5c0;
+    border-radius: 18px;
+    padding: 42px 46px;
+    box-shadow:
+        0 20px 50px rgba(60, 20, 30, 0.10),
+        0 4px 14px rgba(60, 20, 30, 0.05);
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.vendor-onboarding-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    margin-bottom: 28px;
+
+    color: #681f34;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+
+.vendor-onboarding-ring {
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #9b6d25;
+    border-radius: 50%;
+
+    transform: rotate(45deg);
+}
+
+
+.vendor-onboarding-gem {
+    width: 7px;
+    height: 7px;
+
+    background: #9b6d25;
+
+    border-radius: 2px;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.vendor-onboarding-heading {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
+
+.vendor-step-label {
+    margin-bottom: 10px;
+
+    color: #9b6d25;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+
+.vendor-onboarding-heading h1 {
+    margin: 0 0 10px;
+
+    color: #681f34;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+
+.vendor-onboarding-heading p {
+    max-width: 570px;
+    margin: 0 auto;
+
+    color: #78686a;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FORM SECTION
+   ========================================================= */
+
+.vendor-form-section {
+    padding: 26px 0 32px;
+
+    border-top: 1px solid #eee3d5;
+}
+
+
+.vendor-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+
+    margin-bottom: 24px;
+}
+
+
+.vendor-section-number {
+    flex: 0 0 auto;
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #681f34;
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+
+.vendor-section-heading h2 {
+    margin: 2px 0 5px;
+
+    color: #4b1828;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+}
+
+
+.vendor-section-heading p {
+    margin: 0;
+
+    color: #8a7a7c;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.vendor-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+
+.vendor-full-width {
+    grid-column: 1 / -1;
+}
+
+
+.vendor-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.vendor-form-group label {
+    margin-bottom: 8px;
+
+    color: #4d3038;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.vendor-input-wrapper {
+    position: relative;
+}
+
+
+.vendor-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #9b6d25;
+
+    font-size: 15px;
+
+    pointer-events: none;
+}
+
+
+.vendor-input-wrapper input {
+    width: 100%;
+    height: 48px;
+
+    box-sizing: border-box;
+
+    padding: 0 14px 0 40px;
+
+    border: 1px solid #d9c9b6;
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #fffdfa;
+
+    color: #3d2930;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.vendor-input-wrapper input::placeholder {
+    color: #b0a4a1;
+}
+
+
+.vendor-input-wrapper input:focus {
+    border-color: #9b6d25;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(155, 109, 37, 0.10);
+}
+
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+
+.service-option {
+    position: relative;
+
+    display: block;
+
+    cursor: pointer;
+}
+
+
+.service-option input {
+    position: absolute;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.service-option-content {
+    min-height: 54px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    border: 1px solid #dfd1c1;
+    border-radius: 9px;
+
+    background: #fffdfa;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.service-option:hover .service-option-content {
+    border-color: #b89150;
+
+    background: #fffaf1;
+
+    transform: translateY(-1px);
+}
+
+
+.service-check {
+    width: 22px;
+    height: 22px;
+
+    flex: 0 0 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #cdbda9;
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: transparent;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.service-name {
+    color: #51353c;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+
+.service-option input:checked
++ .service-option-content {
+    border-color: #9b6d25;
+
+    background: #fff7e8;
+
+    box-shadow:
+        0 5px 15px rgba(155, 109, 37, 0.08);
+}
+
+
+.service-option input:checked
++ .service-option-content .service-check {
+    border-color: #681f34;
+
+    background: #681f34;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   NO SERVICES
+   ========================================================= */
+
+.no-services-message {
+    grid-column: 1 / -1;
+
+    padding: 20px;
+
+    border: 1px dashed #d8c5ae;
+    border-radius: 9px;
+
+    background: #fffaf3;
+
+    text-align: center;
+}
+
+
+.no-services-message strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #681f34;
+
+    font-size: 13px;
+}
+
+
+.no-services-message p {
+    margin: 0;
+
+    color: #8b7b7c;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+
+.vendor-form-error,
+.vendor-field-error {
+    color: #8a3030;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+.vendor-form-error {
+    margin-bottom: 22px;
+    padding: 11px 13px;
+
+    border: 1px solid #e8cccc;
+    border-radius: 8px;
+
+    background: #fff5f5;
+}
+
+
+.vendor-field-error {
+    margin-top: 6px;
+}
+
+
+.vendor-field-error ul,
+.vendor-form-error ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+
+.services-error {
+    margin-top: 12px;
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.vendor-onboarding-actions {
+    padding-top: 8px;
+}
+
+
+.vendor-onboarding-submit {
+    width: 100%;
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #681f34;
+    color: #ffffff;
+
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.vendor-onboarding-submit span {
+    font-size: 18px;
+    line-height: 1;
+}
+
+
+.vendor-onboarding-submit:hover {
+    background: #521729;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(104, 31, 52, 0.18);
+}
+
+
+.vendor-onboarding-submit:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   NOTE
+   ========================================================= */
+
+.vendor-onboarding-note {
+    margin-top: 22px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #eee3d5;
+
+    color: #8b7c7e;
+
+    text-align: center;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+.vendor-onboarding-note span {
+    margin-right: 5px;
+
+    color: #9b6d25;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .vendor-onboarding-section {
+        padding: 45px 15px 65px;
+    }
+
+
+    .vendor-onboarding-card {
+        padding: 32px 25px;
+    }
+
+
+    .vendor-onboarding-heading h1 {
+        font-size: 29px;
+    }
+
+
+    .vendor-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .vendor-full-width {
+        grid-column: auto;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+    .vendor-onboarding-section {
+        padding: 30px 12px 50px;
+    }
+
+
+    .vendor-onboarding-card {
+        padding: 27px 18px;
+
+        border-radius: 14px;
+    }
+
+
+    .vendor-onboarding-brand {
+        font-size: 23px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .vendor-onboarding-heading {
+        margin-bottom: 30px;
+    }
+
+
+    .vendor-onboarding-heading h1 {
+        font-size: 25px;
+    }
+
+
+    .vendor-onboarding-heading p {
+        font-size: 12px;
+    }
+
+
+    .vendor-section-heading {
+        gap: 11px;
+    }
+
+
+    .vendor-section-number {
+        width: 32px;
+        height: 32px;
+
+        font-size: 10px;
+    }
+
+
+    .vendor-section-heading h2 {
+        font-size: 18px;
+    }
+
+
+    .vendor-section-heading p {
+        font-size: 11px;
+    }
+
+
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+
+    .service-option-content {
+        min-height: 50px;
+    }
+
+
+    .vendor-onboarding-submit {
+        min-height: 48px;
+    }
+
+}
+/* =========================================
+   STATE & CITY SELECT FIELDS
+   ========================================= */
+
+.vendor-form-group select {
+    width: 100%;
+    height: 54px;
+
+    padding: 0 48px;
+
+    border: 1px solid rgba(91, 27, 39, 0.18);
+    border-radius: 10px;
+
+    background-color: #fffdf9;
+    color: #3b2528;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+
+    outline: none;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+/* =========================================
+   SELECT WRAPPER
+   ========================================= */
+
+.vendor-input-wrapper {
+    position: relative;
+}
+
+
+/* =========================================
+   ICONIFY DROPDOWN ARROW
+   ========================================= */
+
+.vendor-select-arrow {
+    position: absolute;
+
+    right: 18px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #7b4a53;
+
+    pointer-events: none;
+}
+
+.vendor-select-arrow iconify-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =========================================
+   SELECT FOCUS
+   ========================================= */
+
+.vendor-form-group select:focus {
+    border-color: #b88a3b;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(184, 138, 59, 0.12);
+}
+
+
+/* =========================================
+   PLACEHOLDER / FIRST OPTION
+   ========================================= */
+
+.vendor-form-group select:invalid {
+    color: #8d7b7e;
+}
+
+
+/* =========================================
+   DISABLED CITY BEFORE STATE SELECTION
+   ========================================= */
+
+.vendor-form-group select:disabled {
+    background-color: #f5f0eb;
+
+    color: #a99b9d;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 700px) {
+
+    .vendor-form-group select {
+        height: 52px;
+
+        font-size: 14px;
+
+        padding-left: 44px;
+        padding-right: 44px;
+    }
+
+    .vendor-select-arrow {
+        right: 16px;
+    }
+
+    .vendor-select-arrow iconify-icon {
+        width: 18px;
+        height: 18px;
+    }
+}

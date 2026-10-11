@@ -1,0 +1,788 @@
+/* =========================================================
+   WEDBOOK — SEARCH RESULTS PAGE
+========================================================= */
+
+.search-results-page {
+    background: #fffaf5;
+    min-height: 100vh;
+    padding: 100px 0 90px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.search-results-header {
+    text-align: center;
+    max-width: 850px;
+    margin: 0 auto 5px;
+}
+
+.search-results-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #b78323;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    margin-bottom: 12px;
+}
+
+.search-results-eyebrow::before,
+.search-results-eyebrow::after {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: #c9a45c;
+}
+
+.search-results-title {
+    margin: 0;
+
+    color: #681f34;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(30px, 5vw, 40px);
+    line-height: 1.08;
+    font-weight: 700;
+}
+
+.search-results-subtitle {
+    margin: 15px auto 0;
+    max-width: 650px;
+
+    color: #765e64;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   SEARCH SUMMARY
+========================================================= */
+
+.search-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    max-width: 1180px;
+    margin: 0 auto 15px;
+
+    padding: 17px 20px;
+
+    background: #ffffff;
+    border: 1px solid rgba(104, 31, 52, 0.10);
+    border-radius: 14px;
+
+    box-shadow: 0 8px 25px rgba(72, 31, 38, 0.06);
+}
+
+.search-summary-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+
+    color: #765e64;
+    font-size: 14px;
+}
+
+.search-summary-left strong {
+    color: #681f34;
+}
+
+.search-query {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    background: #f8efe6;
+    border: 1px solid rgba(183, 131, 35, 0.20);
+    border-radius: 30px;
+
+    color: #681f34;
+    font-weight: 700;
+}
+
+.search-query iconify-icon {
+    color: #b78323;
+    font-size: 17px;
+}
+
+.result-count {
+    color: #9b858b;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESULTS GRID
+========================================================= */
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   RESULT CARD
+========================================================= */
+
+.search-result-card {
+    position: relative;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(104, 31, 52, 0.10);
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 24px rgba(73, 27, 38, 0.07),
+        0 2px 5px rgba(73, 27, 38, 0.04);
+
+    transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+}
+
+.search-result-card:hover {
+    transform: translateY(-7px);
+
+    border-color: rgba(183, 131, 35, 0.35);
+
+    box-shadow:
+        0 18px 38px rgba(73, 27, 38, 0.13),
+        0 5px 12px rgba(73, 27, 38, 0.06);
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.search-result-image {
+    position: relative;
+
+    width: 100%;
+    height: 190px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f4e7d8,
+            #ead4bf
+        );
+
+    overflow: hidden;
+}
+
+.search-result-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform 0.45s ease;
+}
+
+.search-result-card:hover .search-result-image img {
+    transform: scale(1.045);
+}
+
+
+/* Image overlay */
+
+.search-result-image::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to bottom,
+        transparent 55%,
+        rgba(30, 10, 17, 0.30)
+    );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   CATEGORY BADGE
+========================================================= */
+
+.search-category-badge {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    background: #8d1b31;
+    color: #ffffff;
+
+    border-radius: 30px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+
+    box-shadow: 0 5px 15px rgba(65, 12, 28, 0.22);
+}
+
+.search-category-badge iconify-icon {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+========================================================= */
+
+.search-no-image {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgba(104, 31, 52, 0.35);
+}
+
+.search-no-image iconify-icon {
+    font-size: 52px;
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.search-result-body {
+    padding: 16px;
+}
+
+.search-result-title {
+    margin: 0 0 8px;
+
+    color: #4d1a2b;
+
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 19px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.search-result-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-bottom: 10px;
+
+    color: #98757d;
+    font-size: 13px;
+}
+
+.search-result-location iconify-icon {
+    color: #b78323;
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.search-result-description {
+    color: #806c72;
+    font-size: 13px;
+    line-height: 1.6;
+
+    margin: 0 0 12px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   SERVICE TAGS
+========================================================= */
+
+.search-result-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    margin-bottom: 13px;
+}
+
+.search-service-tag {
+    padding: 5px 9px;
+
+    background: #fbf4ec;
+    border: 1px solid rgba(183, 131, 35, 0.16);
+
+    border-radius: 6px;
+
+    color: #795966;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.search-result-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #eee4dc;
+}
+
+.search-price-label {
+    display: block;
+
+    color: #a28d92;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+
+    margin-bottom: 3px;
+}
+
+.search-price {
+    display: block;
+
+    color: #8d1b31;
+
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.search-view-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    min-width: 92px;
+    height: 40px;
+
+    padding: 0 16px;
+
+    background: #e5ad45;
+    color: #3e1a1f;
+
+    border: 1px solid #e5ad45;
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.search-view-button:hover {
+    background: #d99b2e;
+    color: #32151a;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 7px 15px rgba(183, 131, 35, 0.22);
+}
+
+.search-view-button iconify-icon {
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.search-empty {
+    max-width: 650px;
+    margin: 20px auto 0;
+
+    padding: 55px 30px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(104, 31, 52, 0.10);
+    border-radius: 18px;
+
+    text-align: center;
+
+    box-shadow: 0 8px 25px rgba(72, 31, 38, 0.06);
+}
+
+.search-empty-icon {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f8eee5;
+    color: #9c7432;
+
+    border-radius: 50%;
+
+    font-size: 31px;
+}
+
+.search-empty h2 {
+    margin: 0 0 9px;
+
+    color: #681f34;
+
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 27px;
+}
+
+.search-empty p {
+    margin: 0 auto 22px;
+
+    max-width: 470px;
+
+    color: #806c72;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.search-empty-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 11px 20px;
+
+    background: #8d1b31;
+    color: #ffffff;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.search-empty-button:hover {
+    background: #681525;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .search-results-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .search-results-page {
+        padding: 50px 0 70px;
+    }
+
+    .search-results-header {
+        margin-bottom: 5px;
+    }
+
+    .search-results-title {
+        font-size: 38px;
+    }
+
+    .search-summary {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-results-grid {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+    }
+
+    .search-result-image {
+        height: 270px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .search-results-page {
+        padding: 38px 0 55px;
+    }
+
+    .search-results-title {
+        font-size: 32px;
+    }
+
+    .search-results-subtitle {
+        font-size: 13px;
+    }
+
+    .search-summary {
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .search-result-image {
+        height: 220px;
+    }
+
+    .search-result-body {
+        padding: 17px;
+    }
+
+    .search-result-title {
+        font-size: 20px;
+    }
+
+    .search-result-footer {
+        align-items: center;
+    }
+
+    .search-price {
+        font-size: 20px;
+    }
+
+    .search-view-button {
+        min-width: 82px;
+        height: 38px;
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH + FILTER LAYOUT
+   ========================================================= */
+
+.search-results-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 28px;
+    max-width: 1180px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+
+/* =========================================================
+   FILTER SIDEBAR
+   ========================================================= */
+
+.search-filter-sidebar {
+    min-width: 0;
+    position: sticky;
+    top: 100px;
+}
+
+
+/* =========================================================
+   RESULTS AREA
+   ========================================================= */
+
+.search-results-main {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.search-results-main .search-results-grid {
+    max-width: none;
+    margin: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   CARD — FIX HEIGHT / FLEX
+   ========================================================= */
+
+.search-results-main .search-result-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   CARD BODY
+   ========================================================= */
+
+.search-results-main .search-result-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+
+/* =========================================================
+   VENDOR
+   ========================================================= */
+
+.search-result-vendor {
+    margin: 0 0 9px;
+    color: #765e64;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   GUEST CAPACITY
+   ========================================================= */
+
+.search-result-capacity {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 13px;
+    color: #806c72;
+    font-size: 13px;
+}
+
+
+.search-result-capacity iconify-icon {
+    color: #b78323;
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   FOOTER — ALWAYS AT BOTTOM
+   ========================================================= */
+
+.search-results-main .search-result-footer {
+    margin-top: auto;
+}
+
+
+/* =========================================================
+   VIEW DETAILS
+   ========================================================= */
+
+.search-results-main .search-view-button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.search-results-main .search-empty {
+    margin-top: 0;
+    max-width: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .search-results-layout {
+        grid-template-columns: 250px minmax(0, 1fr);
+        gap: 22px;
+    }
+
+    .search-results-main .search-results-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .search-results-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .search-filter-sidebar {
+        position: static;
+    }
+
+    .search-results-main .search-results-grid {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+}

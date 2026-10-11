@@ -1,0 +1,36 @@
+.vendors-section { padding: 2px 0 96px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 38px; }
+.section-heading h2 { margin-top: 18px; }
+.view-all { border: 1px solid #e8cbb7; border-radius: 999px; padding: 8px 18px; font-size: .75rem; font-weight: 600; }
+.view-all span { margin-left: 4px; }
+.vendor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.vendor-card { overflow: hidden; background: #fffdf9; border: 1px solid #f0dfcb; border-radius: 16px; box-shadow: var(--shadow); }
+.vendor-image-wrap { height: 194px; position: relative; overflow: hidden; }
+.vendor-image-wrap img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.88); transition: transform .35s; }
+.vendor-card:hover .vendor-image-wrap img { transform: scale(1.04); }
+.vendor-badge { position: absolute; top: 13px; right: 13px; background: #fff7e9; color: var(--maroon-800); border-radius: 10px; padding: 4px 9px; font-size: .63rem; font-weight: 700; }
+.vendor-category { position: absolute; left: 13px; bottom: 12px; background: rgba(101, 10, 26, .88); color: var(--gold-light); border-radius: 999px; padding: 4px 10px; font-size: .65rem; }
+.vendor-body { padding: 17px 16px 15px; }
+.vendor-body h3 { font-size: 1.05rem; margin-bottom: 5px; }
+.vendor-location { font-size: .71rem; color: #a16d56; }
+.rating { padding: 13px 0; margin-top: 3px; border-bottom: 1px solid #eedfce; color: var(--gold); font-size: .77rem; letter-spacing: 1px; }
+.rating b { color: var(--maroon-900); margin-left: 4px; letter-spacing: 0; }
+.rating span { color: #9d735f; font-size: .65rem; letter-spacing: 0; }
+.vendor-price { padding-top: 13px; display: flex; justify-content: space-between; align-items: center; }
+.vendor-price strong { display: block; color: var(--maroon-800); font-family: var(--display); font-size: 1.2rem; }
+.vendor-price small { display: block; color: #a06f59; font-size: .63rem; }
+.enquiry-btn { padding: 0 19px; min-height: 37px; font-size: .8rem; }
+
+
+/* =========================================
+   CLICKABLE FEATURED VENDOR CARDS
+========================================= */
+
+.vendor-card[data-vendor-id] {
+  cursor: pointer;
+}
+
+.vendor-card[data-vendor-id]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}

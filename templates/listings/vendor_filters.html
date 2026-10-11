@@ -1,0 +1,232 @@
+{% load static %}
+
+<div class="vendor-filters-wrap">
+
+    <!-- MOBILE TRIGGER BUTTON (desktop pe hidden) -->
+    <button
+        type="button"
+        class="vendor-filters-trigger"
+        id="openVendorFilters"
+        aria-controls="vendorFilters"
+    >
+        <iconify-icon icon="mdi:tune-variant"></iconify-icon>
+        <span>Filters</span>
+        <b class="vendor-filters-count" id="vendorFiltersCount" hidden>0</b>
+        <iconify-icon icon="mdi:chevron-down" class="vendor-filters-trigger-arrow"></iconify-icon>
+    </button>
+
+    <!-- DARK OVERLAY (mobile) -->
+    <div class="vendor-filters-overlay" id="vendorFiltersOverlay"></div>
+
+
+    <div class="vendor-filters" id="vendorFilters">
+
+        <!-- HEADER -->
+        <div class="vendor-filters-header">
+
+            <div class="vendor-filters-title">
+                <span class="vendor-filters-title-icon">
+                    <iconify-icon icon="mdi:tune-variant"></iconify-icon>
+                </span>
+                <div>
+                    <h2>Filters</h2>
+                    <p>Refine your search</p>
+                </div>
+            </div>
+
+            <div class="vendor-filters-header-actions">
+                <button type="button" class="vendor-filters-clear" id="clearVendorFilters">
+                    Clear All
+                </button>
+
+                <button type="button" class="vendor-filters-close" id="closeVendorFilters" aria-label="Close filters">
+                    <iconify-icon icon="mdi:close"></iconify-icon>
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- EVENT CITY -->
+        <section class="filter-section">
+            <div class="filter-section-heading">
+                <span class="filter-heading-icon"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon></span>
+                <h3>Event City</h3>
+            </div>
+
+<div class="filter-select-wrap">
+
+    <select name="city" id="filterCity" class="filter-select">
+        <option value="">All Cities</option>
+        {% for city in cities %}
+            <option
+                value="{{ city.id }}"
+                {% if selected_city_id|stringformat:"s" == city.id|stringformat:"s" %}selected{% endif %}
+            >{{ city.name }}</option>
+        {% endfor %}
+    </select>
+
+</div>
+
+            <button type="button" class="filter-map-button" id="viewFilterMap">
+                <iconify-icon icon="mdi:map-outline"></iconify-icon>
+                View on map
+            </button>
+        </section>
+
+
+        <!-- GUESTS -->
+        <section class="filter-section">
+            <div class="filter-section-heading">
+                <span class="filter-heading-icon"><iconify-icon icon="mdi:account-group-outline"></iconify-icon></span>
+                <h3>No. of Guests</h3>
+            </div>
+
+            <div class="filter-options">
+                {% for val, label in guest_options %}{% endfor %}
+
+                <label class="filter-option">
+                    <input type="radio" name="guests" value="100" {% if selected_guests == "100" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">&lt; 100</span>
+                </label>
+
+                <label class="filter-option">
+                    <input type="radio" name="guests" value="250" {% if selected_guests == "250" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">100 - 250</span>
+                </label>
+
+                <label class="filter-option">
+                    <input type="radio" name="guests" value="500" {% if selected_guests == "500" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">250 - 500</span>
+                </label>
+
+                <label class="filter-option">
+                    <input type="radio" name="guests" value="1000" {% if selected_guests == "1000" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">500 - 1000</span>
+                </label>
+
+                <label class="filter-option">
+                    <input type="radio" name="guests" value="1000+" {% if selected_guests == "1000+" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">&gt; 1000</span>
+                </label>
+            </div>
+        </section>
+
+
+        <!-- PRICING TYPE -->
+        <section class="filter-section">
+            <div class="filter-section-heading">
+                <span class="filter-heading-icon"><iconify-icon icon="mdi:cash-multiple"></iconify-icon></span>
+                <h3>Pricing Type</h3>
+            </div>
+
+            <div class="filter-options">
+                <label class="filter-option">
+                    <input type="radio" name="pricing_type" value="per_plate" {% if selected_pricing_type == "per_plate" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">Per plate</span>
+                </label>
+
+                <label class="filter-option">
+                    <input type="radio" name="pricing_type" value="per_day" {% if selected_pricing_type == "per_day" %}checked{% endif %}>
+                    <span class="filter-check"></span>
+                    <span class="filter-option-text">Per day</span>
+                </label>
+            </div>
+        </section>
+
+
+        <!-- PRICE -->
+        <section class="filter-section">
+            <div class="filter-section-heading">
+                <span class="filter-heading-icon"><iconify-icon icon="mdi:currency-inr"></iconify-icon></span>
+                <h3>Price</h3>
+            </div>
+
+            <div class="filter-price-values">
+                <div class="filter-price-field">
+                    <span>Min</span>
+                    <input type="number" id="filterMinPrice" name="min_price" min="0" max="20000000"
+                           value="{{ selected_min_price|default:'0' }}" placeholder="₹0">
+                </div>
+
+                <div class="filter-price-divider">—</div>
+
+                <div class="filter-price-field">
+                    <span>Max</span>
+                    <input type="number" id="filterMaxPrice" name="max_price" min="0" max="20000000"
+                           value="{{ selected_max_price|default:'20000000' }}" placeholder="₹2,00,00,000">
+                </div>
+            </div>
+
+            <div class="filter-price-range-label">
+                <span>₹0</span>
+                <span>₹2,00,00,000</span>
+            </div>
+        </section>
+
+
+        <!-- CATEGORY -->
+        <section class="filter-section">
+            <div class="filter-section-heading">
+                <span class="filter-heading-icon"><iconify-icon icon="mdi:view-grid-outline"></iconify-icon></span>
+                <h3>Category</h3>
+            </div>
+
+            <div class="filter-options">
+                {% for category in categories %}
+                    <label class="filter-option">
+                        <input type="checkbox" name="category" value="{{ category.slug }}">
+                        <span class="filter-check"></span>
+                        <span class="filter-option-text">{{ category.name }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </section>
+
+
+        <!-- DYNAMIC ADMIN ATTRIBUTES -->
+        {% for attribute in filter_attributes %}
+            <section class="filter-section">
+                <div class="filter-section-heading">
+                    <span class="filter-heading-icon"><iconify-icon icon="mdi:filter-variant"></iconify-icon></span>
+                    <h3>{{ attribute.label }}</h3>
+                </div>
+
+                {% if attribute.options %}
+                    <div class="filter-options">
+                        {% for option in attribute.options %}
+                            <label class="filter-option">
+                                <input type="checkbox" name="attribute_{{ attribute.id }}" value="{{ option }}">
+                                <span class="filter-check"></span>
+                                <span class="filter-option-text">{{ option }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </section>
+        {% endfor %}
+
+
+        <!-- APPLY (mobile pe neeche chipka rehta hai) -->
+        <div class="filter-actions">
+            <button type="button" class="filter-apply-button" id="applyVendorFilters">
+                <span>Apply Filters</span>
+                <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    window.vendorFilterUrl = window.location.pathname;
+</script>
+
+<script src="{% static 'js/vendor-filters.js' %}"></script>

@@ -1,0 +1,928 @@
+/* =========================================================
+   REVIEW BOOKING PAGE
+   WedBook
+   ========================================================= */
+
+.review-page {
+    min-height: 100vh;
+    background: #fbf7f0;
+    color: #3b2024;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.review-hero {
+    padding: 100px 0 20px 0 ;
+    background:
+        linear-gradient(
+            135deg,
+            #fffaf3 0%,
+            #f8eee2 100%
+        );
+    border-bottom: 1px solid rgba(91, 38, 48, 0.08);
+}
+
+.review-hero .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+
+/* BREADCRUMB */
+
+.review-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 20px;
+
+    font-size: 13px;
+    color: #8b7476;
+}
+
+.review-breadcrumb a {
+    color: #7c2938;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.review-breadcrumb a:hover {
+    color: #a8751c;
+}
+
+.breadcrumb-arrow {
+    display: flex;
+    align-items: center;
+    color: #b7a3a2;
+}
+
+
+/* HEADING */
+
+.review-heading {
+    max-width: 720px;
+}
+
+.review-eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #b17b20;
+}
+
+.review-heading h1 {
+    margin: 0 0 12px;
+
+    font-family: "Playfair Display", serif;
+    font-size: clamp(30px, 4vw, 40px);
+    line-height: 1.1;
+    font-weight: 600;
+
+    color: #5b2630;
+}
+
+.review-heading p {
+    margin: 0;
+
+    font-size: 15px;
+    line-height: 1.7;
+    color: #806d6d;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.review-content {
+    padding: 0 0 90px;
+}
+
+.review-content .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.review-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 370px;
+    gap: 30px;
+    align-items: start;
+}
+
+.review-main {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   COMMON CARD
+   ========================================================= */
+
+.review-card {
+    margin-bottom: 15px;
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(91, 38, 48, 0.09);
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 30px rgba(74, 40, 35, 0.05);
+}
+
+
+/* CARD HEADING */
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 27px;
+}
+
+.card-heading > div {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.section-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #f7ead5;
+    color: #8c1b31;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.card-heading h2 {
+    margin: 0;
+
+    font-family: "Playfair Display", serif;
+    font-size: 23px;
+    font-weight: 600;
+
+    color: #5b2630;
+}
+
+
+/* EDIT LINK */
+
+.edit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    color: #8a6528;
+    background: #fbf5e9;
+
+    border: 1px solid rgba(177, 123, 32, 0.18);
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.edit-link:hover {
+    background: #f4e7ce;
+    color: #6e2632;
+}
+
+
+/* =========================================================
+   LISTING
+   ========================================================= */
+
+.listing-review {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.listing-image {
+    width: 145px;
+    height: 105px;
+
+    flex: 0 0 145px;
+
+    overflow: hidden;
+    border-radius: 11px;
+
+    background: #f4eee7;
+}
+
+.listing-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.listing-image-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #b69d98;
+    font-size: 30px;
+}
+
+.listing-info {
+    min-width: 0;
+}
+
+.listing-category {
+    display: inline-block;
+    margin-bottom: 7px;
+
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+
+    color: #ae7820;
+}
+
+.listing-info h3 {
+    margin: 0 0 10px;
+
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 600;
+
+    color: #54252e;
+}
+
+.listing-vendor,
+.listing-location {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: 5px;
+
+    color: #7d6a6b;
+    font-size: 13px;
+}
+
+.listing-vendor .iconify,
+.listing-location .iconify {
+    color: #a8751c;
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   DETAILS GRID
+   ========================================================= */
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 25px;
+}
+
+.detail-item {
+    padding: 16px 17px;
+
+    background: #fcfaf7;
+
+    border: 1px solid #eee5db;
+    border-radius: 10px;
+}
+
+.detail-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 7px;
+
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+
+    color: #9a8584;
+}
+
+.detail-label .iconify {
+    color: #a8751c;
+    font-size: 16px;
+}
+
+.detail-item strong {
+    display: block;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #4e3034;
+}
+
+
+/* =========================================================
+   REQUIREMENTS
+   ========================================================= */
+
+.requirements-box {
+    margin-top: 23px;
+    padding: 18px;
+
+    background: #fdf9f3;
+
+    border-left: 3px solid #b17b20;
+    border-radius: 7px;
+}
+
+.requirements-box .detail-label {
+    margin-bottom: 9px;
+}
+
+.requirements-box p {
+    margin: 0;
+
+    color: #665456;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    white-space: pre-line;
+}
+
+
+/* =========================================================
+   CUSTOMER DETAILS
+   ========================================================= */
+
+.customer-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.customer-detail {
+    min-width: 0;
+}
+
+.customer-detail .detail-label {
+    margin-bottom: 8px;
+}
+
+.customer-detail strong {
+    display: block;
+
+    overflow-wrap: anywhere;
+
+    color: #4e3034;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SECURE NOTE
+   ========================================================= */
+
+.secure-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    margin-top: 5px;
+    padding: 18px 20px;
+
+    background: #f5f0e8;
+
+    border: 1px solid #e9ddcf;
+    border-radius: 12px;
+}
+
+.secure-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #ead8b5;
+    color: #8d641e;
+
+    font-size: 19px;
+}
+
+.secure-note strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #5b2630;
+    font-size: 13px;
+}
+
+.secure-note p {
+    margin: 0;
+
+    color: #806e6e;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.review-sidebar {
+    position: sticky;
+    top: 105px;
+}
+
+.summary-card {
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(91, 38, 48, 0.1);
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 35px rgba(74, 40, 35, 0.07);
+}
+
+.summary-header {
+    padding: 27px 26px 22px;
+
+    background: #5b2630;
+}
+
+.summary-eyebrow {
+    display: block;
+    margin-bottom: 6px;
+
+    color: #d6ad62;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+}
+
+.summary-header h2 {
+    margin: 0;
+
+    color: #fffaf3;
+
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+
+/* SUMMARY LISTING */
+
+.summary-listing {
+    display: flex;
+    gap: 13px;
+
+    margin: 0 25px;
+    padding: 8px 0;
+
+    border-bottom: 1px solid #eee6dd;
+}
+
+.summary-listing-image {
+    width: 67px;
+    height: 57px;
+
+    flex: 0 0 67px;
+
+    overflow: hidden;
+
+    border-radius: 8px;
+
+    background: #f3ece4;
+}
+
+.summary-listing-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.summary-listing span {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #a8751c;
+
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+}
+
+.summary-listing h3 {
+    margin: 0;
+
+    color: #54252e;
+
+    font-family: "Playfair Display", serif;
+    font-size: 15px;
+    line-height: 1.35;
+    font-weight: 600;
+}
+
+
+/* SUMMARY DETAILS */
+
+.summary-details {
+    padding: 7px 25px 0;
+}
+
+.summary-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 5px 0;
+
+    border-bottom: 1px solid #f0eae3;
+}
+
+.summary-row > span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #8a7776;
+
+    font-size: 12px;
+}
+
+.summary-row > span .iconify {
+    color: #a8751c;
+    font-size: 16px;
+}
+
+.summary-row > strong {
+    text-align: right;
+
+    color: #513136;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.summary-row small {
+    color: #8c7978;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+
+/* TOTAL */
+
+.summary-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    margin: 0px 25px 18px;
+    padding-top: 15px;
+
+    border-top: 1px solid #e8ddd3;
+}
+
+.summary-total span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #5b2630;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.summary-total small {
+    display: block;
+    max-width: 190px;
+
+    color: #998686;
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.summary-total strong {
+    white-space: nowrap;
+
+    color: #8c1b31;
+
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CONFIRM BUTTON
+   ========================================================= */
+
+.confirm-booking-btn {
+    width: calc(100% - 50px);
+
+    min-height: 52px;
+
+    margin: 0 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #8c1b31;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.confirm-booking-btn:hover {
+    background: #96142e;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(168, 117, 28, 0.2);
+}
+
+.confirm-booking-btn .iconify {
+    font-size: 18px;
+}
+
+
+/* PAYMENT NOTE */
+
+.payment-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    margin: 13px 20px 22px;
+
+    color: #998787;
+
+    font-size: 10px;
+}
+
+.payment-note .iconify {
+    color: #a8751c;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   QUICK INFO
+   ========================================================= */
+
+.quick-info-card {
+    margin-top: 20px;
+    padding: 23px 25px;
+
+    background: #fffaf3;
+
+    border: 1px solid #eadfd2;
+    border-radius: 14px;
+}
+
+.quick-info-card h3 {
+    margin: 0 0 16px;
+
+    color: #5b2630;
+
+    font-family: "Playfair Display", serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.quick-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    margin-top: 11px;
+
+    color: #786768;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.quick-info-item .iconify {
+    flex: 0 0 auto;
+
+    margin-top: 1px;
+
+    color: #a8751c;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .review-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .review-sidebar {
+        position: static;
+    }
+
+    .summary-card {
+        max-width: 600px;
+    }
+
+    .quick-info-card {
+        max-width: 600px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .review-hero {
+        padding: 120px 0 40px;
+    }
+
+    .review-content {
+        padding: 35px 0 60px;
+    }
+
+    .review-hero .container,
+    .review-content .container {
+        padding: 0 16px;
+    }
+
+    .review-card {
+        padding: 20px 18px;
+        border-radius: 13px;
+    }
+
+    .card-heading {
+        margin-bottom: 21px;
+    }
+
+    .card-heading h2 {
+        font-size: 20px;
+    }
+
+    .listing-review {
+        align-items: flex-start;
+    }
+
+    .listing-image {
+        width: 110px;
+        height: 90px;
+        flex-basis: 110px;
+    }
+
+    .listing-info h3 {
+        font-size: 18px;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .customer-details {
+        grid-template-columns: 1fr;
+        gap: 17px;
+    }
+
+    .summary-listing {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .summary-details {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .summary-total {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .confirm-booking-btn {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .quick-info-card {
+        padding: 20px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .review-heading h1 {
+        font-size: 32px;
+    }
+
+    .review-heading p {
+        font-size: 13px;
+    }
+
+    .listing-review {
+        flex-direction: column;
+    }
+
+    .listing-image {
+        width: 100%;
+        height: 170px;
+    }
+
+    .edit-link {
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+
+    .summary-total {
+        align-items: flex-start;
+    }
+
+    .summary-total strong {
+        font-size: 21px;
+    }
+
+    .confirm-booking-btn {
+        font-size: 12px;
+    }
+}
