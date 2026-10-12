@@ -98,10 +98,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /* =========================================================
-       CATEGORY -> TITLE + SERVICES + CATEGORY ATTRIBUTES
+       CATEGORY -> SERVICE (single) -> SERVICE ATTRIBUTES
        ========================================================= */
 
   const categorySelect = document.getElementById("id_category");
+
+  const serviceSelect = document.getElementById("id_service");
 
   const titleInput = document.getElementById("id_title");
 
@@ -109,9 +111,76 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("categoryAttributesGrid") ||
     document.getElementById("categoryAttributes");
 
+  const attributesCard = document.getElementById("categoryAttributesCard");
+
   let lastAutoTitle = "";
 
-  function updateCategoryUI(updateTitle = true, reloadAttributes = true) {
+  /* Keep a copy of every service option once, then rebuild the
+     <select> for the chosen category (hiding <option> is not
+     reliable on all browsers). */
+
+  const allServiceOptions = serviceSelect
+    ? Array.from(serviceSelect.options)
+        .filter(function (option) {
+          return option.value;
+        })
+        .map(function (option) {
+          return {
+            value: option.value,
+            text: option.text.trim(),
+            categoryId: option.getAttribute("data-category-id"),
+          };
+        })
+    : [];
+
+  const initialServiceValue = serviceSelect ? serviceSelect.value : "";
+
+  function rebuildServiceOptions(categoryId, keepValue) {
+    if (!serviceSelect) {
+      return;
+    }
+
+    serviceSelect.innerHTML = "";
+
+    const placeholder = document.createElement("option");
+
+    placeholder.value = "";
+    placeholder.textContent = categoryId
+      ? "Select service"
+      : "Select category first";
+
+    serviceSelect.appendChild(placeholder);
+
+    allServiceOptions
+      .filter(function (item) {
+        return categoryId && String(item.categoryId) === String(categoryId);
+      })
+      .forEach(function (item) {
+        const option = document.createElement("option");
+
+        option.value = item.value;
+        option.textContent = item.text;
+        option.setAttribute("data-category-id", item.categoryId);
+
+        if (keepValue && String(keepValue) === String(item.value)) {
+          option.selected = true;
+        }
+
+        serviceSelect.appendChild(option);
+      });
+  }
+
+  function clearAttributes() {
+    if (attributesContainer) {
+      attributesContainer.innerHTML = "";
+    }
+
+    if (attributesCard) {
+      attributesCard.classList.add("is-hidden");
+    }
+  }
+
+  function updateCategoryUI(updateTitle = true) {
     if (!categorySelect) {
       return;
     }
@@ -119,129 +188,80 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedOption = categorySelect.options[categorySelect.selectedIndex];
 
     if (!selectedOption || !selectedOption.value) {
-      hideAllServices();
+      rebuildServiceOptions("", "");
+      clearAttributes();
 
       return;
     }
 
     const categoryId = selectedOption.value;
-
     const categoryName = selectedOption.text.trim();
 
-    /* -----------------------------------------------------
-           AUTOMATIC TITLE
-           ----------------------------------------------------- */
+    /* AUTOMATIC TITLE */
 
     if (titleInput && updateTitle) {
       const currentTitle = titleInput.value.trim();
 
       if (currentTitle === "" || currentTitle === lastAutoTitle) {
         titleInput.value = categoryName;
-
         lastAutoTitle = categoryName;
       }
     }
 
-    /* -----------------------------------------------------
-           SERVICES
-           ----------------------------------------------------- */
+    /* New category -> service must be chosen again */
 
-    filterServicesByCategory(categoryId);
-
-    /* -----------------------------------------------------
-           CATEGORY ATTRIBUTES
-           ----------------------------------------------------- */
-
-        if (reloadAttributes) {
-          loadCategoryAttributes(categoryId);
-        }
+    rebuildServiceOptions(categoryId, "");
+    clearAttributes();
   }
 
   /* =========================================================
-       SERVICES FILTER
+       SERVICE ATTRIBUTES (only for the selected service)
        ========================================================= */
 
-  function filterServicesByCategory(categoryId) {
-    const serviceInputs = document.querySelectorAll('input[name="services"]');
-
-    serviceInputs.forEach(function (input) {
-      const serviceCategoryId = input.getAttribute("data-category-id");
-
-      const serviceCard =
-        input.closest(".selection-card") ||
-        input.closest("label") ||
-        input.parentElement;
-
-      if (!serviceCard) {
-        return;
-      }
-
-      if (serviceCategoryId === String(categoryId)) {
-        serviceCard.style.display = "";
-      } else {
-        serviceCard.style.display = "none";
-
-        input.checked = false;
-      }
-    });
-  }
-
-  function hideAllServices() {
-    const serviceInputs = document.querySelectorAll('input[name="services"]');
-
-    serviceInputs.forEach(function (input) {
-      const serviceCard =
-        input.closest(".selection-card") ||
-        input.closest("label") ||
-        input.parentElement;
-
-      if (serviceCard) {
-        serviceCard.style.display = "none";
-      }
-
-      input.checked = false;
-    });
-  }
-
-  /* =========================================================
-       CATEGORY ATTRIBUTES
-       ========================================================= */
-
-  async function loadCategoryAttributes(categoryId) {
+  async function loadServiceAttributes(categoryId, serviceId) {
     if (!attributesContainer || !attributesUrl) {
       return;
     }
 
+    if (!categoryId || !serviceId) {
+      clearAttributes();
+
+      return;
+    }
+
     try {
-      const response = await fetch(
-        `${attributesUrl}?category_id=${categoryId}`,
-        {
-          headers: {
-            "X-Requested-With": "XMLHttpRequest",
-          },
+      const params = new URLSearchParams();
+
+      params.append("category_id", categoryId);
+      params.append("service_id", serviceId);
+
+      const response = await fetch(`${attributesUrl}?${params.toString()}`, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
         },
-      );
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to load category attributes.");
+        throw new Error("Failed to load service attributes.");
       }
 
       const data = await response.json();
 
+      /* ignore stale responses if the service changed meanwhile */
+      if (serviceSelect && String(serviceSelect.value) !== String(serviceId)) {
+        return;
+      }
+
       attributesContainer.innerHTML = "";
 
-            const attrCard = document.getElementById("categoryAttributesCard");
-            if (attrCard) {
-              attrCard.classList.toggle(
-                "is-hidden",
-                !data.attributes || data.attributes.length === 0,
-              );
-            }
-
       if (!data.attributes || data.attributes.length === 0) {
-        attributesContainer.style.display = "none";
+        clearAttributes();
 
         return;
+      }
+
+      if (attributesCard) {
+        attributesCard.classList.remove("is-hidden");
       }
 
       attributesContainer.style.display = "";
@@ -249,136 +269,94 @@ document.addEventListener("DOMContentLoaded", function () {
       data.attributes.forEach(function (attribute) {
         const wrapper = document.createElement("div");
 
-        wrapper.className = "form-group";
-
-        let fieldHTML = "";
+        wrapper.className = "listing-field";
 
         const fieldName = `attribute_${attribute.id}`;
 
-        /* TEXT */
+        const requiredAttr = attribute.is_required ? "required" : "";
 
-        if (attribute.field_type === "text") {
-          fieldHTML = `
-                            <input
-                                type="text"
-                                name="${fieldName}"
-                                id="${fieldName}"
-                                class="form-control"
-                                value="${escapeHtml(attribute.value || "")}"
-                            >
-                        `;
-        } else if (attribute.field_type === "number") {
+        let fieldHTML = "";
 
-        /* NUMBER */
+        if (attribute.field_type === "number") {
           fieldHTML = `
-                            <input
-                                type="number"
-                                name="${fieldName}"
-                                id="${fieldName}"
-                                class="form-control"
-                                step="any"
-                                value="${escapeHtml(attribute.value || "")}"
-                            >
-                        `;
+            <input type="number" name="${fieldName}" id="${fieldName}"
+                   class="form-control" step="any" min="0" ${requiredAttr}>`;
         } else if (attribute.field_type === "boolean") {
-
-        /* BOOLEAN */
           fieldHTML = `
-                            <select
-                                name="${fieldName}"
-                                id="${fieldName}"
-                                class="form-control"
-                            >
-
-                                <option value="">
-                                    Select
-                                </option>
-
-                                <option
-                                    value="true"
-                                    ${
-                                      attribute.value === "true"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    Yes
-                                </option>
-
-                                <option
-                                    value="false"
-                                    ${
-                                      attribute.value === "false"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    No
-                                </option>
-
-                            </select>
-                        `;
+            <select name="${fieldName}" id="${fieldName}"
+                    class="form-control" ${requiredAttr}>
+              <option value="">Select</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>`;
         } else if (attribute.field_type === "dropdown") {
-
-        /* DROPDOWN */
-          let optionsHTML = `<option value="">
-                                Select
-                            </option>`;
-
-          if (attribute.options) {
-            attribute.options.forEach(function (option) {
-              optionsHTML += `
-                                        <option
-                                            value="${escapeHtml(option)}"
-                                            ${
-                                              attribute.value === option
-                                                ? "selected"
-                                                : ""
-                                            }
-                                        >
-                                            ${escapeHtml(option)}
-                                        </option>
-                                    `;
-            });
-          }
+          const optionsHTML = (attribute.options || [])
+            .map(function (option) {
+              return `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`;
+            })
+            .join("");
 
           fieldHTML = `
-                            <select
-                                name="${fieldName}"
-                                id="${fieldName}"
-                                class="form-control"
-                            >
+            <select name="${fieldName}" id="${fieldName}"
+                    class="form-control" ${requiredAttr}>
+              <option value="">Select</option>
+              ${optionsHTML}
+            </select>`;
+        } else if (attribute.field_type === "multiselect") {
+          /* same markup as the Event Types checkboxes */
+          wrapper.style.gridColumn = "1 / -1";
 
-                                ${optionsHTML}
+          const cardsHTML = (attribute.options || [])
+            .map(function (option, index) {
+              return `
+                <label class="selection-card">
+                  <input type="checkbox" name="${fieldName}"
+                         id="${fieldName}_${index}"
+                         value="${escapeHtml(option)}">
+                  <span class="selection-card-content">
+                    <span class="selection-card-title">${escapeHtml(option)}</span>
+                  </span>
+                  <span class="selection-card-check">
+                    <span class="iconify" data-icon="solar:check-circle-bold"></span>
+                  </span>
+                </label>`;
+            })
+            .join("");
 
-                            </select>
-                        `;
+          fieldHTML = `<div class="selection-grid">${cardsHTML}</div>`;
+        } else {
+          fieldHTML = `
+            <input type="text" name="${fieldName}" id="${fieldName}"
+                   class="form-control" ${requiredAttr}>`;
         }
 
         wrapper.innerHTML = `
-                        <label for="${fieldName}">
-                            ${escapeHtml(attribute.label)}
-                        </label>
+          <label for="${fieldName}">
+            ${escapeHtml(attribute.label)}
+            ${attribute.is_required ? "<span>*</span>" : ""}
+            ${
+              attribute.unit
+                ? `<span class="attribute-unit">(${escapeHtml(attribute.unit)})</span>`
+                : ""
+            }
+          </label>
 
-                        ${fieldHTML}
+          ${fieldHTML}
 
-                        ${
-                          attribute.help_text
-                            ? `
-                                    <small
-                                        class="form-help-text"
-                                    >
-                                        ${escapeHtml(attribute.help_text)}
-                                    </small>
-                                `
-                            : ""
-                        }
-                    `;
+          ${
+            attribute.help_text
+              ? `<small class="field-help">${escapeHtml(attribute.help_text)}</small>`
+              : ""
+          }`;
 
         attributesContainer.appendChild(wrapper);
       });
+
+      if (window.Iconify && typeof window.Iconify.scan === "function") {
+        window.Iconify.scan(attributesContainer);
+      }
     } catch (error) {
-      console.error("Category attributes error:", error);
+      console.error("Service attributes error:", error);
     }
   }
 
@@ -395,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /* =========================================================
-       CATEGORY CHANGE
+       EVENTS
        ========================================================= */
 
   if (categorySelect) {
@@ -404,8 +382,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  if (serviceSelect) {
+    serviceSelect.addEventListener("change", function () {
+      loadServiceAttributes(
+        categorySelect ? categorySelect.value : "",
+        serviceSelect.value,
+      );
+    });
+  }
+
   /* =========================================================
-       INITIAL CATEGORY LOAD
+       INITIAL LOAD
+       (attributes are already rendered by Django on first load /
+        validation errors, so only the service list is rebuilt)
        ========================================================= */
 
   if (categorySelect) {
@@ -413,9 +402,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (initialOption && initialOption.value) {
       lastAutoTitle = initialOption.text.trim();
-    }
 
-    updateCategoryUI(false, false);
+      rebuildServiceOptions(initialOption.value, initialServiceValue);
+    } else {
+      rebuildServiceOptions("", "");
+    }
   }
 
 /* =========================================================
@@ -1503,3 +1494,79 @@ document.addEventListener("click", async function (event) {
 
 });
 });
+
+
+/* =========================================================
+   DATE PICKERS
+   - past dates cannot be picked (min = today)
+   - "until" can never be before its "from"  (data-range groups)
+   Server side validates the same rules.
+   ========================================================= */
+
+(function () {
+  function pad(number) {
+    return String(number).padStart(2, "0");
+  }
+
+  function todayString() {
+    const now = new Date();
+
+    return (
+      now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate())
+    );
+  }
+
+  function initDatePickers() {
+    const today = todayString();
+
+    document.querySelectorAll('input[type="date"]').forEach(function (input) {
+      input.min = today;
+    });
+
+    const groups = {};
+
+    document.querySelectorAll("[data-range]").forEach(function (input) {
+      const name = input.getAttribute("data-range");
+      const role = input.getAttribute("data-range-role");
+
+      groups[name] = groups[name] || {};
+      groups[name][role] = input;
+    });
+
+    Object.keys(groups).forEach(function (name) {
+      const start = groups[name].start;
+      const end = groups[name].end;
+
+      if (!start || !end) {
+        return;
+      }
+
+      function syncEnd(clearInvalid) {
+        let minimum = today;
+
+        if (start.value && start.value > minimum) {
+          minimum = start.value;
+        }
+
+        end.min = minimum;
+
+        if (clearInvalid && end.value && end.value < minimum) {
+          end.value = "";
+        }
+      }
+
+      start.addEventListener("change", function () {
+        syncEnd(true);
+      });
+
+      /* on page load only restrict the calendar, keep saved values */
+      syncEnd(false);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDatePickers);
+  } else {
+    initDatePickers();
+  }
+})();

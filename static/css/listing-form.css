@@ -790,7 +790,7 @@
 
     margin-bottom: 8px;
 
-    color: #493934;
+    color: #8e1b32;
 
     font-size: 13px;
     font-weight: 750;
@@ -1910,4 +1910,394 @@
 
 .availability-item-content {
     min-width: 0;
+}
+
+
+/* =========================================================
+   MOBILE OVERRIDES  (add / edit listing)
+   ========================================================= */
+
+.listing-form-container,
+.listing-form-card,
+.listing-field,
+.form-grid > * {
+    min-width: 0;
+}
+
+/* selection checkboxes inside .listing-field must stay tiny/invisible */
+.listing-field .selection-card input {
+    width: 1px;
+    height: 1px;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+}
+
+@media (max-width: 640px) {
+
+    /* ---------- PAGE / CARD ---------- */
+
+    .listing-form-page {
+        padding: 80px 12px 36px;
+    }
+
+    .listing-form-header {
+        gap: 12px;
+        margin: 4px 0 16px;
+    }
+
+    .listing-form-header-icon,
+    .form-card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+    }
+
+    .listing-form-header-icon .iconify,
+    .form-card-icon .iconify {
+        font-size: 20px;
+    }
+
+    .listing-form-header h1 {
+        font-size: 26px;
+    }
+
+    .listing-form-header p {
+        margin-top: 4px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .listing-form-card {
+        margin-bottom: 14px;
+        padding: 16px 14px;
+        border-radius: 14px;
+    }
+
+    .listing-form-card::before {
+        left: 14px;
+        width: 44px;
+    }
+
+    .form-card-header {
+        gap: 11px;
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+    }
+
+    .form-card-header h2 {
+        font-size: 17px;
+        line-height: 1.25;
+    }
+
+    .form-card-header p {
+        margin-top: 2px;
+        font-size: 11.5px;
+        line-height: 1.4;
+    }
+
+    /* ---------- FORM GRID ----------
+       Long fields (selects, text) = full width.
+       Short fields (lat/long, dates) = side by side. */
+
+    .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 10px;
+    }
+
+    .form-grid > .listing-field {
+        grid-column: 1 / -1;
+    }
+
+    .form-grid > .listing-field:has(#id_latitude),
+    .form-grid > .listing-field:has(#id_longitude),
+    .form-grid > .listing-field:has(#availableFrom),
+    .form-grid > .listing-field:has(#availableUntil),
+    .form-grid > .listing-field:has(#newBlockedFrom),
+    .form-grid > .listing-field:has(#newBlockedUntil) {
+        grid-column: auto;
+    }
+
+    /* dates inside existing availability / blocked-date rows */
+    .availability-item .form-grid > .listing-field,
+    .blocked-date-item .form-grid > .listing-field {
+        grid-column: auto;
+    }
+
+    /* ---------- LABELS & INPUTS ---------- */
+
+    .listing-field > label {
+        margin-bottom: 5px;
+        font-size: 12.5px;
+    }
+
+    .listing-field .form-control,
+    .listing-field input[type="text"],
+    .listing-field input[type="number"],
+    .listing-field input[type="date"],
+    .listing-field select,
+    .listing-field textarea {
+        min-height: 44px;
+        padding: 9px 12px;
+        border-radius: 9px;
+        font-size: 16px; /* stops iOS zoom-on-focus */
+    }
+
+    .listing-field select {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .listing-field textarea {
+        min-height: 96px;
+    }
+
+    .field-help,
+    .listing-field small {
+        margin-top: 5px;
+        font-size: 11px;
+    }
+
+    /* ---------- SELECTION CARDS (event types, multiselect) ---------- */
+
+    .selection-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .selection-card-content {
+        min-height: 42px;
+        padding: 8px 32px 8px 11px;
+        border-radius: 10px;
+    }
+
+    .selection-card-title {
+        font-size: 12.5px;
+        line-height: 1.3;
+    }
+
+    .selection-card-check {
+        right: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .selection-card-check .iconify {
+        font-size: 12px;
+    }
+
+    /* ---------- COVER IMAGE ---------- */
+
+    .current-cover-wrapper {
+        margin-bottom: 12px;
+    }
+
+    .current-cover-image {
+        width: 100%;
+        height: 150px;
+        aspect-ratio: auto;
+        border-radius: 10px;
+    }
+
+    .media-existing-delete-btn {
+        top: 7px;
+        right: 7px;
+        width: 30px;
+        height: 30px;
+    }
+
+    /* ---------- UPLOAD BOX: button + file name in ONE row ---------- */
+
+    .media-upload-layout {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 0;
+    }
+
+    .custom-file-box {
+        min-height: 0;
+        padding: 10px 12px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 8px 12px;
+        border-radius: 11px;
+    }
+
+    .custom-file-button {
+        min-width: 0;
+        padding: 9px 14px;
+    }
+
+    .selected-file-name {
+        flex: 1 1 100px;
+        margin: 0;
+        text-align: left;
+    }
+
+    /* empty preview box takes no space; shows only after choosing files */
+
+    .media-preview-box {
+        min-height: 0;
+        padding: 8px;
+        border-radius: 11px;
+    }
+
+    .media-preview-box:empty {
+        display: none;
+    }
+
+    .cover-preview-box .single-preview-item {
+        width: 130px;
+        height: 90px;
+    }
+
+    .gallery-preview {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .video-preview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .video-preview-grid .video-preview-item video {
+        height: 120px;
+    }
+
+    /* ---------- EXISTING GALLERY / VIDEOS ---------- */
+
+    .existing-gallery-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .existing-gallery-item {
+        aspect-ratio: 1 / 0.85;
+        border-radius: 9px;
+    }
+
+    .existing-gallery-item .gallery-delete-btn {
+        top: 5px;
+        right: 5px;
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+    }
+
+    .existing-gallery-item .gallery-delete-btn .iconify {
+        font-size: 14px;
+    }
+
+    .existing-video-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .existing-video-footer {
+        padding: 6px 10px;
+    }
+
+    .existing-video-footer .gallery-delete-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* ---------- AVAILABILITY / BLOCKED DATES ---------- */
+
+    .availability-list,
+    .blocked-date-list {
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .availability-item,
+    .blocked-date-item {
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .availability-item-icon {
+        display: none;
+    }
+
+    .availability-item-content,
+    .blocked-date-item > div {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .availability-item-content .form-grid,
+    .blocked-date-item .form-grid {
+        gap: 8px;
+    }
+
+    .availability-item .gallery-delete-btn,
+    .blocked-date-item .gallery-delete-btn {
+        width: 30px;
+        height: 30px;
+        margin-top: 22px; /* lines up with the inputs, below the labels */
+    }
+
+    /* ---------- STATUS / INFO ---------- */
+
+    .status-toggle {
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .listing-form-info {
+        margin-top: 10px;
+        padding: 10px 12px;
+    }
+
+    /* ---------- ACTIONS: Cancel + Save side by side ---------- */
+
+    .listing-form-actions {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .listing-form-actions .btn-outline,
+    .listing-form-actions .btn-gold {
+        flex: 1;
+        width: auto;
+        min-height: 44px;
+        padding: 0 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 360px) {
+
+    .listing-form-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .listing-form-card {
+        padding: 14px 12px;
+    }
+
+    .listing-form-header h1 {
+        font-size: 23px;
+    }
+
+    .selection-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Blocked dates: From + Until side by side, Reason on its own full row */
+.form-grid > .listing-field.blocked-reason-field,
+.blocked-date-item .form-grid > .listing-field.blocked-reason-field {
+    grid-column: 1 / -1;
 }

@@ -33,6 +33,44 @@ from django.db.models import Q
 from packages.models import Package
 
 
+
+# =========================================================
+# ATTRIBUTE FILTER HELPER (supports multiselect values)
+# =========================================================
+
+def _filter_by_attribute(queryset, attribute_id, values):
+    """Filter listings by one attribute.
+    Multiselect values are stored as "A, B, C", so they need
+    delimiter-aware matching; other types use exact match."""
+
+    field_type = (
+        CategoryAttribute.objects
+        .filter(pk=attribute_id)
+        .values_list('field_type', flat=True)
+        .first()
+    )
+
+    if field_type != 'multiselect':
+        return queryset.filter(
+            attribute_values__attribute_id=attribute_id,
+            attribute_values__value__in=values,
+        )
+
+    condition = Q()
+
+    for value in values:
+        condition |= (
+            Q(attribute_values__value__iexact=value)
+            | Q(attribute_values__value__istartswith=f'{value}, ')
+            | Q(attribute_values__value__iendswith=f', {value}')
+            | Q(attribute_values__value__icontains=f', {value}, ')
+        )
+
+    return queryset.filter(
+        condition,
+        attribute_values__attribute_id=attribute_id,
+    )
+
 # =========================================================
 # LISTING DETAIL
 # =========================================================
@@ -53,7 +91,7 @@ def listing_detail(request, listing_id):
             'images',
             'videos',
             'event_types',
-            'services',
+            'service',
             'availability_periods',
             'blocked_dates',
             'attribute_values__attribute',
@@ -177,6 +215,15 @@ def add_listing(request):
                         and available_until
                     ):
 
+                        _ensure_not_past(
+                            _parse_date(available_from, 'Available from'),
+                            'Available from date'
+                        )
+                        _ensure_not_past(
+                            _parse_date(available_until, 'Available until'),
+                            'Available until date'
+                        )
+
                         availability = ListingAvailability(
                             listing=listing,
                             available_from=available_from,
@@ -229,6 +276,76 @@ def _collect_validation_messages(exc):
 
 
 
+# =========================================================
+# DATE HELPERS (availability / blocked ranges)
+# =========================================================
+
+MAX_BLOCKED_RANGE_DAYS = 366
+
+
+def _parse_date(value, label):
+    try:
+        return datetime.strptime(value, '%Y-%m-%d').date()
+    except (TypeError, ValueError):
+        raise ValidationError(f'{label}: please enter a valid date.')
+
+
+def _ensure_not_past(day, label):
+    if day < date.today():
+        raise ValidationError(f'{label} cannot be in the past.')
+
+
+def _date_range(start, end):
+    """All dates from start to end (inclusive)."""
+
+    if end < start:
+        raise ValidationError(
+            'Blocked "until" date cannot be before the "from" date.'
+        )
+
+    total_days = (end - start).days + 1
+
+    if total_days > MAX_BLOCKED_RANGE_DAYS:
+        raise ValidationError(
+            f'You can block at most {MAX_BLOCKED_RANGE_DAYS} days at a time.'
+        )
+
+    return [start + timedelta(days=i) for i in range(total_days)]
+
+
+def get_blocked_ranges(listing):
+    """Group consecutive blocked days having the same reason
+    into ranges, e.g. 3 Nov -> 5 Nov (Maintenance)."""
+
+    ranges = []
+
+    for blocked in listing.blocked_dates.order_by('date'):
+
+        last = ranges[-1] if ranges else None
+
+        if (
+            last
+            and last['reason'] == blocked.reason
+            and (blocked.date - last['end']) == timedelta(days=1)
+        ):
+            last['end'] = blocked.date
+            last['ids'].append(blocked.id)
+
+        else:
+            ranges.append({
+                'start': blocked.date,
+                'end': blocked.date,
+                'reason': blocked.reason,
+                'ids': [blocked.id],
+            })
+
+    for item in ranges:
+        item['key'] = item['ids'][0]
+        item['ids_csv'] = ','.join(str(i) for i in item['ids'])
+
+    return ranges
+
+
 def update_existing_availability(request, listing):
     """Existing availability periods ko usi record mein update karta hai."""
 
@@ -251,6 +368,19 @@ def update_existing_availability(request, listing):
                 'Availability dates cannot be empty.'
             )
 
+        # Only dates the vendor actually changed must not be in the past
+        if date_from != period.available_from.isoformat():
+            _ensure_not_past(
+                _parse_date(date_from, 'Available from'),
+                'Available from date'
+            )
+
+        if date_until != period.available_until.isoformat():
+            _ensure_not_past(
+                _parse_date(date_until, 'Available until'),
+                'Available until date'
+            )
+
         period.available_from = date_from
         period.available_until = date_until
         period.is_active = (
@@ -262,30 +392,53 @@ def update_existing_availability(request, listing):
 
 
 def update_existing_blocked_dates(request, listing):
+    """Each existing blocked RANGE (from - until + reason) is edited
+    as one unit; its day rows are rebuilt."""
 
-    for blocked in listing.blocked_dates.all():
+    for item in get_blocked_ranges(listing):
 
-        bid = blocked.id
+        key = item['key']
 
-        new_date = request.POST.get(f'blocked_date_{bid}')
+        new_from = request.POST.get(f'blocked_from_{key}')
+        new_until = request.POST.get(f'blocked_until_{key}')
 
-        if new_date is None:
+        # range not present in the submitted form
+        if new_from is None or new_until is None:
             continue
 
-        new_date = new_date.strip()
+        new_from = new_from.strip()
+        new_until = new_until.strip()
 
-        if not new_date:
-            raise ValidationError('Blocked date cannot be empty.')
+        if not (new_from and new_until):
+            raise ValidationError('Blocked dates cannot be empty.')
 
         reason = request.POST.get(
-            f'blocked_reason_{bid}', ''
+            f'blocked_reason_{key}', ''
         ).strip()
 
-        blocked.date = new_date
-        blocked.reason = reason
+        start = _parse_date(new_from, 'Blocked from')
+        end = _parse_date(new_until, 'Blocked until')
 
-        blocked.full_clean()  
-        blocked.save()
+        if (
+            start == item['start']
+            and end == item['end']
+            and reason == item['reason']
+        ):
+            continue
+
+        if start != item['start']:
+            _ensure_not_past(start, 'Blocked from date')
+
+        days = _date_range(start, end)
+
+        listing.blocked_dates.filter(id__in=item['ids']).delete()
+
+        for day in days:
+            ListingBlockedDate.objects.update_or_create(
+                listing=listing,
+                date=day,
+                defaults={'reason': reason}
+            )
 
 
 @login_required
@@ -396,11 +549,29 @@ def edit_listing(request, listing_id):
 
                     if available_from or available_until:
 
+                        # One availability period per listing:
+                        # vendor must edit the existing dates.
+                        if listing.availability_periods.exists():
+                            raise ValidationError(
+                                'This listing already has an availability '
+                                'period. Please edit the existing dates '
+                                'instead of adding a new one.'
+                            )
+
                         if not (available_from and available_until):
                             raise ValidationError(
                                 'Please select both Available From '
                                 'and Available Until dates.'
                             )
+
+                        _ensure_not_past(
+                            _parse_date(available_from, 'Available from'),
+                            'Available from date'
+                        )
+                        _ensure_not_past(
+                            _parse_date(available_until, 'Available until'),
+                            'Available until date'
+                        )
 
                         already_exists = listing.availability_periods.filter(
                             available_from=available_from,
@@ -421,31 +592,39 @@ def edit_listing(request, listing_id):
                         availability.full_clean()
                         availability.save()
 
-                    # ---------- NEW BLOCKED DATE ----------
-                    new_blocked_date = request.POST.get(
-                        'new_blocked_date', ''
+                    # ---------- NEW BLOCKED DATE RANGE ----------
+                    new_from = request.POST.get(
+                        'new_blocked_from', ''
+                    ).strip()
+                    new_until = request.POST.get(
+                        'new_blocked_until', ''
                     ).strip()
 
-                    if new_blocked_date:
+                    if new_from or new_until:
+
+                        if not new_from:
+                            raise ValidationError(
+                                'Please select the blocked "From" date.'
+                            )
+
+                        # only "from" given -> single day
+                        start = _parse_date(new_from, 'Blocked from')
+                        end = _parse_date(
+                            new_until or new_from, 'Blocked until'
+                        )
+
+                        _ensure_not_past(start, 'Blocked from date')
 
                         blocked_reason = request.POST.get(
                             'blocked_date_reason', ''
                         ).strip()
 
-                        already_blocked = (
-                            listing.blocked_dates
-                            .filter(date=new_blocked_date)
-                            .exists()
-                        )
-
-                        if not already_blocked:
-                            blocked = ListingBlockedDate(
+                        for day in _date_range(start, end):
+                            ListingBlockedDate.objects.get_or_create(
                                 listing=listing,
-                                date=new_blocked_date,
-                                reason=blocked_reason
+                                date=day,
+                                defaults={'reason': blocked_reason}
                             )
-                            blocked.full_clean()
-                            blocked.save()
 
                 return redirect(
                     'listings:listing_detail',
@@ -472,6 +651,7 @@ def edit_listing(request, listing_id):
             'listing': listing,
             'vendor_profile': vendor_profile,
             'remaining_image_slots': max(0, 8 - listing.images.count()),
+            'blocked_ranges': get_blocked_ranges(listing),
             'dynamic_attribute_fields':
                 get_dynamic_attribute_fields(form),
         }
@@ -505,7 +685,7 @@ def my_listings(request):
         .prefetch_related(
             'images',
             'videos',
-            'services'
+            'service'
         )
     )
 
@@ -955,7 +1135,18 @@ def delete_blocked_date(
 
     if request.method == 'POST':
 
-        blocked_date.delete()
+        # A blocked RANGE is stored as one row per day; the form sends
+        # all ids of the range in range_ids.
+        ids = {blocked_date.id}
+
+        for raw_id in request.POST.get('range_ids', '').split(','):
+            if raw_id.strip().isdigit():
+                ids.add(int(raw_id))
+
+        ListingBlockedDate.objects.filter(
+            id__in=ids,
+            listing=blocked_date.listing
+        ).delete()
 
     return redirect(
         'listings:edit_listing',
@@ -1125,7 +1316,7 @@ def search(request):
         .prefetch_related(
             'images',
             'videos',
-            'services',
+            'service',
             'event_types',
             'attribute_values__attribute',
         )
@@ -1211,7 +1402,7 @@ def search(request):
             )
             |
             Q(
-                services__name__icontains=query
+                service__name__icontains=query
             )
             |
             Q(
@@ -1288,7 +1479,7 @@ def search(request):
     if service_slug:
 
         listings = listings.filter(
-            services__slug=service_slug
+            service__slug=service_slug
         )
 
 
@@ -1456,10 +1647,7 @@ def search(request):
 
     for attribute_id, values in attribute_filters.items():
 
-        listings = listings.filter(
-            attribute_values__attribute_id=attribute_id,
-            attribute_values__value__in=values,
-        )
+        listings = _filter_by_attribute(listings, attribute_id, values)
 
 
     # =====================================================
@@ -1630,61 +1818,52 @@ def search(request):
 # CATEGORY ATTRIBUTES API
 # =========================================================
 
+
 def category_attributes(request):
+    """Attributes of ONE selected service (add / edit listing form)."""
 
-    category_id = request.GET.get(
-        'category_id'
-    )
+    category_id = request.GET.get('category_id')
+    service_id = request.GET.get('service_id')
 
-    if not category_id:
+    if not category_id or not service_id:
+        return JsonResponse({'attributes': []})
 
-        return JsonResponse(
-            {
-                'attributes': []
-            }
-        )
+    try:
+        category_id = int(category_id)
+        service_id = int(service_id)
+    except ValueError:
+        return JsonResponse({'attributes': []})
 
     attributes = (
         CategoryAttribute.objects
         .filter(
-            category_id=category_id
+            category_id=category_id,
+            service_id=service_id,
+            service__category_id=category_id,
         )
-        .order_by(
-            'order',
-            'id'
-        )
+        .order_by('order', 'id')
     )
 
     data = []
 
     for attribute in attributes:
-
         options = [
             option.strip()
-            for option in (
-                attribute.options or ''
-            ).split(',')
+            for option in (attribute.options or '').split(',')
             if option.strip()
         ]
 
-        data.append(
-            {
-                'id': attribute.id,
-                'label': attribute.label,
-                'field_type':
-                    attribute.field_type,
-                'options': options,
-                'unit': attribute.unit,
-                'help_text':
-                    attribute.help_text,
-            }
-        )
+        data.append({
+            'id': attribute.id,
+            'label': attribute.label,
+            'field_type': attribute.field_type,
+            'options': options,
+            'unit': attribute.unit,
+            'help_text': attribute.help_text,
+            'is_required': attribute.is_required,
+        })
 
-    return JsonResponse(
-        {
-            'attributes': data
-        }
-    )
+    return JsonResponse({'attributes': data})
 
 # =========================================================
 # CATEGORY DETAIL
@@ -1849,7 +2028,7 @@ def category_detail(request, slug):
         .prefetch_related(
             "images",
             "videos",
-            "services",
+            "service",
             "event_types",
             "attribute_values__attribute",
         )
@@ -1922,7 +2101,7 @@ def category_detail(request, slug):
     if service_slugs:
 
         listings = listings.filter(
-            services__slug__in=service_slugs
+            service__slug__in=service_slugs
         )
 
     # =====================================================
@@ -1941,10 +2120,7 @@ def category_detail(request, slug):
 
     for attribute_id, values in attribute_filters.items():
 
-        listings = listings.filter(
-            attribute_values__attribute_id=attribute_id,
-            attribute_values__value__in=values,
-        )
+        listings = _filter_by_attribute(listings, attribute_id, values)
 
     listings = listings.distinct()
 
@@ -2257,77 +2433,62 @@ def listing_availability(
 # SAVE DYNAMIC LISTING ATTRIBUTES
 # =========================================================
 
-def save_listing_attributes(
-    listing,
-    form
-):
+def save_listing_attributes(listing, form):
+    """Save attribute values of the listing's ONE service and sync
+    min_guests / max_guests from the special attributes."""
 
-    attributes = (
-        CategoryAttribute.objects
-        .filter(
-            category=listing.category
+    if listing.service_id:
+        attributes = list(
+            CategoryAttribute.objects
+            .filter(
+                category=listing.category,
+                service_id=listing.service_id
+            )
+            .order_by('order', 'id')
         )
-        .order_by(
-            'order',
-            'id'
-        )
-    )
+    else:
+        attributes = []
 
-    # Remove values that belong to an old category
+    # Values of attributes that do not belong to the (new) service
     ListingAttributeValue.objects.filter(
         listing=listing
     ).exclude(
-        attribute__category=listing.category
+        attribute_id__in=[a.id for a in attributes]
     ).delete()
 
     for attribute in attributes:
 
-        field_name = (
-            f'attribute_{attribute.id}'
-        )
+        value = form.cleaned_data.get(f'attribute_{attribute.id}')
 
-        value = form.cleaned_data.get(
-            field_name
-        )
-
-        # Vendor fields are optional.
-        # Empty values are simply removed.
-        if (
-            value is None
-            or value == ''
-        ):
-
+        if value is None or value == '' or value == []:
             ListingAttributeValue.objects.filter(
                 listing=listing,
                 attribute=attribute
             ).delete()
-
             continue
 
-        # Store boolean values consistently.
         if attribute.field_type == 'boolean':
+            value = 'true' if value == 'true' else 'false'
 
-            value = (
-                'true'
-                if value == 'true'
-                else 'false'
-            )
+        elif attribute.field_type == 'multiselect':
+            value = ', '.join(value)
 
         else:
-
             value = str(value)
 
         ListingAttributeValue.objects.update_or_create(
             listing=listing,
             attribute=attribute,
-            defaults={
-                'value': value
-            }
+            defaults={'value': value}
         )
 
-# =========================================================
-# BUDGET PLANNER RESULTS
-# =========================================================
+    # Guest capacity columns (used by search / budget planner)
+    special = form.get_special_values()
+
+    Listing.objects.filter(pk=listing.pk).update(
+        min_guests=special['min_guests'],
+        max_guests=special['max_guests'],
+    )
 
 # =========================================================
 # BUDGET PLANNER RESULTS
@@ -2444,7 +2605,7 @@ def budget_results(request):
         )
         .prefetch_related(
             "images",
-            "services",
+            "service",
         )
     )
 
@@ -2798,7 +2959,7 @@ def budget_results(request):
         )
         .prefetch_related(
             "images",
-            "services",
+            "service",
         )
     )
 
@@ -3086,7 +3247,7 @@ def budget_results(request):
         )
         .prefetch_related(
             "images",
-            "services",
+            "service",
             "attribute_values__attribute",
         )
     )
@@ -3260,7 +3421,7 @@ def budget_results(request):
         .prefetch_related(
             "listings__category",
             "listings__images",
-            "listings__services",
+            "listings__service",
         )
     )
 
@@ -3421,7 +3582,7 @@ def budget_results(request):
         )
         .prefetch_related(
             "images",
-            "services",
+            "service",
         )
     )
 
@@ -3784,7 +3945,7 @@ def filter_results(request):
         .prefetch_related(
             "images",
             "videos",
-            "services",
+            "service",
             "event_types",
             "attribute_values__attribute",
         )
@@ -3860,7 +4021,7 @@ def filter_results(request):
     if service_slugs:
 
         listings = listings.filter(
-            services__slug__in=service_slugs
+            service__slug__in=service_slugs
         )
 
 
@@ -3870,10 +4031,7 @@ def filter_results(request):
 
     for attribute_id, values in attribute_filters.items():
 
-        listings = listings.filter(
-            attribute_values__attribute_id=attribute_id,
-            attribute_values__value__in=values,
-        )
+        listings = _filter_by_attribute(listings, attribute_id, values)
 
 
     listings = listings.distinct()
@@ -4282,7 +4440,7 @@ def filter_results(request):
         .prefetch_related(
             "images",
             "videos",
-            "services",
+            "service",
             "event_types",
             "attribute_values__attribute",
         )
@@ -4365,7 +4523,7 @@ def filter_results(request):
     if service_slugs:
 
         listings = listings.filter(
-            services__slug__in=service_slugs
+            service__slug__in=service_slugs
         )
 
 
@@ -4384,10 +4542,7 @@ def filter_results(request):
 
     for attribute_id, values in attribute_filters.items():
 
-        listings = listings.filter(
-            attribute_values__attribute_id=attribute_id,
-            attribute_values__value__in=values,
-        )
+        listings = _filter_by_attribute(listings, attribute_id, values)
 
 
     listings = listings.distinct()
@@ -4774,7 +4929,7 @@ def filter_results(request):
         .prefetch_related(
             "images",
             "videos",
-            "services",
+            "service",
             "event_types",
             "attribute_values__attribute",
         )
@@ -4857,7 +5012,7 @@ def filter_results(request):
     if service_slugs:
 
         listings = listings.filter(
-            services__slug__in=service_slugs
+            service__slug__in=service_slugs
         )
 
 

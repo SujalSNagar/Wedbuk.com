@@ -52,13 +52,24 @@ class Service(models.Model):
         return f"{self.category.name} - {self.name}"
 
 
+
+
 class CategoryAttribute(models.Model):
 
     FIELD_TYPE_CHOICES = [
         ('text', 'Text'),
         ('number', 'Number'),
         ('boolean', 'Yes / No'),
-        ('dropdown', 'Dropdown'),
+        ('dropdown', 'Dropdown (single choice)'),
+        ('multiselect', 'Multiple Select (vendor can pick many)'),
+    ]
+
+    # Special attributes feed fixed Listing columns that the search /
+    # budget planner filters use (e.g. guest capacity).
+    SPECIAL_KEY_CHOICES = [
+        ('', 'None (normal field)'),
+        ('min_guests', 'Minimum Guests'),
+        ('max_guests', 'Maximum Guests'),
     ]
 
     category = models.ForeignKey(
@@ -67,8 +78,19 @@ class CategoryAttribute(models.Model):
         related_name='attributes'
     )
 
+    # The attribute is shown ONLY when vendor picks this service.
+    # (null kept only so old category-wide rows do not break)
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        related_name='attributes',
+        null=True,
+        blank=True
+    )
+
     label = models.CharField(
-        max_length=150
+        max_length=150,
+        help_text='e.g. Seating Capacity'
     )
 
     field_type = models.CharField(
@@ -79,7 +101,20 @@ class CategoryAttribute(models.Model):
 
     options = models.TextField(
         blank=True,
-        help_text='For dropdown: enter options separated by commas.'
+        help_text=(
+            'For dropdown / multiple select: enter options separated by commas.'
+        )
+    )
+
+    special_key = models.CharField(
+        max_length=20,
+        choices=SPECIAL_KEY_CHOICES,
+        blank=True,
+        default='',
+        help_text=(
+            'Only for Number fields. Use "Minimum/Maximum Guests" so the '
+            'value is also used by guest-count search filters.'
+        )
     )
 
     unit = models.CharField(
@@ -94,57 +129,55 @@ class CategoryAttribute(models.Model):
         help_text='Small instruction shown to the vendor.'
     )
 
-    is_required = models.BooleanField(
-        default=False
-    )
+    is_required = models.BooleanField(default=False)
 
     order = models.PositiveIntegerField(
-        default=0
+        default=0,
+        help_text='Controls the display order of this field'
     )
 
     class Meta:
         ordering = ['order', 'id']
 
-    def __str__(self):
-        return f"{self.category.name} - {self.label}"
+    def clean(self):
+        from django.core.exceptions import ValidationError
 
-    class FieldType(models.TextChoices):
-        TEXT = 'text', 'Text'
-        NUMBER = 'number', 'Number'
-        BOOLEAN = 'boolean', 'Yes/No'
-        DROPDOWN = 'dropdown', 'Dropdown'
+        super().clean()
 
-    category = models.ForeignKey(
-        Category,
-        related_name='attributes',
-        on_delete=models.CASCADE
-    )
-    label = models.CharField(
-        max_length=100,
-        help_text="e.g. Seating Capacity"
-    )
-    field_type = models.CharField(
-        max_length=20,
-        choices=FieldType.choices,
-        default=FieldType.TEXT
-    )
-    options = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text=(
-            "Only used for Dropdown type. "
-            "Separate values with commas, "
-            "e.g. Veg,Non-Veg,Both"
-        )
-    )
-    is_required = models.BooleanField(default=True)
-    order = models.PositiveIntegerField(
-        default=0,
-        help_text="Controls the display order of this field"
-    )
+        if (
+            self.service_id
+            and self.category_id
+            and self.service.category_id != self.category_id
+        ):
+            raise ValidationError({
+                'service': (
+                    'Selected service must belong to the selected category.'
+                )
+            })
 
-    class Meta:
-        ordering = ['order']
+        if self.special_key and self.field_type != 'number':
+            raise ValidationError({
+                'special_key': 'Special keys can only be used on Number fields.'
+            })
+
+        if self.special_key and self.service_id:
+            clash = CategoryAttribute.objects.filter(
+                service_id=self.service_id,
+                special_key=self.special_key,
+            ).exclude(pk=self.pk)
+
+            if clash.exists():
+                raise ValidationError({
+                    'special_key': 'This service already has an attribute with this special key.'
+                })
+
+        if self.field_type in ('dropdown', 'multiselect') and not self.options.strip():
+            raise ValidationError({
+                'options': 'Please enter options separated by commas.'
+            })
 
     def __str__(self):
-        return f"{self.category.name} - {self.label}"
+        if self.service_id:
+            return f'{self.service.name} - {self.label}'
+
+        return f'{self.category.name} - {self.label}'

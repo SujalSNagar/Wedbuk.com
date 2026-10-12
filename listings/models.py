@@ -50,15 +50,19 @@ class Listing(models.Model):
         decimal_places=2
     )
 
+    # NOT entered in the form any more. They are filled automatically
+    # from service attributes whose special_key is min_guests / max_guests.
     min_guests = models.PositiveIntegerField(
         null=True,
         blank=True,
+        editable=False,
         verbose_name='Minimum Guests'
     )
 
     max_guests = models.PositiveIntegerField(
         null=True,
         blank=True,
+        editable=False,
         verbose_name='Maximum Guests'
     )
 
@@ -113,10 +117,15 @@ class Listing(models.Model):
         related_name='listings'
     )
 
-    services = models.ManyToManyField(
+    # ONE service per listing (e.g. Venue -> Banquet Hall).
+    # null=True only so old rows survive the migration;
+    # the form makes it mandatory.
+    service = models.ForeignKey(
         Service,
-        blank=True,
-        related_name='listings'
+        on_delete=models.PROTECT,
+        related_name='listings',
+        null=True,
+        blank=True
     )
 
     is_active = models.BooleanField(
@@ -137,7 +146,23 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def services(self):
+        """Backward compatibility: old templates using
+        listing.services.all keep working (returns 0 or 1 service)."""
+        return Service.objects.filter(pk=self.service_id)
+
     def clean(self):
+
+        if (
+            self.service_id
+            and self.category_id
+            and self.service.category_id != self.category_id
+        ):
+            raise ValidationError({
+                'service':
+                    'Selected service does not belong to the selected category.'
+            })
 
         if (
             self.state_id

@@ -135,6 +135,33 @@
                     </div>
 
 
+                    <!-- SERVICE (single select) -->
+
+                    <div class="listing-field">
+
+                        <label for="{{ form.service.id_for_label }}">
+                            Service
+                            <span>*</span>
+                        </label>
+
+                        {{ form.service }}
+
+                        <small class="field-help">
+                            Choose the one service you offer. Extra details
+                            for it will appear below.
+                        </small>
+
+                        {% if form.service.errors %}
+
+                        <div class="field-error">
+                            {{ form.service.errors.0 }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
                     <!-- TITLE -->
 
                     <div class="listing-field">
@@ -229,10 +256,10 @@
 
                     <div>
 
-                        <h2>Category Details</h2>
+                        <h2>Service Details</h2>
 
                         <p>
-                            Add additional information about your listing.
+                            Details related to the service you selected.
                         </p>
 
                     </div>
@@ -247,11 +274,16 @@
 
                     {% for attribute, field in dynamic_attribute_fields %}
 
-                    <div class="listing-field">
+                    <div
+                        class="listing-field"
+                        {% if attribute.field_type == 'multiselect' %}style="grid-column: 1 / -1;"{% endif %}
+                    >
 
                         <label for="{{ field.id_for_label }}">
 
                             {{ field.label }}
+
+                            {% if attribute.is_required %}<span>*</span>{% endif %}
 
                             {% if attribute.unit %}
                                 <span class="attribute-unit">
@@ -261,7 +293,40 @@
 
                         </label>
 
+                        {% if attribute.field_type == 'multiselect' %}
+
+                        <div class="selection-grid">
+
+                            {% for checkbox in field %}
+
+                            <label class="selection-card">
+
+                                {{ checkbox.tag }}
+
+                                <span class="selection-card-content">
+                                    <span class="selection-card-title">
+                                        {{ checkbox.choice_label }}
+                                    </span>
+                                </span>
+
+                                <span class="selection-card-check">
+                                    <span
+                                        class="iconify"
+                                        data-icon="solar:check-circle-bold"
+                                    ></span>
+                                </span>
+
+                            </label>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {% else %}
+
                         {{ field }}
+
+                        {% endif %}
 
                         {% if field.help_text %}
 
@@ -284,77 +349,6 @@
                     {% endfor %}
 
                 </div>
-
-            </section>
-
-
-            <!-- ================================================= -->
-            <!-- SERVICES -->
-            <!-- ================================================= -->
-
-            <section class="listing-form-card">
-
-                <div class="form-card-header">
-
-                    <div class="form-card-icon">
-                        <span
-                            class="iconify"
-                            data-icon="solar:settings-bold"
-                        ></span>
-                    </div>
-
-                    <div>
-
-                        <h2>Services</h2>
-
-                        <p>
-                            Select the services included with this listing.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="selection-grid">
-
-                    {% for checkbox in form.services %}
-
-                    <label class="selection-card">
-
-                        {{ checkbox.tag }}
-
-                        <span class="selection-card-content">
-
-                            <span class="selection-card-title">
-                                {{ checkbox.choice_label }}
-                            </span>
-
-                        </span>
-
-                        <span class="selection-card-check">
-
-                            <span
-                                class="iconify"
-                                data-icon="solar:check-circle-bold"
-                            ></span>
-
-                        </span>
-
-                    </label>
-
-                    {% endfor %}
-
-                </div>
-
-
-                {% if form.services.errors %}
-
-                <div class="field-error">
-                    {{ form.services.errors.0 }}
-                </div>
-
-                {% endif %}
 
             </section>
 
@@ -415,78 +409,6 @@
                     </label>
 
                     {% endfor %}
-
-                </div>
-
-            </section>
-
-
-            <!-- ================================================= -->
-            <!-- GUEST CAPACITY -->
-            <!-- ================================================= -->
-
-            <section class="listing-form-card">
-
-                <div class="form-card-header">
-
-                    <div class="form-card-icon">
-                        <span
-                            class="iconify"
-                            data-icon="solar:users-group-rounded-bold"
-                        ></span>
-                    </div>
-
-                    <div>
-
-                        <h2>Guest Capacity</h2>
-
-                        <p>
-                            Define the minimum and maximum number of guests.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-grid">
-
-                    <div class="listing-field">
-
-                        <label for="{{ form.min_guests.id_for_label }}">
-                            Minimum Guests
-                        </label>
-
-                        {{ form.min_guests }}
-
-                        {% if form.min_guests.errors %}
-
-                        <div class="field-error">
-                            {{ form.min_guests.errors.0 }}
-                        </div>
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <div class="listing-field">
-
-                        <label for="{{ form.max_guests.id_for_label }}">
-                            Maximum Guests
-                        </label>
-
-                        {{ form.max_guests }}
-
-                        {% if form.max_guests.errors %}
-
-                        <div class="field-error">
-                            {{ form.max_guests.errors.0 }}
-                        </div>
-
-                        {% endif %}
-
-                    </div>
 
                 </div>
 
@@ -992,6 +914,8 @@
                             type="date"
                             name="available_from"
                             id="availableFrom"
+                            data-range="avail-new"
+                            data-range-role="start"
                             class="form-control"
                         >
 
@@ -1008,6 +932,8 @@
                             type="date"
                             name="available_until"
                             id="availableUntil"
+                            data-range="avail-new"
+                            data-range-role="end"
                             class="form-control"
                         >
 
@@ -1119,4 +1045,3 @@
 <script src="{% static 'js/listing-form.js' %}"></script>
 
 {% endblock %}
-

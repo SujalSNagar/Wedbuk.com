@@ -69,3 +69,6 @@ class CategoryAttributeAdmin(admin.ModelAdmin):
         'label',
         'category__name',
     ]
+
+    class Media:
+        js = ('js/attribute-admin.js',)

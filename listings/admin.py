@@ -121,7 +121,6 @@ class ListingAdmin(admin.ModelAdmin):
 
     filter_horizontal = (
         'event_types',
-        'services',
     )
 
     readonly_fields = (
