@@ -190,7 +190,7 @@
 
     padding: 12px 14px;
 
-    border: 1px solid #ded4cb;
+    border: 1px solid #232120;
     border-radius: 10px;
 
     outline: none;
@@ -335,7 +335,7 @@
 
     box-sizing: border-box;
 
-    border: 1px solid #e3d9d0;
+    border: 1px solid #2b2927;
     border-radius: 11px;
 
     background: #fffdfb;
@@ -824,7 +824,7 @@
 
     padding: 12px 14px;
 
-    border: 1px solid #ded4cb;
+    border: 1px solid #302d2b;
     border-radius: 10px;
 
     outline: none;
@@ -850,7 +850,7 @@
 .listing-field input:hover,
 .listing-field select:hover,
 .listing-field textarea:hover {
-    border-color: #cbb797;
+    border-color: #4b4944;
 }
 
 .listing-field input:focus,
@@ -924,7 +924,7 @@
 
     transform: translateY(-50%);
 
-    border: 1px solid #d8cdc4;
+    border: 1px solid #670a1b;
     border-radius: 50%;
 
     color: transparent;
@@ -1911,7 +1911,6 @@
 .availability-item-content {
     min-width: 0;
 }
-
 
 /* =========================================================
    MOBILE OVERRIDES  (add / edit listing)

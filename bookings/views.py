@@ -19,11 +19,11 @@ def booking_page(request, listing_id):
             "category",
             "state",
             "city",
+            "service",
         )
         .prefetch_related(
             "images",
             "videos",
-            "services",
         ),
         id=listing_id,
         is_active=True,
@@ -129,11 +129,11 @@ def review_booking(request):
             "category",
             "state",
             "city",
+            "service",
         )
         .prefetch_related(
             "images",
             "videos",
-            "services",
         ),
         id=booking_data["listing_id"],
         is_active=True,

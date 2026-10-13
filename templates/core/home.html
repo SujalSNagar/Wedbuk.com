@@ -16,8 +16,6 @@ WedBook — India's Wedding Marketplace
     href="{% static 'css/budget-planner.css' %}"
 >
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
-
 <link
     rel="stylesheet"
     href="{% static 'css/home-responsive.css' %}"
@@ -577,9 +575,8 @@ WedBook — India's Wedding Marketplace
                 <small>Start Date</small>
 
                 <input
-                    type="text"
+                    type="date"
                     id="plannerDate"
-                    placeholder="Select date" readonly
                 >
 
             </div>
@@ -599,9 +596,8 @@ WedBook — India's Wedding Marketplace
                 <small>End Date</small>
 
                 <input
-                    type="text"
+                    type="date"
                     id="plannerEndDate"
-                    placeholder="Select date" readonly
                 >
 
             </div>
@@ -1296,16 +1292,31 @@ WedBook — India's Wedding Marketplace
                     class="trending-card reveal-on-scroll"
                 >
 
-<div class="trending-icon">
-    <iconify-icon icon="mdi:sparkles"></iconify-icon>
-</div>
+                    <div class="trending-icon">
 
-<div class="trending-content">
-    <h3>{{ service.name }}</h3>
-    <span>{{ service.category.name }}</span>
-</div>
+                        <iconify-icon
+                            icon="mdi:sparkles">
+                        </iconify-icon>
 
-<strong class="trending-count">{{ service.listing_count }}</strong>
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            {{ service.name }}
+                        </h3>
+
+                        <span>
+                            {{ service.category.name }}
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        {{ service.listing_count }}
+                    </strong>
 
                 </a>
 
@@ -1979,7 +1990,6 @@ WedBook — India's Wedding Marketplace
 <script>
     window.citiesByStateUrl = "{% url 'listings:cities_by_state' %}";
 </script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 
 <script
     src="{% static 'js/budget-planner.js' %}">

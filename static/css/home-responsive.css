@@ -1292,6 +1292,13 @@
         height: auto;
         min-height: 625px;
         overflow: hidden;
+
+        background: linear-gradient(
+    135deg,
+    #680b1c 0%,
+    #850f27 50%,
+    #68091a 100%
+);
     }
 
     .hero-inner {

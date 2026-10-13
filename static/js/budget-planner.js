@@ -85,16 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const MAX_BUDGET = 10000000;
 
 
-    const now = new Date();
-
-    const today =
-        now.getFullYear() + "-" +
-        String(now.getMonth() + 1).padStart(2, "0") + "-" +
-        String(now.getDate()).padStart(2, "0");
-
-    let startPicker, endPicker;
-
-
     /* =====================================================
        CURRENCY
        ===================================================== */
@@ -639,7 +629,44 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSelectedCategories();
 
     }
+function showPlannerError(message, target) {
+    clearPlannerError();
 
+    plannerError.innerHTML = `
+        <span class="planner-error-icon">!</span>
+        <span>${message}</span>
+    `;
+
+    plannerError.classList.add("is-visible");
+    plannerError.setAttribute("role", "alert");
+
+    if (target) {
+        target.classList.add("planner-invalid");
+
+        target.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        target.focus({ preventScroll: true });
+    }
+}
+
+function clearPlannerError(target) {
+    if (target) {
+        target.classList.remove("planner-invalid");
+        return;
+    }
+
+    plannerError.textContent = "";
+    plannerError.classList.remove("is-visible");
+    plannerError.removeAttribute("role");
+
+    planner.querySelectorAll(".planner-invalid")
+        .forEach(function (field) {
+            field.classList.remove("planner-invalid");
+        });
+}
 
     /* =====================================================
        FIND OPTIONS
@@ -647,8 +674,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function findMatchingOptions() {
 
-        plannerError.textContent =
-            "";
+        clearPlannerError();
 
 
         /* ---------------------------------------------
@@ -659,16 +685,13 @@ document.addEventListener("DOMContentLoaded", function () {
             stateSelect.value;
 
 
-        if (!stateId) {
-
-            plannerError.textContent =
-                "Please select a state.";
-
-            stateSelect.focus();
-
-            return;
-
-        }
+if (!stateId) {
+    showPlannerError(
+        "Please select your event state.",
+        stateSelect
+    );
+    return;
+}
 
 
         /* ---------------------------------------------
@@ -679,16 +702,13 @@ document.addEventListener("DOMContentLoaded", function () {
             citySelect.value;
 
 
-        if (!cityId) {
-
-            plannerError.textContent =
-                "Please select a city.";
-
-            citySelect.focus();
-
-            return;
-
-        }
+if (!cityId) {
+    showPlannerError(
+        "Please select your event city.",
+        citySelect
+    );
+    return;
+}
 
 
         /* ---------------------------------------------
@@ -702,32 +722,22 @@ document.addEventListener("DOMContentLoaded", function () {
             endDateInput.value;
 
 
-        if (endDate && !startDate) {
-
-            plannerError.textContent =
-                "Please select the start date first.";
-
-            dateInput.focus();
-
-            return;
-
-        }
+if (endDate && !startDate) {
+    showPlannerError(
+        "Please select a start date first.",
+        dateInput
+    );
+    return;
+}
 
 
-        if (
-            startDate &&
-            endDate &&
-            endDate < startDate
-        ) {
-
-            plannerError.textContent =
-                "End date cannot be before start date.";
-
-            endDateInput.focus();
-
-            return;
-
-        }
+if (startDate && endDate && endDate < startDate) {
+    showPlannerError(
+        "End date cannot be before start date.",
+        endDateInput
+    );
+    return;
+}
 
 
         /* ---------------------------------------------
@@ -758,14 +768,13 @@ document.addEventListener("DOMContentLoaded", function () {
             getSelectedCategories();
 
 
-        if (!categories.length) {
-
-            plannerError.textContent =
-                "Please select at least one category.";
-
-            return;
-
-        }
+if (!categories.length) {
+    showPlannerError(
+        "Please select at least one service category.",
+        planner.querySelector(".planner-service-options")
+    );
+    return;
+}
 
 
         /* ---------------------------------------------
@@ -876,11 +885,14 @@ document.addEventListener("DOMContentLoaded", function () {
            DATE
            --------------------------------------------- */
 
-        startPicker.clear();
+        dateInput.value =
+            "";
 
-        endPicker.clear();
+        endDateInput.value =
+            "";
 
-        endPicker.set("minDate", today);
+        endDateInput.min =
+            today;
 
 
         /* ---------------------------------------------
@@ -1124,39 +1136,44 @@ document.addEventListener("DOMContentLoaded", function () {
        DATE MINIMUM
        ===================================================== */
 
-    /* =====================================================
-       DATE PICKERS (flatpickr)
-       ===================================================== */
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
 
-    startPicker = flatpickr(dateInput, {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d M Y",
-        minDate: today,
-        disableMobile: true,
-        static: true,
-        onChange: function (selectedDates, dateStr) {
 
-            endPicker.set("minDate", dateStr || today);
+    dateInput.min =
+        today;
 
-            if (endDateInput.value && endDateInput.value < dateStr) {
-                endPicker.clear();
-            }
 
-            updateDateSummary();
+    endDateInput.min =
+        today;
+
+
+        [stateSelect, citySelect, dateInput, endDateInput]
+    .forEach(function (field) {
+        field.addEventListener("change", function () {
+            clearPlannerError(field);
+            plannerError.textContent = "";
+            plannerError.classList.remove("is-visible");
+        });
+    });
+
+planner.querySelectorAll(
+    'input[name="planner_category"]'
+).forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+        const categories = getSelectedCategories();
+
+        if (categories.length) {
+            clearPlannerError(
+                planner.querySelector(".planner-service-options")
+            );
+            plannerError.textContent = "";
+            plannerError.classList.remove("is-visible");
         }
     });
-
-    endPicker = flatpickr(endDateInput, {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d M Y",
-        minDate: today,
-        disableMobile: true,
-        static: true,
-        onChange: updateDateSummary
-    });
-
+});
 
     /* =====================================================
        INITIALIZE
@@ -1180,105 +1197,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateSelectedCategories();
 
-
-        /* =====================================================
-       CUSTOM DROPDOWN (State / City)
-       ===================================================== */
-
-    function enhanceSelect(select) {
-
-        const wrap = select.closest(".planner-select-wrap");
-
-        if (!wrap || select.dataset.enhanced) {
-            return;
-        }
-
-        select.dataset.enhanced = "1";
-        select.classList.add("is-enhanced");
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "planner-dd-btn";
-
-        const list = document.createElement("ul");
-        list.className = "planner-dd-list";
-
-        wrap.appendChild(btn);
-        wrap.appendChild(list);
-
-        function close() {
-            list.classList.remove("show");
-        }
-
-        function build() {
-
-            list.innerHTML = "";
-
-            const current = select.options[select.selectedIndex];
-
-            btn.textContent = current ? current.textContent.trim() : "";
-            btn.classList.toggle("is-placeholder", !select.value);
-            btn.disabled = select.disabled;
-
-            Array.from(select.options).forEach(function (opt) {
-
-                const li = document.createElement("li");
-
-                li.textContent = opt.textContent.trim();
-
-                if (opt.value === select.value) {
-                    li.classList.add("selected");
-                }
-
-                li.addEventListener("click", function () {
-                    select.value = opt.value;
-                    select.dispatchEvent(new Event("change", { bubbles: true }));
-                    close();
-                    build();
-                });
-
-                list.appendChild(li);
-            });
-        }
-
-        btn.addEventListener("click", function (e) {
-
-            e.stopPropagation();
-
-            const isOpen = list.classList.contains("show");
-
-            document
-                .querySelectorAll(".planner-dd-list.show")
-                .forEach(function (l) {
-                    l.classList.remove("show");
-                });
-
-            if (!isOpen && !btn.disabled) {
-                list.classList.add("show");
-            }
-        });
-
-        document.addEventListener("click", close);
-
-        new MutationObserver(build).observe(select, {
-            childList: true,
-            attributes: true,
-            attributeFilter: ["disabled"]
-        });
-
-        select.addEventListener("change", build);
-
-        if (resetButton) {
-            resetButton.addEventListener("click", function () {
-                setTimeout(build, 50);
-            });
-        }
-
-        build();
-    }
-
-    document
-        .querySelectorAll(".planner-location-select")
-        .forEach(enhanceSelect);
 
 });

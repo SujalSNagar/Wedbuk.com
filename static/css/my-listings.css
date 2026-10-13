@@ -19,9 +19,9 @@
 
 .my-listings-container {
     width: min(1180px, 100%);
-        padding-top: 55px;
 
     margin: 0 auto;
+    padding-top: 55px;
 }
 
 

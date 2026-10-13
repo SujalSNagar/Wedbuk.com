@@ -65,13 +65,25 @@
 
     /* HERO */
 
-    .hero {
-        width: 100%;
-        min-height: auto !important;
-        height: auto !important;
-        overflow: hidden;
-        position: relative;
-    }
+
+.hero {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+
+    /* Desktop wala same background */
+    background: linear-gradient(
+        135deg,
+        #680b1c 0%,
+        #850f27 50%,
+        #68091a 100%
+    );
+
+    color: #fff8ef;
+}
+
 
 
     /* HERO INNER */
@@ -386,3 +398,5 @@
     }
 
 }
+
+
