@@ -302,4 +302,308 @@
 
 </section>
 
+{% endblock %}{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Booking Details — WedBook{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/booking-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="booking-detail-page">
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="booking-detail-header">
+
+            <div>
+                <div class="eyebrow eyebrow-gold">
+                    BOOKING DETAILS
+                </div>
+
+                <h1>Your Event Booking</h1>
+
+                <p>
+                    Booking #{{ booking_group.id }}
+                    · Booked on {{ booking_group.created_at|date:"d M Y" }}
+                </p>
+            </div>
+
+            <a
+                href="{% url 'bookings:my_bookings' %}"
+                class="back-bookings-btn"
+            >
+                <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                My Bookings
+            </a>
+
+        </div>
+
+
+        <!-- EVENT SUMMARY -->
+        <div class="booking-detail-card event-summary">
+
+            <div class="detail-card-heading">
+                <div>
+                    <span class="detail-label">EVENT</span>
+                    <h2>
+                        {% if booking_group.event_start_date == booking_group.event_end_date %}
+                            {{ booking_group.event_start_date|date:"d M Y" }}
+                        {% else %}
+                            {{ booking_group.event_start_date|date:"d M Y" }}
+                            —
+                            {{ booking_group.event_end_date|date:"d M Y" }}
+                        {% endif %}
+                    </h2>
+                </div>
+
+                <div class="event-total">
+                    <span>Total Amount</span>
+                    <strong>
+                        ₹{{ booking_group.total_amount|floatformat:0|intcomma }}
+                    </strong>
+                </div>
+            </div>
+
+
+            <div class="event-summary-grid">
+
+                <div>
+                    <span>
+                        <iconify-icon icon="mdi:calendar-range-outline"></iconify-icon>
+                        Duration
+                    </span>
+
+                    <strong>
+                        {{ booking_group.total_days }}
+                        {% if booking_group.total_days == 1 %}
+                            Day
+                        {% else %}
+                            Days
+                        {% endif %}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>
+                        <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
+                        Guests
+                    </span>
+
+                    <strong>
+                        {{ booking_group.guest_count|default:"—" }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>
+                        <iconify-icon icon="mdi:calendar-check-outline"></iconify-icon>
+                        Booking Date
+                    </span>
+
+                    <strong>
+                        {{ booking_group.created_at|date:"d M Y" }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOOKED SERVICES -->
+        <div class="booking-detail-card">
+
+            <div class="detail-section-heading">
+
+                <div>
+                    <span class="detail-label">
+                        YOUR SELECTION
+                    </span>
+
+                    <h2>Booked Services</h2>
+                </div>
+
+                <span class="item-count">
+                    {{ booking_group.bookings.count }}
+                    {% if booking_group.bookings.count == 1 %}
+                        Item
+                    {% else %}
+                        Items
+                    {% endif %}
+                </span>
+
+            </div>
+
+
+            <div class="detail-bookings-list">
+
+                {% for booking in booking_group.bookings.all %}
+
+                    <div class="detail-booking-item">
+
+                        <div class="detail-item-icon">
+
+                            {% if booking.package %}
+                                <iconify-icon
+                                    icon="mdi:package-variant-closed">
+                                </iconify-icon>
+                            {% else %}
+                                <iconify-icon
+                                    icon="mdi:storefront-outline">
+                                </iconify-icon>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="detail-item-main">
+
+                            <div class="detail-item-title">
+
+                                <h3>
+                                    {{ booking.item_name }}
+                                </h3>
+
+                                <span
+                                    class="detail-status detail-status-{{ booking.status }}"
+                                >
+                                    {{ booking.get_status_display }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="detail-item-meta">
+
+                                <span>
+                                    <iconify-icon icon="mdi:store-outline"></iconify-icon>
+                                    {{ booking.vendor.business_name }}
+                                </span>
+
+                                {% if booking.package %}
+                                    <span>Package</span>
+                                {% else %}
+                                    <span>{{ booking.listing.category.name }}</span>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item-price">
+
+                            <span>Amount</span>
+
+                            <strong>
+                                ₹{{ booking.item_price|floatformat:0|intcomma }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMER DETAILS -->
+        <div class="booking-detail-card">
+
+            <div class="detail-section-heading">
+
+                <div>
+                    <span class="detail-label">
+                        CUSTOMER INFORMATION
+                    </span>
+
+                    <h2>Contact Details</h2>
+                </div>
+
+            </div>
+
+
+            <div class="customer-detail-grid">
+
+                <div>
+                    <span>Name</span>
+                    <strong>{{ booking_group.full_name|default:"—" }}</strong>
+                </div>
+
+                <div>
+                    <span>Phone</span>
+                    <strong>{{ booking_group.phone_number|default:"—" }}</strong>
+                </div>
+
+                <div>
+                    <span>Email</span>
+                    <strong>{{ booking_group.email|default:"—" }}</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% if booking_group.notes %}
+
+            <!-- NOTES -->
+            <div class="booking-detail-card">
+
+                <div class="detail-section-heading">
+
+                    <div>
+                        <span class="detail-label">
+                            SPECIAL REQUEST
+                        </span>
+
+                        <h2>Your Notes</h2>
+                    </div>
+
+                </div>
+
+                <div class="booking-notes-box">
+                    {{ booking_group.notes }}
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- FOOTER -->
+        <div class="booking-detail-bottom">
+
+            <a
+                href="{% url 'bookings:my_bookings' %}"
+                class="back-link"
+            >
+                <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                Back to My Bookings
+            </a>
+
+            <div class="grand-total">
+                <span>Grand Total</span>
+                <strong>
+                    ₹{{ booking_group.total_amount|floatformat:0|intcomma }}
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 {% endblock %}
