@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Booking Details — WedBook{% endblock %}
 
@@ -60,7 +61,7 @@
                 <div class="event-total">
                     <span>Total Amount</span>
                     <strong>
-                        ₹{{ booking_group.total_amount|floatformat:0 }}
+                        ₹{{ booking_group.total_amount|floatformat:0|intcomma }}
                     </strong>
                 </div>
             </div>
@@ -199,7 +200,7 @@
                             <span>Amount</span>
 
                             <strong>
-                                ₹{{ booking.item_price|floatformat:0 }}
+                                ₹{{ booking.item_price|floatformat:0|intcomma }}
                             </strong>
 
                         </div>
@@ -291,7 +292,7 @@
             <div class="grand-total">
                 <span>Grand Total</span>
                 <strong>
-                    ₹{{ booking_group.total_amount|floatformat:0 }}
+                    ₹{{ booking_group.total_amount|floatformat:0|intcomma }}
                 </strong>
             </div>
 

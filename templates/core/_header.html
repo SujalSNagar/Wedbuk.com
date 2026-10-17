@@ -13,6 +13,13 @@
                 WedBuk
             </span>
 
+            <span id="selected-city-label">
+    {% if selected_city %}
+        {{ selected_city.name }}
+    {% else %}
+        Select City
+    {% endif %}
+</span>
         </a>
 
 

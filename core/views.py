@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Count, Prefetch, Q
 
 from categories.models import Category, Service
+from core.context_processors import selected_city
 from core.models import EventType
 from listings.models import Listing
 from packages.models import Package
@@ -11,6 +12,8 @@ from locations.models import City,State
 
 def home(request):
 
+
+    selected_city = request.selected_city
     # =========================================================
     # CATEGORIES
     # =========================================================
@@ -38,14 +41,29 @@ def home(request):
     )
 
 
-    # =========================================================
-    # ACTIVE LISTINGS
-    # =========================================================
-
+    #active listings
     active_listings = (
         Listing.objects
         .filter(is_active=True)
+        .select_related(
+            "category",
+            "service",
+            "state",
+            "city",
+        )
+        .prefetch_related(
+            "attribute_values__attribute",
+        )
     )
+
+    
+    # Selected city filter
+    if selected_city:
+        active_listings = active_listings.filter(
+            city_id=selected_city.id
+        )
+
+
 
 
     # =========================================================
@@ -54,28 +72,44 @@ def home(request):
 
     featured_vendors = (
         VendorProfile.objects
-        .filter(listings__is_active=True)
+
+        .filter(
+            is_featured=True,
+            listings__is_active=True,
+            **({"city_id": selected_city.id} if selected_city else {}),
+        )
+
         .distinct()
+        .order_by(
+            "featured_order",
+            "business_name",
+        )
         .prefetch_related(
             Prefetch(
-                'listings',
+                "listings",
                 queryset=active_listings,
-                to_attr='active_listings'
+                to_attr="active_listings",
             )
         )[:6]
     )
+
 
 
     # =========================================================
     # FEATURED PACKAGES
     # =========================================================
 
+
     featured_packages = (
         Package.objects
-        .filter(is_active=True)
+        .filter(
+            is_active=True,
+            **({"vendor__city_id": selected_city.id} if selected_city else {}),
+        )
         .select_related('vendor')
         [:6]
     )
+
 
 
     # =========================================================
@@ -158,27 +192,46 @@ def home(request):
     # STATS
     # =========================================================
 
+  
+  
     stats = {
+        'vendor_count': (
+            VendorProfile.objects.filter(
+                city_id=selected_city.id
+            ).count()
+            if selected_city
+            else VendorProfile.objects.count()
+        ),
 
-        'vendor_count':
-            VendorProfile.objects.count(),
-
-        'listing_count':
+        'listing_count': (
             Listing.objects.filter(
+                is_active=True,
+                city_id=selected_city.id
+            ).count()
+            if selected_city
+            else Listing.objects.filter(
                 is_active=True
-            ).count(),
+            ).count()
+        ),
 
-        'category_count':
+        'category_count': (
             Category.objects.filter(
+                is_active=True,
+                listings__is_active=True,
+                listings__city_id=selected_city.id
+            ).distinct().count()
+            if selected_city
+            else Category.objects.filter(
                 is_active=True
-            ).count(),
+            ).count()
+        ),
 
-        'event_type_count':
-            EventType.objects.filter(
-                is_active=True
-            ).count(),
-
+        'event_type_count': EventType.objects.filter(
+            is_active=True
+        ).count(),
     }
+
+
 
     cities = (
     City.objects
@@ -215,6 +268,8 @@ def home(request):
         ).order_by('name'),
 
         'cities': cities,
+
+        'selected_city': selected_city,
 
     }
 

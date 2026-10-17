@@ -45,6 +45,18 @@ class Listing(models.Model):
 
     description = models.TextField()
 
+    class PricingType(models.TextChoices):
+        FIXED = 'fixed', 'Fixed Price'
+        PER_DAY = 'per_day', 'Per Day'
+        PER_PLATE = 'per_plate', 'Per Plate / Person'
+
+    pricing_type = models.CharField(
+        max_length=20,
+        choices=PricingType.choices,
+        default=PricingType.FIXED,
+        help_text='Choose how the starting price should be calculated.'
+    )
+
     base_price = models.DecimalField(
         max_digits=12,
         decimal_places=2

@@ -10,6 +10,42 @@ from .forms import BookingForm
 from .models import BookingGroup
 
 
+
+
+from decimal import Decimal
+
+
+def calculate_booking_total(listing, start_date, end_date, guest_count=0):
+    """Calculate booking price from the listing's pricing type."""
+
+    if not start_date or not end_date or end_date < start_date:
+        return {
+            "total_days": 0,
+            "unit_price": listing.base_price,
+            "total_amount": listing.base_price,
+        }
+
+    # Both start and end dates are included.
+    total_days = (end_date - start_date).days + 1
+    unit_price = listing.base_price
+
+    if listing.pricing_type == Listing.PricingType.PER_DAY:
+        total_amount = unit_price * total_days
+
+    elif listing.pricing_type == Listing.PricingType.PER_PLATE:
+        total_amount = unit_price * int(guest_count or 0)
+
+    else:
+        total_amount = unit_price
+
+    return {
+        "total_days": total_days,
+        "unit_price": unit_price,
+        "total_amount": total_amount.quantize(Decimal("0.01")),
+    }
+
+
+
 @login_required
 def booking_page(request, listing_id):
 
@@ -36,21 +72,39 @@ def booking_page(request, listing_id):
             listing=listing,
         )
 
+
         if form.is_valid():
+            start_date = form.cleaned_data["start_date"]
+            end_date = form.cleaned_data["end_date"]
+            guest_count = form.cleaned_data["guest_count"]
+
+            price_data = calculate_booking_total(
+                listing,
+                start_date,
+                end_date,
+                guest_count,
+            )
+
             request.session["booking_data"] = {
                 "listing_id": listing.id,
-                "start_date": form.cleaned_data["start_date"].isoformat(),
-                "end_date": form.cleaned_data["end_date"].isoformat(),
-                "guest_count": form.cleaned_data["guest_count"],
+                "start_date": start_date.isoformat(),
+                "end_date": end_date.isoformat(),
+                "guest_count": guest_count,
                 "customer_note": form.cleaned_data["customer_note"],
                 "full_name": form.cleaned_data["full_name"],
                 "phone_number": form.cleaned_data["phone_number"],
                 "email": form.cleaned_data["email"],
+                "total_days": price_data["total_days"],
+                "unit_price": str(price_data["unit_price"]),
+                "total_amount": str(price_data["total_amount"]),
+                "pricing_type": listing.pricing_type,
             }
-        
+
             request.session.modified = True
-        
+
             return redirect("bookings:review_booking")
+
+
     else:
         booking_data = request.session.get("booking_data", {})
 
@@ -103,6 +157,23 @@ def booking_page(request, listing_id):
         except (ValueError, TypeError):
             end_date = None
 
+
+    
+    guest_value = form["guest_count"].value()
+
+    try:
+        guest_count = int(guest_value) if guest_value else 0
+    except (ValueError, TypeError):
+        guest_count = 0
+
+    price_data = calculate_booking_total(
+        listing,
+        start_date,
+        end_date,
+        guest_count,
+    )
+
+
     return render(
         request,
         "bookings/booking_page.html",
@@ -111,6 +182,9 @@ def booking_page(request, listing_id):
             "form": form,
             "start_date": start_date,
             "end_date": end_date,
+            "total_days": price_data["total_days"],
+            "unit_price": price_data["unit_price"],
+            "total_amount": price_data["total_amount"],
         },
     )
 
@@ -150,6 +224,16 @@ def review_booking(request):
     ).date()
 
 
+    guest_count = int(booking_data.get("guest_count") or 0)
+
+    price_data = calculate_booking_total(
+        listing,
+        start_date,
+        end_date,
+        guest_count,
+    )
+
+
     return render(
         request,
         "bookings/review_booking.html",
@@ -158,6 +242,9 @@ def review_booking(request):
             "booking_data": booking_data,
             "start_date": start_date,
             "end_date": end_date,
+            "total_days": price_data["total_days"],
+            "unit_price": price_data["unit_price"],
+            "total_amount": price_data["total_amount"],
 
         },
     )

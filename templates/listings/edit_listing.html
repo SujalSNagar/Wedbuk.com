@@ -174,6 +174,13 @@
                 </div>
 
 
+                    <div class="listing-field">
+                        <label for="{{ form.pricing_type.id_for_label }}">Pricing Type <span>*</span></label>
+                        {{ form.pricing_type }}
+                        {% if form.pricing_type.errors %}<div class="field-error">{{ form.pricing_type.errors.0 }}</div>{% endif %}
+                        <small>Fixed = one-time price; Per Day = price × event days; Per Plate = price × guests.</small>
+                    </div>
+
                 <div class="listing-field listing-field-full">
 
                     <label for="{{ form.description.id_for_label }}">

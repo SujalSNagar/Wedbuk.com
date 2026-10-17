@@ -2152,6 +2152,18 @@
 }
 
 
+.vendor-info-chip{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #f8eddf;
+    color: #762d35;
+    font-size: 12px;
+    font-weight: 600;
+}
+
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -2170,4 +2182,34 @@
     .vendor-cta-section::before {
         opacity: .8;
     }
+}
+
+
+
+.vendor-services,
+.vendor-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.service-chip {
+    display: inline-flex;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #f8eddf;
+    color: #762d35;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.attribute-chip {
+    display: inline-flex;
+    padding: 5px 8px;
+    border: 1px solid #eadfce;
+    border-radius: 6px;
+    background: #fffdf9;
+    color: #51463e;
+    font-size: 11px;
 }

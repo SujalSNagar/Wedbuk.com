@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Book Listing | WedBook{% endblock %}
 
@@ -576,20 +577,22 @@
                         <div class="price-summary">
 
 
-                            <div class="price-row">
+<div class="price-row">
+    <span>
+        {% if listing.pricing_type == "per_day" %}
+            Price per Day
+        {% elif listing.pricing_type == "per_plate" %}
+            Price per Guest
+        {% else %}
+            Fixed Price
+        {% endif %}
+    </span>
 
-                                <span>
-                                    Starting Price
-                                </span>
-
-                                <strong>
-                                    ₹{{ listing.base_price }}
-                                </strong>
-
-                            </div>
+    <strong>₹{{ unit_price|floatformat:0 }}</strong>
+</div>
 
 
-                            <div class="price-row">
+    <div class="price-row">
 
     <span>
         Booking Date
@@ -615,24 +618,28 @@
         {% endif %}
 
     </strong>
-
+    
 </div>
+{% if total_days > 0 %}
+    <div class="price-row">
+        <span>Duration</span>
+        <strong>
+            {{ total_days }}
+            {% if total_days == 1 %}Day{% else %}Days{% endif %}
+        </strong>
+    </div>
+{% endif %}
+
+
 
 
                             <div class="price-divider"></div>
 
 
-                            <div class="price-total">
-
-                                <span>
-                                    Estimated Total
-                                </span>
-
-                                <strong>
-                                    ₹{{ listing.base_price }}
-                                </strong>
-
-                            </div>
+                           <div class="price-total">
+    <span>Estimated Total</span>
+    <strong>₹{{ total_amount|floatformat:0|intcomma }}</strong>
+</div>
 
 
                         </div>

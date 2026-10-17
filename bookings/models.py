@@ -42,6 +42,26 @@ class BookingGroup(models.Model):
         blank=True
     )
 
+    total_amount = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0
+    )
+
+    selected_payment_percentage = models.PositiveSmallIntegerField(
+    default=20
+    )
+    
+    amount_paid = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0
+    )
+    
+    remaining_amount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -72,12 +92,8 @@ class BookingGroup(models.Model):
         ).days + 1
 
     @property
-    def total_amount(self):
-
-        return sum(
-            booking.item_price
-            for booking in self.bookings.all()
-        )
+    def calculated_total_amount(self):
+        return sum((booking.item_price for booking in self.bookings.all()), start=0)
 
     def __str__(self):
 
@@ -164,12 +180,15 @@ class Booking(models.Model):
 
     @property
     def item_price(self):
-
-        return (
-            self.listing.base_price
-            if self.listing
-            else self.package.price
-        )
+        if self.listing:
+            rate = self.listing.base_price
+            pricing_type = self.listing.pricing_type
+            if pricing_type == self.listing.PricingType.PER_DAY:
+                return rate * self.group.total_days
+            if pricing_type == self.listing.PricingType.PER_PLATE:
+                return rate * (self.group.guest_count or 0)
+            return rate
+        return self.package.price
 
     def __str__(self):
 

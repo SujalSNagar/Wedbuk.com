@@ -31,6 +31,16 @@ class VendorProfile(models.Model):
         null=True
     )
 
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name="Featured on Homepage"
+    )
+
+    featured_order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Featured Display Order"
+    )
+
     categories = models.ManyToManyField(Category)
 
     created_at = models.DateTimeField(auto_now_add=True)

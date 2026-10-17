@@ -306,50 +306,136 @@
 {% endif %} 
 
 
-                <!-- ================= SERVICES ================= -->
 
-                {% if listing.services.all %}
+<!-- CATEGORY & SERVICE -->
+<section class="detail-section detail-overview-section">
+    <div class="detail-section-heading">
+        <span class="detail-section-icon">
+            <iconify-icon icon="mdi:shape-outline"></iconify-icon>
+        </span>
+        <h2>Category & Service</h2>
+    </div>
 
-                    <section class="detail-section">
+    <div class="detail-overview-content">
+        {% if listing.category %}
+            <div class="overview-item">
+                <span class="overview-label">Category</span>
+                <span class="overview-value">
+                    {{ listing.category.name }}
+                </span>
+            </div>
+        {% endif %}
 
-                        <div class="detail-section-heading">
+        {% if listing.service %}
+            <div class="overview-item">
+                <span class="overview-label">Service Offered</span>
+                <span class="overview-value service-value">
+                    <iconify-icon icon="mdi:check-circle"></iconify-icon>
+                    {{ listing.service.name }}
+                </span>
+            </div>
+        {% endif %}
+    </div>
+</section>
 
-                            <span class="detail-section-icon">
+<!-- SERVICE ATTRIBUTES -->
+{% with attribute_values=listing.attribute_values.all %}
+    {% if attribute_values %}
+        <section class="detail-section detail-attributes-section">
+            <div class="detail-section-heading">
+                <span class="detail-section-icon">
+                    <iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon>
+                </span>
 
+                <div>
+                    <h2>Features & Facilities</h2>
+                    <p class="attributes-subtitle">
+                        Details and facilities provided by this vendor
+                    </p>
+                </div>
+            </div>
+
+            <div class="attribute-grid">
+                {% for item in attribute_values %}
+                    {% if item.value != "" and item.value != None %}
+                        <div class="attribute-card">
+                            <div class="attribute-card-icon">
                                 <iconify-icon
-                                    icon="mdi:briefcase-outline"
-                                ></iconify-icon>
+                                    icon="mdi:check-circle-outline">
+                                </iconify-icon>
+                            </div>
 
-                            </span>
-
-                            <h2>
-                                Services
-                            </h2>
-
-                        </div>
-
-
-                        <div class="detail-tags">
-
-                            {% for service in listing.services.all %}
-
-                                <span class="detail-tag">
-
-                                    <iconify-icon
-                                        icon="mdi:check-circle-outline"
-                                    ></iconify-icon>
-
-                                    {{ service.name }}
-
+                            <div class="attribute-card-content">
+                                <span class="attribute-label">
+                                    {{ item.attribute.label }}
                                 </span>
 
-                            {% endfor %}
-
+                                <strong class="attribute-value">
+                                    {{ item.value|linebreaksbr }}
+                                    {% if item.attribute.unit %}
+                                        <span class="attribute-unit">
+                                            {{ item.attribute.unit }}
+                                        </span>
+                                    {% endif %}
+                                </strong>
+                            </div>
                         </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+{% endwith %}
 
-                    </section>
 
+
+<!-- PRICING & CHARGES -->
+<section class="detail-section detail-pricing-section">
+    <div class="detail-section-heading">
+        <span class="detail-section-icon">
+            <iconify-icon icon="mdi:currency-inr"></iconify-icon>
+        </span>
+        <h2>Pricing & Charges</h2>
+    </div>
+
+    <div class="pricing-detail-card">
+        <div class="pricing-detail-main">
+            <span class="pricing-detail-label">Starting Price</span>
+
+            <div class="pricing-detail-amount">
+                <span class="currency-symbol">₹</span>
+                {{ listing.base_price|floatformat:0 }}
+            </div>
+
+            <span class="pricing-type-badge">
+                {% if listing.pricing_type == "per_day" %}
+                    <iconify-icon icon="mdi:calendar-clock"></iconify-icon>
+                    Per Day
+                {% elif listing.pricing_type == "per_plate" %}
+                    <iconify-icon icon="mdi:food"></iconify-icon>
+                    Per Plate / Person
+                {% else %}
+                    <iconify-icon icon="mdi:tag-outline"></iconify-icon>
+                    Fixed Price
                 {% endif %}
+            </span>
+        </div>
+
+        <div class="pricing-detail-note">
+            {% if listing.pricing_type == "per_day" %}
+                <strong>How it works</strong>
+                <p>Charges are calculated according to the number of event days.</p>
+            {% elif listing.pricing_type == "per_plate" %}
+                <strong>How it works</strong>
+                <p>Charges are calculated according to the number of plates or guests.</p>
+            {% else %}
+                <strong>How it works</strong>
+                <p>This is the listed fixed price. Confirm any additional charges with the vendor.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
 
 
                 <!-- ================= INCLUDED SERVICES ================= -->

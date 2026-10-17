@@ -86,6 +86,7 @@ class ListingForm(forms.ModelForm):
             'title',
             'description',
             'base_price',
+            'pricing_type',
 
             'address_line_1',
             'address_line_2',
@@ -116,6 +117,8 @@ class ListingForm(forms.ModelForm):
                 'rows': 6,
                 'placeholder': 'Describe your service...'
             }),
+
+            'pricing_type': forms.Select(attrs={'class': 'form-control'}),
 
             'base_price': forms.NumberInput(attrs={
                 'class': 'form-control',

@@ -69,51 +69,45 @@ WedBook — India's Wedding Marketplace
             </p>
 
 
-            <!-- SEARCH -->
 
-            <form
-                class="search-box"
-                id="vendor-search"
-                action="{% url 'listings:search' %}"
-                method="get"
-            >
+<!-- HOME SEARCH -->
+<form
+    class="search-box"
+    id="vendor-search"
+    action="{% url 'listings:search' %}"
+    method="get"
+>
+    <label class="search-location">
+        <span class="location-icon">
+            <iconify-icon icon="mdi:map-marker-outline"></iconify-icon>
+        </span>
 
-                <label class="search-location">
+        <input
+            type="text"
+            id="search-input"
+            name="q"
+            list="wedbook-search-cities"
+            placeholder="Search vendors, services or cities..."
+            aria-label="Search vendors, services or cities"
+            autocomplete="off"
+        >
+    </label>
 
-                    <span class="location-icon">
+    <datalist id="wedbook-search-cities">
+        {% for city in cities %}
+            <option
+                value="{{ city.name }}"
+                data-city-id="{{ city.id }}"
+            ></option>
+        {% endfor %}
+    </datalist>
 
-                        <iconify-icon
-                            icon="mdi:map-marker-outline">
-                        </iconify-icon>
+    <button class="btn btn-gold search-button" type="submit">
+        <iconify-icon icon="mdi:magnify"></iconify-icon>
+        Search
+    </button>
+</form>
 
-                    </span>
-
-
-                    <input
-                        type="text"
-                        id="search-input"
-                        name="q"
-                        placeholder="Search vendors, venues, cities, services..."
-                        aria-label="Search vendors, venues, cities, services"
-                    >
-
-                </label>
-
-
-                <button
-                    class="btn btn-gold search-button"
-                    type="submit"
-                >
-
-                    <iconify-icon
-                        icon="mdi:magnify">
-                    </iconify-icon>
-
-                    Search
-
-                </button>
-
-            </form>
 
 
             <!-- STATS -->
@@ -314,97 +308,116 @@ WedBook — India's Wedding Marketplace
 
             {% if listing %}
 
-                <a
-                    class="vendor-card"
-                    href="{% url 'listings:listing_detail' listing.id %}"
-                >
+                
+<a
+    class="vendor-card"
+    href="{% url 'listings:listing_detail' listing.id %}"
+>
+    <div class="vendor-image-wrap">
+        {% if listing.cover_image %}
+            <img
+                src="{{ listing.cover_image.url }}"
+                alt="{{ listing.title }}"
+                loading="lazy"
+            >
+        {% else %}
+            <div class="vendor-image-placeholder">
+                WedBook
+            </div>
+        {% endif %}
 
-                    <div class="vendor-image-wrap">
+        <span class="vendor-badge">Featured</span>
 
-                        {% if listing.cover_image %}
+        <span class="vendor-category">
+            {{ listing.category.name }}
+        </span>
+    </div>
 
-                            <img
-                                src="{{ listing.cover_image.url }}"
-                                alt="{{ listing.title }}"
-                            >
+    <div class="vendor-body">
 
-                        {% else %}
+        <h3>{{ vendor.business_name }}</h3>
 
-                            <div class="vendor-image-placeholder">
-                                WedBook
-                            </div>
+        <p class="vendor-location">
+            <iconify-icon icon="mdi:map-marker-outline"></iconify-icon>
+            {{ vendor.city }}
+        </p>
 
+        <div class="rating">
+            <span>★★★★★</span>
+            <b>—</b>
+            <span>Reviews coming soon</span>
+        </div>
+
+        <div class="vendor-info-chips">
+
+            {% if listing.service %}
+                <span class="vendor-info-chip service-chip">
+                    {{ listing.service.name }}
+                </span>
+            {% endif %}
+
+            {% if listing.min_guests or listing.max_guests %}
+                <span class="vendor-info-chip guest-chip ">
+                    <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
+
+                    {% if listing.min_guests and listing.max_guests %}
+                       <span class="vendor-info-chip service-chip"> {{ listing.min_guests }}–{{ listing.max_guests }} </span>
+                    {% elif listing.min_guests %}
+                        <span class="vendor-info-chip service-chip"> {{ listing.min_guests }}+ </span>
+                    {% else %}
+                        <span class="vendor-info-chip service-chip"> Up to {{ listing.max_guests }} </span>
+                    {% endif %}
+                </span>
+            {% endif %}
+
+            {% for item in listing.attribute_values.all %}
+                {% if item.value and item.attribute.special_key != 'min_guests' and item.attribute.special_key != 'max_guests' %}
+
+                    {% if item.attribute.field_type == 'boolean' %}
+                        {% if item.value == 'true' or item.value == 'True' or item.value == '1' %}
+                            <span class="vendor-info-chip">
+                                {{ item.attribute.label }}: Yes
+                            </span>
+                        {% elif item.value == 'false' or item.value == 'False' or item.value == '0' %}
+                            <span class="vendor-info-chip">
+                                {{ item.attribute.label }}: No
+                            </span>
                         {% endif %}
-
-                        <span class="vendor-badge">
-                            Featured
+                    {% else %}
+                        <span class="vendor-info-chip">
+                            {{ item.attribute.label }}:
+                            {{ item.value }}{% if item.attribute.unit %} {{ item.attribute.unit }}{% endif %}
                         </span>
+                    {% endif %}
 
-                        <span class="vendor-category">
-                            {{ listing.category.name }}
-                        </span>
+                {% endif %}
+            {% endfor %}
 
-                    </div>
+        </div>
 
+        <div class="vendor-price">
+            <div>
+                <strong>
+                    ₹{{ listing.base_price|floatformat:0 }}
+                </strong>
 
-                    <div class="vendor-body">
+                <small>
+                    {% if listing.pricing_type == "per_day" %}
+                        Per Day
+                    {% elif listing.pricing_type == "per_plate" %}
+                        Per Plate
+                    {% else %}
+                        Fixed Price
+                    {% endif %}
+                </small>
+            </div>
 
-                        <h3>
-                            {{ vendor.business_name }}
-                        </h3>
+            <span class="btn btn-gold enquiry-btn">View</span>
+        </div>
 
+    </div>
+</a>
 
-                        <p class="vendor-location">
-
-                            <iconify-icon
-                                icon="mdi:map-marker-outline">
-                            </iconify-icon>
-
-                            {{ vendor.city }}
-
-                        </p>
-
-
-                        <div class="rating">
-
-                            <span>
-                                ★★★★★
-                            </span>
-
-                            <b>—</b>
-
-                            <span>
-                                Reviews coming soon
-                            </span>
-
-                        </div>
-
-
-                        <div class="vendor-price">
-
-                            <div>
-
-                                <strong>
-                                    ₹{{ listing.base_price }}
-                                </strong>
-
-                                <small>
-                                    starting price
-                                </small>
-
-                            </div>
-
-
-                            
-                            <span class="btn btn-gold enquiry-btn">
-                                View
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </a>
 
             {% endif %}
 
@@ -1046,7 +1059,7 @@ WedBook — India's Wedding Marketplace
             {% for city in popular_cities %}
 
                 <a
-                    href="{% url 'listings:search' %}?city={{ city.name|urlencode }}"
+                    href="{% url 'listings:search' %}?city={{ city.id }}"
                     class="city-card reveal-on-scroll"
                 >
 
@@ -1990,6 +2003,12 @@ WedBook — India's Wedding Marketplace
 <script>
     window.citiesByStateUrl = "{% url 'listings:cities_by_state' %}";
 </script>
+
+<script>
+    window.selectCityUrl = "{% url 'listings:select_city' %}";
+</script>
+
+<script src="{% static 'js/home-search.js' %}"></script>
 
 <script
     src="{% static 'js/budget-planner.js' %}">

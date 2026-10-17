@@ -1,5 +1,6 @@
 
 {% extends "base.html" %}
+{% load humanize %}
 {% load static %}
 
 {% block title %}Payment | WedBook{% endblock %}
@@ -410,6 +411,19 @@
                         </div>
 
 
+                        <div class="advance-selector" style="margin:18px 0;padding:16px;border:1px solid #eadfd5;border-radius:12px;background:#fffaf3;">
+                            <label for="advancePercentage" style="display:flex;justify-content:space-between;font-weight:700;color:#5b2630;">
+                                <span>Advance Payment</span><strong><span id="advancePercentageLabel">20</span>%</strong>
+                            </label>
+                            <input id="advancePercentage" type="range" min="20" max="100" step="5" value="20" style="width:100%;margin:14px 0;accent-color:#951c36;">
+                            <div style="display:flex;justify-content:space-between;font-size:12px;color:#7f6d6a;"><span>Minimum 20%</span><span>Full payment 100%</span></div>
+                            <div style="display:grid;gap:8px;margin-top:14px;font-size:14px;">
+                                <div style="display:flex;justify-content:space-between;"><span>Total Booking Amount</span><strong id="totalAmountLabel">₹{{ total_amount|floatformat:2|intcomma }}</strong></div>
+                                <div style="display:flex;justify-content:space-between;"><span>Pay Now</span><strong id="payNowLabel">₹{{ amount|floatformat:2|intcomma }}</strong></div>
+                                <div style="display:flex;justify-content:space-between;"><span>Remaining Balance</span><strong id="remainingAmountLabel">₹{{ remaining_amount|floatformat:2|intcomma }}</strong></div>
+                            </div>
+                        </div>
+
                         <div class="summary-row">
 
                             <span>
@@ -417,7 +431,7 @@
                             </span>
 
                             <strong>
-                                ₹{{ amount|floatformat:2 }}
+                                ₹{{ amount|floatformat:2|intcomma }}
                             </strong>
 
                         </div>
@@ -433,33 +447,29 @@
                             </span>
 
                             <strong>
-                                ₹{{ amount|floatformat:2 }}
+                                ₹{{ amount|floatformat:2|intcomma }}
                             </strong>
 
                         </div>
 
 
-                        <button
-                            type="button"
-                            id="payButton"
-                            class="pay-button"
-                        >
-
-                            <span
-                                class="iconify"
-                                data-icon="solar:card-2-bold">
-                            </span>
-
-                            <span>
-                                Pay ₹{{ amount|floatformat:2 }}
-                            </span>
-
-                            <span
-                                class="iconify arrow"
-                                data-icon="solar:arrow-right-bold">
-                            </span>
-
-                        </button>
+<button
+    type="button"
+    id="payButton"
+    class="pay-button"
+    data-create-order-url="{% url 'payments:create_payment_order' %}"
+    data-verify-url="{% url 'payments:verify_payment' %}"
+    data-key="{{ razorpay_key_id }}"
+    data-description="{{ listing.title }}"
+    data-customer-name="{{ booking_data.full_name }}"
+    data-customer-email="{{ booking_data.email }}"
+    data-customer-phone="{{ booking_data.phone_number }}"
+    data-csrf-token="{{ csrf_token }}"
+>
+    <span class="iconify" data-icon="solar:card-2-bold"></span>
+    <span id="payButtonLabel">Pay ₹{{ amount|floatformat:2 }}</span>
+    <span class="iconify arrow" data-icon="solar:arrow-right-bold"></span>
+</button>
 
 
                         <p class="payment-method-note">
@@ -564,214 +574,5 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const payButton =
-            document.getElementById("payButton");
-
-
-        payButton.addEventListener(
-            "click",
-            function () {
-
-                payButton.disabled = true;
-
-                payButton.classList.add(
-                    "is-loading"
-                );
-
-
-                const options = {
-
-                    key: "{{ razorpay_key_id }}",
-
-                    amount: "{{ amount_paise }}",
-
-                    currency: "INR",
-
-                    name: "WedBook",
-
-                    description:
-                        "{{ listing.title|escapejs }}",
-
-                    order_id:
-                        "{{ razorpay_order_id }}",
-
-
-                    prefill: {
-
-                        name:
-                            "{{ booking_data.full_name|escapejs }}",
-
-                        email:
-                            "{{ booking_data.email|escapejs }}",
-
-                        contact:
-                            "{{ booking_data.phone_number|escapejs }}"
-
-                    },
-
-
-                    theme: {
-
-                        color: "#8e1b32"
-
-                    },
-
-
-                    handler: function (response) {
-
-                        const formData =
-                            new FormData();
-
-
-                        formData.append(
-                            "csrfmiddlewaretoken",
-                            "{{ csrf_token }}"
-                        );
-
-
-                        formData.append(
-                            "razorpay_order_id",
-                            response.razorpay_order_id
-                        );
-
-
-                        formData.append(
-                            "razorpay_payment_id",
-                            response.razorpay_payment_id
-                        );
-
-
-                        formData.append(
-                            "razorpay_signature",
-                            response.razorpay_signature
-                        );
-
-
-                        fetch(
-                            "{% url 'payments:verify_payment' %}",
-                            {
-                                method: "POST",
-
-                                body: formData,
-
-                                headers: {
-                                    "X-Requested-With":
-                                        "XMLHttpRequest"
-                                }
-                            }
-                        )
-
-                        .then(
-                            response => response.json()
-                        )
-
-                        .then(
-                            data => {
-
-                                if (data.success) {
-
-                                    window.location.href =
-                                        data.redirect_url;
-
-                                } else {
-
-                                    alert(
-                                        data.message ||
-                                        "Payment verification failed."
-                                    );
-
-                                    payButton.disabled =
-                                        false;
-
-                                    payButton.classList.remove(
-                                        "is-loading"
-                                    );
-
-                                }
-
-                            }
-                        )
-
-                        .catch(
-                            function () {
-
-                                alert(
-                                    "Something went wrong while verifying payment."
-                                );
-
-                                payButton.disabled =
-                                    false;
-
-                                payButton.classList.remove(
-                                    "is-loading"
-                                );
-
-                            }
-                        );
-
-                    },
-
-
-                    modal: {
-
-                        ondismiss: function () {
-
-                            payButton.disabled =
-                                false;
-
-                            payButton.classList.remove(
-                                "is-loading"
-                            );
-
-                        }
-
-                    }
-
-                };
-
-
-                const razorpay =
-                    new Razorpay(options);
-
-
-                razorpay.on(
-                    "payment.failed",
-                    function (response) {
-
-                        console.error(
-                            response.error
-                        );
-
-                        alert(
-                            response.error.description ||
-                            "Payment failed. Please try again."
-                        );
-
-                        payButton.disabled =
-                            false;
-
-                        payButton.classList.remove(
-                            "is-loading"
-                        );
-
-                    }
-                );
-
-
-                razorpay.open();
-
-            }
-        );
-
-    }
-);
-
-</script>
-
+<script src="{% static 'js/payment.js' %}"></script>
 {% endblock %}

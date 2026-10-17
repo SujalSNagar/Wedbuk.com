@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% load static %}
 
 {% block title %}Review Booking | WedBook{% endblock %}
@@ -408,6 +409,14 @@
 
 </div>
 
+<div class="summary-row">
+    <span>Duration</span>
+    <strong>
+        {{ total_days }}
+        {% if total_days == 1 %}Day{% else %}Days{% endif %}
+    </strong>
+</div>
+
 
                             <div class="summary-row">
 
@@ -429,11 +438,17 @@
                                 <span>
                                     <span class="iconify"
                                           data-icon="solar:tag-price-linear"></span>
-                                    Starting Price
+                                    {% if listing.pricing_type == "per_day" %}
+    Price per Day
+{% elif listing.pricing_type == "per_plate" %}
+    Price per Guest
+{% else %}
+    Fixed Price
+{% endif %}
                                 </span>
 
                                 <strong>
-                                    ₹{{ listing.base_price|floatformat:0 }}
+                                    ₹{{ listing.base_price|floatformat:0|intcomma }}
                                 </strong>
 
                             </div>
@@ -448,13 +463,12 @@
                                 <span>Estimated Total</span>
 
                                 <small>
-                                    Final amount may vary based on
-                                    selected services.
+                                    Price is calculated using the selected pricing type, dates and guest count.
                                 </small>
                             </div>
 
                             <strong>
-                                ₹{{ listing.base_price|floatformat:0 }}
+                                ₹{{ total_amount|floatformat:0|intcomma }}
                             </strong>
 
                         </div>

@@ -78,6 +78,14 @@
         </p>
 
 
+{% if payment_total_amount %}
+        <div style="max-width:400px;margin:0 auto 24px;padding:16px;border:1px solid #eadfd5;border-radius:12px;text-align:left;background:#fffaf3;color:#5b2630;">
+            <p style="display:flex;justify-content:space-between;gap:15px;margin:6px 0;"><span>Total booking amount</span><strong>₹{{ payment_total_amount }}</strong></p>
+            <p style="display:flex;justify-content:space-between;gap:15px;margin:6px 0;"><span>Paid now ({{ payment_percentage }}%)</span><strong>₹{{ payment_amount }}</strong></p>
+            <p style="display:flex;justify-content:space-between;gap:15px;margin:6px 0;"><span>Remaining balance</span><strong>₹{{ payment_remaining_amount }}</strong></p>
+        </div>
+{% endif %}
+
 <div style="
     display:flex;
     justify-content:center;

@@ -1,16 +1,24 @@
+
 from django import forms
 
 
 class BookingForm(forms.Form):
-
     start_date = forms.DateField(
         required=True,
         input_formats=["%Y-%m-%d"],
+        widget=forms.DateInput(
+            attrs={"type": "date"},
+            format="%Y-%m-%d",
+        ),
     )
 
     end_date = forms.DateField(
         required=True,
         input_formats=["%Y-%m-%d"],
+        widget=forms.DateInput(
+            attrs={"type": "date"},
+            format="%Y-%m-%d",
+        ),
     )
 
     guest_count = forms.IntegerField(
@@ -40,32 +48,28 @@ class BookingForm(forms.Form):
 
     def __init__(self, *args, listing=None, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.listing = listing
 
     def clean_guest_count(self):
-
         guest_count = self.cleaned_data["guest_count"]
 
-        if guest_count < 1:
-            raise forms.ValidationError(
-                "Number of guests must be at least 1."
-            )
+        if self.listing:
+            min_guests = getattr(self.listing, "min_guests", None)
+            max_guests = getattr(self.listing, "max_guests", None)
 
-        if (
-            self.listing
-            and self.listing.max_guests is not None
-            and guest_count > self.listing.max_guests
-        ):
-            raise forms.ValidationError(
-                f"You can enter maximum "
-                f"{self.listing.max_guests} guests."
-            )
+            if min_guests is not None and guest_count < min_guests:
+                raise forms.ValidationError(
+                    f"Minimum {min_guests} guests are required."
+                )
+
+            if max_guests is not None and guest_count > max_guests:
+                raise forms.ValidationError(
+                    f"Maximum {max_guests} guests are allowed."
+                )
 
         return guest_count
 
     def clean(self):
-
         cleaned_data = super().clean()
 
         start_date = cleaned_data.get("start_date")

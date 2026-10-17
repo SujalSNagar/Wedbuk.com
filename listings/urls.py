@@ -191,4 +191,11 @@ urlpatterns = [
     name='filter_results'
 ),
 
+
+path(
+    "select-city/",
+    views.select_city,
+    name="select_city",
+),
+
 ]

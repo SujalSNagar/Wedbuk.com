@@ -3,9 +3,8 @@ from datetime import date, timedelta, datetime
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.http import JsonResponse, request
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.http import JsonResponse
 from categories.models import Category, CategoryAttribute
 from locations.models import City,State
 from vendors.models import VendorProfile
@@ -32,7 +31,7 @@ from django.db.models import Q
 
 from packages.models import Package
 
-
+from django.views.decorators.http import require_POST
 
 # =========================================================
 # ATTRIBUTE FILTER HELPER (supports multiselect values)
@@ -1286,9 +1285,7 @@ def availability_calendar(
     )
 
 
-# =========================================================
-# SEARCH
-# =========================================================
+
 
 # =========================================================
 # SEARCH
@@ -1378,6 +1375,65 @@ def search(request):
     ).strip()
 
 
+
+
+    # -----------------------------------------------------
+    # RESOLVE SELECTED CITY
+    # -----------------------------------------------------
+
+    selected_city = None
+
+    # Explicit city parameter has priority.
+    # Used by Popular Cities links and other city filters.
+    if city:
+        active_cities = City.objects.filter(
+            is_active=True,
+            state__is_active=True,
+        )
+
+        if city.isdigit():
+            selected_city = active_cities.filter(
+                pk=city
+            ).first()
+        else:
+            selected_city = active_cities.filter(
+                name__iexact=city
+            ).first()
+
+        if selected_city:
+            request.session["selected_city_id"] = selected_city.id
+            city = str(selected_city.id)
+
+    # If no explicit city was passed, check whether
+    # the entire search text exactly matches a city.
+    elif query:
+        typed_city = City.objects.filter(
+            name__iexact=query,
+            is_active=True,
+            state__is_active=True,
+        ).first()
+
+        if typed_city:
+            selected_city = typed_city
+            request.session["selected_city_id"] = typed_city.id
+
+            # Searching only for a city means show its listings,
+            # not listings whose titles contain the city name.
+            city = str(typed_city.id)
+            query = ""
+
+    # Otherwise use the city already stored in the session.
+    if selected_city is None and request.selected_city:
+        selected_city = request.selected_city
+
+    if selected_city:
+        city = str(selected_city.id)
+        listings = listings.filter(
+            city_id=selected_city.id
+        )
+
+
+
     # =====================================================
     # MAIN SEARCH
     # =====================================================
@@ -1453,23 +1509,11 @@ def search(request):
     # Support both.
     # =====================================================
 
-    if city:
-
-        if city.isdigit():
-
-            listings = listings.filter(
-                Q(city_id=city)
-                |
-                Q(vendor__city_id=city)
-            )
-
-        else:
-
-            listings = listings.filter(
-                Q(city__name__icontains=city)
-                |
-                Q(vendor__city__name__icontains=city)
-            )
+    if selected_city:
+        listings = listings.filter(
+            Q(city_id=selected_city.id)
+            | Q(vendor__city_id=selected_city.id)
+        )
 
 
     # =====================================================
@@ -1761,8 +1805,7 @@ def search(request):
             'selected_event':
                 event_slug,
 
-            'selected_city':
-                city,
+            'selected_city_id': city,
 
             'selected_service':
                 service_slug,
@@ -1891,6 +1934,28 @@ def category_detail(request, slug):
         "city",
         ""
     ).strip()
+
+
+    
+    if city_id:
+        selected = City.objects.filter(
+            pk=city_id,
+            is_active=True,
+            state__is_active=True,
+        ).first()
+
+        if selected:
+            request.session["selected_city_id"] = selected.id
+            city_id = str(selected.id)
+        else:
+            city_id = ""
+            selected = request.selected_city
+    else:
+        selected = request.selected_city
+        if selected:
+            city_id = str(selected.id)
+
+
 
     guests = request.GET.get(
         "guests",
@@ -2277,6 +2342,44 @@ def get_dynamic_attribute_fields(form):
     return result
 
 
+
+
+
+@require_POST
+def select_city(request):
+    city_id = request.POST.get("city_id", "").strip()
+
+    if not city_id:
+        request.session.pop("selected_city_id", None)
+        return JsonResponse({"success": True, "city": None})
+
+    city = City.objects.filter(
+        id=city_id,
+        is_active=True,
+        state__is_active=True,
+    ).first()
+
+    if city is None:
+        return JsonResponse(
+            {"success": False, "message": "Please select a valid city."},
+            status=400,
+        )
+
+    request.session["selected_city_id"] = city.id
+
+    return JsonResponse({
+        "success": True,
+        "city": city.name,
+        "city_id": city.id,
+    })
+
+
+
+
+
+
+
+
 # =========================================================
 # CITIES BY STATE
 # =========================================================
@@ -2496,8 +2599,33 @@ def save_listing_attributes(listing, form):
 
 def budget_results(request):
 
+    
     state_id = request.GET.get("state", "").strip()
     city_id = request.GET.get("city", "").strip()
+
+    if city_id:
+        selected = City.objects.filter(
+            pk=city_id,
+            is_active=True,
+            state__is_active=True,
+        ).first()
+
+        if selected:
+            request.session["selected_city_id"] = selected.id
+            city_id = str(selected.id)
+            state_id = str(selected.state_id)
+        else:
+            city_id = ""
+            selected = request.selected_city
+            if selected:
+                city_id = str(selected.id)
+                state_id = str(selected.state_id)
+
+    elif request.selected_city:
+        selected = request.selected_city
+        city_id = str(selected.id)
+        state_id = str(selected.state_id)
+
     guests = request.GET.get("guests", "").strip()
     budget = request.GET.get("budget", "").strip()
     event_date = request.GET.get("date","").strip()
@@ -2935,844 +3063,7 @@ def budget_results(request):
         }
     )
 
-    state_id = request.GET.get("state", "").strip()
-    city_id = request.GET.get("city", "").strip()
-    guests = request.GET.get("guests", "").strip()
-    budget = request.GET.get("budget", "").strip()
-    event_date = request.GET.get("date", "").strip()
-
-    category_slugs = request.GET.getlist("category")
-
-
-    # =====================================================
-    # LISTINGS
-    # =====================================================
-
-    listings = (
-        Listing.objects
-        .filter(is_active=True)
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-            "category",
-        )
-        .prefetch_related(
-            "images",
-            "service",
-        )
-    )
-
-
-    # -----------------------------------------------------
-    # LOCATION
-    # -----------------------------------------------------
-
-    if state_id:
-        listings = listings.filter(
-            state_id=state_id
-        )
-
-    if city_id:
-        listings = listings.filter(
-            city_id=city_id
-        )
-
-
-    # -----------------------------------------------------
-    # CATEGORIES
-    # -----------------------------------------------------
-
-    if category_slugs:
-        listings = listings.filter(
-            category__slug__in=category_slugs
-        )
-
-
-    # -----------------------------------------------------
-    # GUEST CAPACITY
-    # -----------------------------------------------------
-
-    if guests:
-
-        try:
-
-            guest_count = int(guests)
-
-            # User ke selected guests se 50 kam tak
-            # capacity acceptable hai.
-            minimum_required_capacity = max(
-                guest_count - 50,
-                0
-            )
-
-            listings = listings.filter(
-                Q(min_guests__isnull=True) |
-                Q(min_guests__lte=guest_count)
-            ).filter(
-                Q(max_guests__isnull=True) |
-                Q(max_guests__gte=minimum_required_capacity)
-            )
-
-        except ValueError:
-
-            guest_count = None
-
-    else:
-
-        guest_count = None
-
-
-    # -----------------------------------------------------
-    # BUDGET
-    # -----------------------------------------------------
-
-    if budget:
-
-        try:
-
-            budget_amount = float(budget)
-
-            listings = listings.filter(
-                base_price__lte=budget_amount
-            )
-
-        except ValueError:
-
-            budget_amount = None
-
-    else:
-
-        budget_amount = None
-
-
-    # -----------------------------------------------------
-    # DATE
-    # -----------------------------------------------------
-
-    selected_date = None
-
-    if event_date:
-
-        try:
-
-            selected_date = datetime.strptime(
-                event_date,
-                "%Y-%m-%d"
-            ).date()
-
-        except ValueError:
-
-            selected_date = None
-
-
-    if selected_date:
-
-        # Available period
-        listings = listings.filter(
-            availability_periods__is_active=True,
-            availability_periods__available_from__lte=selected_date,
-            availability_periods__available_until__gte=selected_date,
-        )
-
-        # Blocked date remove
-        listings = listings.exclude(
-            blocked_dates__date=selected_date
-        )
-
-        # Confirmed booking remove
-        listings = listings.exclude(
-            bookings__status="confirmed",
-            bookings__group__event_start_date__lte=selected_date,
-            bookings__group__event_end_date__gte=selected_date,
-        )
-
-
-    listings = listings.distinct()
-
-
-    # =====================================================
-    # PACKAGES
-    # =====================================================
-
-    packages = (
-        Package.objects
-        .filter(is_active=True)
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-        )
-        .prefetch_related(
-            "package_categories__category",
-            "package_categories__services",
-            "gallery_images",
-        )
-    )
-
-
-    # -----------------------------------------------------
-    # PACKAGE LOCATION
-    # -----------------------------------------------------
-
-    if state_id:
-
-        packages = packages.filter(
-            vendor__state_id=state_id
-        )
-
-
-    if city_id:
-
-        packages = packages.filter(
-            vendor__city_id=city_id
-        )
-
-    # -----------------------------------------------------
-    # PACKAGE GUEST CAPACITY
-    # -----------------------------------------------------
-
-    if guest_count is not None:
-
-        minimum_required_capacity = max(
-            guest_count - 50,
-            0
-        )
-
-        packages = packages.filter(
-            Q(min_guests__isnull=True) |
-            Q(min_guests__lte=guest_count)
-        ).filter(
-            Q(max_guests__isnull=True) |
-            Q(max_guests__gte=minimum_required_capacity)
-        )
-
-    # -----------------------------------------------------
-    # PACKAGE BUDGET
-    # -----------------------------------------------------
-
-    if budget_amount is not None:
-
-        packages = packages.filter(
-            price__lte=budget_amount
-        )
-
-
-    # -----------------------------------------------------
-    # PACKAGE CATEGORIES
-    # -----------------------------------------------------
-
-    if category_slugs:
-
-        packages = packages.filter(
-            package_categories__category__slug__in=category_slugs
-        )
-
-
-    packages = packages.distinct()
-
-
-    # =====================================================
-    # RESULTS
-    # =====================================================
-
-    return render(
-        request,
-        "listings/budget_results.html",
-        {
-            "listings": listings,
-            "packages": packages,
-
-            "guest_count": guest_count,
-            "budget_amount": budget_amount,
-            "selected_date": selected_date,
-
-            "category_slugs": category_slugs,
-
-            "selected_state_id": state_id,
-            "selected_city_id": city_id,
-        }
-    )
-
-    # -----------------------------------------------------
-    # GET PARAMETERS
-    # -----------------------------------------------------
-
-    state_id = request.GET.get(
-        "state",
-        ""
-    ).strip()
-
-    city_id = request.GET.get(
-        "city",
-        ""
-    ).strip()
-
-    guests = request.GET.get(
-        "guests",
-        ""
-    ).strip()
-
-    budget = request.GET.get(
-        "budget",
-        ""
-    ).strip()
-
-    event_date = request.GET.get(
-        "date",
-        ""
-    ).strip()
-
-    category_slugs = request.GET.getlist(
-        "category"
-    )
-
-
-    # =====================================================
-    # LISTINGS
-    # =====================================================
-
-    listings = (
-        Listing.objects
-        .filter(
-            is_active=True
-        )
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-            "category",
-            "state",
-            "city",
-        )
-        .prefetch_related(
-            "images",
-            "service",
-            "attribute_values__attribute",
-        )
-    )
-
-
-    # -----------------------------------------------------
-    # LOCATION
-    # -----------------------------------------------------
-
-    if state_id:
-
-        listings = listings.filter(
-            state_id=state_id
-        )
-
-
-    if city_id:
-
-        listings = listings.filter(
-            city_id=city_id
-        )
-
-
-    # -----------------------------------------------------
-    # CATEGORY
-    # -----------------------------------------------------
-
-    if category_slugs:
-
-        listings = listings.filter(
-            category__slug__in=category_slugs
-        )
-
-
-    # -----------------------------------------------------
-    # GUEST CAPACITY
-    # -----------------------------------------------------
-
-    guest_count = None
-
-    if guests:
-
-        try:
-
-            guest_count = int(
-                guests
-            )
-
-            listings = (
-                listings
-                .filter(
-                    Q(min_guests__isnull=True) |
-                    Q(
-                        min_guests__lte=
-                        guest_count
-                    )
-                )
-                .filter(
-                    Q(max_guests__isnull=True) |
-                    Q(
-                        max_guests__gte=
-                        guest_count
-                    )
-                )
-            )
-
-        except ValueError:
-
-            guest_count = None
-
-
-    # -----------------------------------------------------
-    # BUDGET
-    # -----------------------------------------------------
-
-    budget_amount = None
-
-    if budget:
-
-        try:
-
-            budget_amount = float(
-                budget
-            )
-
-            listings = listings.filter(
-                base_price__lte=
-                budget_amount
-            )
-
-        except ValueError:
-
-            budget_amount = None
-
-
-    # -----------------------------------------------------
-    # DATE
-    # -----------------------------------------------------
-
-    selected_date = None
-
-    if event_date:
-
-        try:
-
-            selected_date = datetime.strptime(
-                event_date,
-                "%Y-%m-%d"
-            ).date()
-
-        except ValueError:
-
-            selected_date = None
-
-
-    # -----------------------------------------------------
-    # LISTING AVAILABILITY
-    # -----------------------------------------------------
-
-    if selected_date:
-
-        # Listing must have an active
-        # availability period containing the date.
-
-        listings = listings.filter(
-            availability_periods__is_active=True,
-            availability_periods__available_from__lte=
-                selected_date,
-            availability_periods__available_until__gte=
-                selected_date,
-        )
-
-
-        # Remove blocked listings.
-
-        listings = listings.exclude(
-            blocked_dates__date=
-                selected_date
-        )
-
-
-        # Remove listings having a confirmed
-        # booking on the selected date.
-
-        listings = listings.exclude(
-            bookings__status="confirmed",
-            bookings__group__event_start_date__lte=
-                selected_date,
-            bookings__group__event_end_date__gte=
-                selected_date,
-        )
-
-
-    listings = listings.distinct()
-
-
-    # =====================================================
-    # PACKAGES
-    # =====================================================
-
-    packages = (
-        Package.objects
-        .filter(
-            is_active=True
-        )
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-        )
-        .prefetch_related(
-            "listings__category",
-            "listings__images",
-            "listings__service",
-        )
-    )
-
-
-    # -----------------------------------------------------
-    # PACKAGE LOCATION
-    # -----------------------------------------------------
-
-    if state_id:
-
-        packages = packages.filter(
-            vendor__state_id=
-                state_id
-        )
-
-
-    if city_id:
-
-        packages = packages.filter(
-            vendor__city_id=
-                city_id
-        )
-
-
-    # -----------------------------------------------------
-    # PACKAGE BUDGET
-    # -----------------------------------------------------
-    #
-    # Package model has `price`, NOT `package_price`.
-    #
-
-    if budget_amount is not None:
-
-        packages = packages.filter(
-            price__lte=
-                budget_amount
-        )
-
-
-    # -----------------------------------------------------
-    # PACKAGE CATEGORY MATCHING
-    # -----------------------------------------------------
-    #
-    # A package should contain ALL selected categories.
-    #
-    # Example:
-    #
-    # Selected:
-    # Venue + DJ + Catering
-    #
-    # Package A:
-    # Venue + DJ + Catering
-    # -> SHOW
-    #
-    # Package B:
-    # Venue + DJ
-    # -> DON'T SHOW
-    #
-
-    for category_slug in category_slugs:
-
-        packages = packages.filter(
-            listings__category__slug=
-                category_slug
-        )
-
-
-    packages = packages.distinct()
-
-
-    # =====================================================
-    # SELECTED STATE / CITY
-    # =====================================================
-
-    selected_state = None
-    selected_city = None
-
-
-    if state_id:
-
-        try:
-
-            if state_id:
-
-                selected_state = (
-                    State.objects
-                    .filter(
-                        id=state_id,
-                        is_active=True
-                    )
-                    .first()
-                )
-
-        except Exception:
-
-            selected_state = None
-
-
-    if city_id:
-
-        selected_city = (
-            City.objects
-            .filter(
-                id=city_id,
-                state_id=state_id,
-                is_active=True
-            )
-            .first()
-        )
-
-
-    # =====================================================
-    # RENDER
-    # =====================================================
-
-    return render(
-        request,
-        "listings/budget_results.html",
-        {
-
-            # Results
-            "listings": listings,
-            "packages": packages,
-
-            # Planner values
-            "guest_count": guest_count,
-            "budget_amount": budget_amount,
-            "selected_date": selected_date,
-            "category_slugs": category_slugs,
-
-            # Location
-            "selected_state_id": state_id,
-            "selected_city_id": city_id,
-
-            "selected_state": selected_state,
-            "selected_city": selected_city,
-
-        }
-    )
-
-    state_id = request.GET.get("state", "").strip()
-    city_id = request.GET.get("city", "").strip()
-    guests = request.GET.get("guests", "").strip()
-    budget = request.GET.get("budget", "").strip()
-    event_date = request.GET.get("date", "").strip()
-
-    category_slugs = request.GET.getlist("category")
-
-
-    listings = (
-        Listing.objects
-        .filter(is_active=True)
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-            "category",
-        )
-        .prefetch_related(
-            "images",
-            "service",
-        )
-    )
-
-
-    # -----------------------------------------------------
-    # LOCATION
-    # -----------------------------------------------------
-
-    if state_id:
-        listings = listings.filter(
-            state_id=state_id
-        )
-
-    if city_id:
-        listings = listings.filter(
-            city_id=city_id
-        )
-
-
-    # -----------------------------------------------------
-    # CATEGORIES
-    # -----------------------------------------------------
-
-    if category_slugs:
-
-        listings = listings.filter(
-            category__slug__in=category_slugs
-        )
-
-
-    # -----------------------------------------------------
-    # GUEST CAPACITY
-    # -----------------------------------------------------
-
-    if guests:
-
-        try:
-            guest_count = int(guests)
-
-            listings = listings.filter(
-                Q(min_guests__isnull=True) |
-                Q(min_guests__lte=guest_count)
-            ).filter(
-                Q(max_guests__isnull=True) |
-                Q(max_guests__gte=guest_count)
-            )
-
-        except ValueError:
-            guest_count = None
-
-    else:
-        guest_count = None
-
-
-    # -----------------------------------------------------
-    # BUDGET
-    # -----------------------------------------------------
-
-    if budget:
-
-        try:
-            budget_amount = float(budget)
-
-            listings = listings.filter(
-                base_price__lte=budget_amount
-            )
-
-        except ValueError:
-            budget_amount = None
-
-    else:
-        budget_amount = None
-
-
-    # -----------------------------------------------------
-    # DATE
-    # -----------------------------------------------------
-
-    selected_date = None
-
-    if event_date:
-
-        try:
-
-            selected_date = datetime.strptime(
-                event_date,
-                "%Y-%m-%d"
-            ).date()
-
-        except ValueError:
-
-            selected_date = None
-
-
-    if selected_date:
-
-        # Vendor must have an availability period
-        # containing the selected date.
-        listings = listings.filter(
-            availability_periods__is_active=True,
-            availability_periods__available_from__lte=selected_date,
-            availability_periods__available_until__gte=selected_date,
-        )
-
-        # Remove blocked listings for that date.
-        listings = listings.exclude(
-            blocked_dates__date=selected_date
-        )
-
-        # Remove already confirmed bookings.
-        listings = listings.exclude(
-            bookings__status="confirmed",
-            bookings__group__event_start_date__lte=selected_date,
-            bookings__group__event_end_date__gte=selected_date,
-        )
-
-
-    listings = listings.distinct()
-
-
-    # -----------------------------------------------------
-    # PACKAGES
-    # -----------------------------------------------------
-
-    packages = (
-        Package.objects
-        .filter(is_active=True)
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-        )
-        .prefetch_related(
-            "listings__category",
-            "listings__images",
-        )
-    )
-
-
-    if state_id:
-        packages = packages.filter(
-            vendor__state_id=state_id
-        )
-
-
-    if city_id:
-        packages = packages.filter(
-            vendor__city_id=city_id
-        )
-
-
-    if budget_amount is not None:
-
-        packages = packages.filter(
-            price__lte=budget_amount
-        )
-
-
-    if category_slugs:
-
-        packages = packages.filter(
-            listings__category__slug__in=category_slugs
-        )
-
-
-    packages = packages.distinct()
-
-
-    return render(
-        request,
-        "listings/budget_results.html",
-        {
-            "listings": listings,
-            "packages": packages,
-
-            "guest_count": guest_count,
-            "budget_amount": budget_amount,
-            "selected_date": selected_date,
-
-            "category_slugs": category_slugs,
-
-            "selected_state_id": state_id,
-            "selected_city_id": city_id,
-        }
-    )
-
-# =========================================================
-# VENDOR FILTER RESULTS
-# =========================================================
-
+    
 # =========================================================
 # FILTER RESULTS
 # =========================================================
@@ -3787,10 +3078,27 @@ def filter_results(request):
     # BASIC FILTERS
     # =====================================================
 
-    city_id = request.GET.get(
-        "city",
-        ""
-    ).strip()
+        
+    city_id = request.GET.get("city", "").strip()
+    
+    if city_id:
+        selected = City.objects.filter(
+            pk=city_id,
+            is_active=True,
+            state__is_active=True,
+        ).first()
+    
+        if selected:
+            request.session["selected_city_id"] = selected.id
+            city_id = str(selected.id)
+        else:
+            city_id = ""
+            if request.selected_city:
+                city_id = str(request.selected_city.id)
+    
+    elif request.selected_city:
+        city_id = str(request.selected_city.id)
+    
 
     guests = request.GET.get(
         "guests",
@@ -4248,960 +3556,6 @@ def filter_results(request):
 
             "selected_attribute_values":
                 attribute_filters,
-
-            "total_matches":
-                total_matches,
-        }
-    )
-
-    # =====================================================
-    # BASIC FILTERS
-    # =====================================================
-
-    state_id = request.GET.get(
-        "state",
-        ""
-    ).strip()
-
-    city_id = request.GET.get(
-        "city",
-        ""
-    ).strip()
-
-    guests = request.GET.get(
-        "guests",
-        ""
-    ).strip()
-
-    min_price = request.GET.get(
-        "min_price",
-        ""
-    ).strip()
-
-    max_price = request.GET.get(
-        "max_price",
-        ""
-    ).strip()
-
-    pricing_type = request.GET.get(
-        "pricing_type",
-        ""
-    ).strip()
-
-
-    # =====================================================
-    # CATEGORY / SERVICE
-    # =====================================================
-
-    category_slugs = request.GET.getlist(
-        "category"
-    )
-
-    service_slugs = request.GET.getlist(
-        "service"
-    )
-
-
-    # =====================================================
-    # DYNAMIC ATTRIBUTE FILTERS
-    #
-    # Example:
-    #
-    # attribute_12=Vegetarian
-    # attribute_15=5 Star
-    #
-    # Same attribute can have multiple values:
-    #
-    # attribute_12=Vegetarian
-    # attribute_12=Vegan
-    # =====================================================
-
-    attribute_filters = {}
-
-    for key in request.GET:
-
-        if not key.startswith(
-            "attribute_"
-        ):
-            continue
-
-        try:
-
-            attribute_id = int(
-                key.split(
-                    "_",
-                    1
-                )[1]
-            )
-
-        except (
-            ValueError,
-            IndexError
-        ):
-
-            continue
-
-
-        values = [
-            value.strip()
-            for value in request.GET.getlist(key)
-            if value.strip()
-        ]
-
-
-        if values:
-
-            attribute_filters[
-                attribute_id
-            ] = values
-
-
-    # =====================================================
-    # GUEST RANGE
-    # =====================================================
-
-    guest_min = None
-    guest_max = None
-
-
-    if guests:
-
-        if guests == "100":
-
-            guest_max = 99
-
-        elif guests == "250":
-
-            guest_min = 100
-            guest_max = 250
-
-        elif guests == "500":
-
-            guest_min = 250
-            guest_max = 500
-
-        elif guests == "1000":
-
-            guest_min = 500
-            guest_max = 1000
-
-        elif guests == "1000+":
-
-            guest_min = 1001
-
-
-    # =====================================================
-    # PRICE
-    # =====================================================
-
-    try:
-
-        min_price_value = (
-            float(min_price)
-            if min_price
-            else None
-        )
-
-    except ValueError:
-
-        min_price_value = None
-
-
-    try:
-
-        max_price_value = (
-            float(max_price)
-            if max_price
-            else None
-        )
-
-    except ValueError:
-
-        max_price_value = None
-
-
-    # =====================================================
-    # LISTINGS
-    # =====================================================
-
-    listings = (
-        Listing.objects
-        .filter(
-            is_active=True
-        )
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-            "category",
-            "state",
-            "city",
-        )
-        .prefetch_related(
-            "images",
-            "videos",
-            "service",
-            "event_types",
-            "attribute_values__attribute",
-        )
-    )
-
-
-    # =====================================================
-    # LOCATION
-    # =====================================================
-
-    if state_id:
-
-        listings = listings.filter(
-            state_id=state_id
-        )
-
-
-    if city_id:
-
-        listings = listings.filter(
-            city_id=city_id
-        )
-
-
-    # =====================================================
-    # GUEST CAPACITY
-    # =====================================================
-
-    if guest_min is not None:
-
-        listings = listings.filter(
-            Q(max_guests__isnull=True)
-            |
-            Q(max_guests__gte=guest_min)
-        )
-
-
-    if guest_max is not None:
-
-        listings = listings.filter(
-            Q(min_guests__isnull=True)
-            |
-            Q(min_guests__lte=guest_max)
-        )
-
-
-    # =====================================================
-    # PRICE
-    # =====================================================
-
-    if min_price_value is not None:
-
-        listings = listings.filter(
-            base_price__gte=min_price_value
-        )
-
-
-    if max_price_value is not None:
-
-        listings = listings.filter(
-            base_price__lte=max_price_value
-        )
-
-
-    # =====================================================
-    # CATEGORY
-    # =====================================================
-
-    if category_slugs:
-
-        listings = listings.filter(
-            category__slug__in=category_slugs
-        )
-
-
-    # =====================================================
-    # SERVICE
-    # =====================================================
-
-    if service_slugs:
-
-        listings = listings.filter(
-            service__slug__in=service_slugs
-        )
-
-
-    # =====================================================
-    # DYNAMIC ATTRIBUTES
-    #
-    # Every selected attribute must match.
-    #
-    # Example:
-    #
-    # Food = Vegetarian
-    # Venue Type = Resort
-    #
-    # BOTH conditions must be satisfied.
-    # =====================================================
-
-    for attribute_id, values in attribute_filters.items():
-
-        listings = _filter_by_attribute(listings, attribute_id, values)
-
-
-    listings = listings.distinct()
-
-
-    # =====================================================
-    # PACKAGES
-    # =====================================================
-
-    packages = (
-        Package.objects
-        .filter(
-            is_active=True
-        )
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-        )
-        .prefetch_related(
-            "package_categories__category",
-            "package_categories__services",
-            "gallery_images",
-        )
-    )
-
-
-    # =====================================================
-    # PACKAGE LOCATION
-    # =====================================================
-
-    if state_id:
-
-        packages = packages.filter(
-            vendor__state_id=state_id
-        )
-
-
-    if city_id:
-
-        packages = packages.filter(
-            vendor__city_id=city_id
-        )
-
-
-    # =====================================================
-    # PACKAGE GUEST CAPACITY
-    # =====================================================
-
-    if guest_min is not None:
-
-        packages = packages.filter(
-            Q(max_guests__isnull=True)
-            |
-            Q(max_guests__gte=guest_min)
-        )
-
-
-    if guest_max is not None:
-
-        packages = packages.filter(
-            Q(min_guests__isnull=True)
-            |
-            Q(min_guests__lte=guest_max)
-        )
-
-
-    # =====================================================
-    # PACKAGE PRICE
-    # =====================================================
-
-    if min_price_value is not None:
-
-        packages = packages.filter(
-            price__gte=min_price_value
-        )
-
-
-    if max_price_value is not None:
-
-        packages = packages.filter(
-            price__lte=max_price_value
-        )
-
-
-    # =====================================================
-    # PACKAGE CATEGORY
-    # =====================================================
-
-    if category_slugs:
-
-        for category_slug in category_slugs:
-
-            packages = packages.filter(
-                package_categories__category__slug=
-                category_slug
-            )
-
-
-    # =====================================================
-    # PACKAGE SERVICE
-    # =====================================================
-
-    if service_slugs:
-
-        for service_slug in service_slugs:
-
-            packages = packages.filter(
-                package_categories__services__slug=
-                service_slug
-            )
-
-
-    # =====================================================
-    # NOTE
-    #
-    # Packages currently have their own independent
-    # architecture and are NOT connected to Listing.
-    #
-    # Therefore ListingAttributeValue filters cannot
-    # automatically be applied to Package.
-    #
-    # Package attributes should be added separately
-    # when Package dynamic attributes are implemented.
-    # =====================================================
-
-    packages = packages.distinct()
-
-
-    # =====================================================
-    # FILTER DATA
-    # =====================================================
-
-    states = (
-        State.objects
-        .filter(
-            is_active=True
-        )
-        .order_by("name")
-    )
-
-
-    cities = (
-        City.objects
-        .filter(
-            is_active=True
-        )
-        .order_by("name")
-    )
-
-
-    # =====================================================
-    # FILTER ATTRIBUTES
-    #
-    # Admin-created attributes.
-    # =====================================================
-
-    filter_attributes = []
-
-    for attribute in (
-        CategoryAttribute.objects
-        .order_by("order", "id")
-    ):
-
-        options = [
-            option.strip()
-            for option in (
-                attribute.options or ""
-            ).split(",")
-            if option.strip()
-        ]
-
-        filter_attributes.append({
-            "id": attribute.id,
-            "label": attribute.label,
-            "field_type": attribute.field_type,
-            "options": options,
-            "unit": attribute.unit,
-        })
-
-
-    # =====================================================
-    # SELECTED VALUES
-    # =====================================================
-
-    selected_attribute_values = {}
-
-    for attribute_id, values in attribute_filters.items():
-
-        selected_attribute_values[
-            str(attribute_id)
-        ] = values
-
-
-    # =====================================================
-    # RESULT COUNT
-    # =====================================================
-
-    total_matches = (
-        listings.count()
-        +
-        packages.count()
-    )
-
-
-    # =====================================================
-    # RENDER
-    # =====================================================
-
-    return render(
-        request,
-        "listings/filter_results.html",
-        {
-            "listings":
-                listings,
-
-            "packages":
-                packages,
-
-            "states":
-                states,
-
-            "cities":
-                cities,
-
-            "filter_attributes":
-                filter_attributes,
-
-            "selected_state_id":
-                state_id,
-
-            "selected_city_id":
-                city_id,
-
-            "selected_guests":
-                guests,
-
-            "selected_min_price":
-                min_price,
-
-            "selected_max_price":
-                max_price,
-
-            "selected_pricing_type":
-                pricing_type,
-
-            "selected_categories":
-                category_slugs,
-
-            "selected_services":
-                service_slugs,
-
-            "selected_attribute_values":
-                selected_attribute_values,
-
-            "total_matches":
-                total_matches,
-        }
-    )
-
-    # =====================================================
-    # GET PARAMETERS
-    # =====================================================
-
-    state_id = request.GET.get(
-        "state",
-        ""
-    ).strip()
-
-    city_id = request.GET.get(
-        "city",
-        ""
-    ).strip()
-
-    guests = request.GET.get(
-        "guests",
-        ""
-    ).strip()
-
-    min_price = request.GET.get(
-        "min_price",
-        ""
-    ).strip()
-
-    max_price = request.GET.get(
-        "max_price",
-        ""
-    ).strip()
-
-    pricing_type = request.GET.get(
-        "pricing_type",
-        ""
-    ).strip()
-
-    category_slugs = request.GET.getlist(
-        "category"
-    )
-
-    service_slugs = request.GET.getlist(
-        "service"
-    )
-
-
-    # =====================================================
-    # GUEST RANGE
-    # =====================================================
-
-    guest_min = None
-    guest_max = None
-
-    if guests:
-
-        if guests == "100":
-
-            guest_max = 99
-
-        elif guests == "250":
-
-            guest_min = 100
-            guest_max = 250
-
-        elif guests == "500":
-
-            guest_min = 250
-            guest_max = 500
-
-        elif guests == "1000":
-
-            guest_min = 500
-            guest_max = 1000
-
-        elif guests == "1000+":
-
-            guest_min = 1001
-
-
-    # =====================================================
-    # PRICE
-    # =====================================================
-
-    try:
-
-        min_price_value = (
-            float(min_price)
-            if min_price
-            else None
-        )
-
-    except ValueError:
-
-        min_price_value = None
-
-
-    try:
-
-        max_price_value = (
-            float(max_price)
-            if max_price
-            else None
-        )
-
-    except ValueError:
-
-        max_price_value = None
-
-
-    # =====================================================
-    # LISTINGS
-    # =====================================================
-
-    listings = (
-        Listing.objects
-        .filter(
-            is_active=True
-        )
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-            "category",
-            "state",
-            "city",
-        )
-        .prefetch_related(
-            "images",
-            "videos",
-            "service",
-            "event_types",
-            "attribute_values__attribute",
-        )
-    )
-
-
-    # =====================================================
-    # CITY
-    # =====================================================
-
-    if state_id:
-
-        listings = listings.filter(
-            state_id=state_id
-        )
-
-
-    if city_id:
-
-        listings = listings.filter(
-            city_id=city_id
-        )
-
-
-    # =====================================================
-    # GUEST CAPACITY
-    # =====================================================
-
-    if guest_min is not None:
-
-        listings = listings.filter(
-            Q(max_guests__isnull=True)
-            |
-            Q(max_guests__gte=guest_min)
-        )
-
-
-    if guest_max is not None:
-
-        listings = listings.filter(
-            Q(min_guests__isnull=True)
-            |
-            Q(min_guests__lte=guest_max)
-        )
-
-
-    # =====================================================
-    # PRICE
-    # =====================================================
-
-    if min_price_value is not None:
-
-        listings = listings.filter(
-            base_price__gte=min_price_value
-        )
-
-
-    if max_price_value is not None:
-
-        listings = listings.filter(
-            base_price__lte=max_price_value
-        )
-
-
-    # =====================================================
-    # CATEGORY
-    # =====================================================
-
-    if category_slugs:
-
-        listings = listings.filter(
-            category__slug__in=category_slugs
-        )
-
-
-    # =====================================================
-    # SERVICES
-    # =====================================================
-
-    if service_slugs:
-
-        listings = listings.filter(
-            service__slug__in=service_slugs
-        )
-
-
-    listings = listings.distinct()
-
-
-    # =====================================================
-    # PACKAGES
-    # =====================================================
-
-    packages = (
-        Package.objects
-        .filter(
-            is_active=True
-        )
-        .select_related(
-            "vendor",
-            "vendor__state",
-            "vendor__city",
-        )
-        .prefetch_related(
-            "package_categories__category",
-            "package_categories__services",
-            "gallery_images",
-        )
-    )
-
-
-    # =====================================================
-    # PACKAGE CITY
-    # =====================================================
-
-    if state_id:
-
-        packages = packages.filter(
-            vendor__state_id=state_id
-        )
-
-
-    if city_id:
-
-        packages = packages.filter(
-            vendor__city_id=city_id
-        )
-
-
-    # =====================================================
-    # PACKAGE GUEST CAPACITY
-    # =====================================================
-
-    if guest_min is not None:
-
-        packages = packages.filter(
-            Q(max_guests__isnull=True)
-            |
-            Q(max_guests__gte=guest_min)
-        )
-
-
-    if guest_max is not None:
-
-        packages = packages.filter(
-            Q(min_guests__isnull=True)
-            |
-            Q(min_guests__lte=guest_max)
-        )
-
-
-    # =====================================================
-    # PACKAGE PRICE
-    # =====================================================
-
-    if min_price_value is not None:
-
-        packages = packages.filter(
-            price__gte=min_price_value
-        )
-
-
-    if max_price_value is not None:
-
-        packages = packages.filter(
-            price__lte=max_price_value
-        )
-
-
-    # =====================================================
-    # PACKAGE CATEGORY
-    # =====================================================
-
-    if category_slugs:
-
-        for category_slug in category_slugs:
-
-            packages = packages.filter(
-                package_categories__category__slug=
-                category_slug
-            )
-
-
-    # =====================================================
-    # PACKAGE SERVICE
-    # =====================================================
-
-    if service_slugs:
-
-        for service_slug in service_slugs:
-
-            packages = packages.filter(
-                package_categories__services__slug=
-                service_slug
-            )
-
-
-    packages = packages.distinct()
-
-
-    # =====================================================
-    # CITIES
-    # =====================================================
-
-    cities = (
-        City.objects
-        .filter(
-            is_active=True
-        )
-        .order_by("name")
-    )
-
-
-    # =====================================================
-    # SELECTED CITY
-    # =====================================================
-
-    selected_city = None
-
-    if city_id:
-
-        selected_city = (
-            City.objects
-            .filter(
-                id=city_id,
-                is_active=True
-            )
-            .first()
-        )
-
-
-    # =====================================================
-    # RESULT COUNT
-    # =====================================================
-
-    total_matches = (
-        listings.count()
-        +
-        packages.count()
-    )
-
-
-    # =====================================================
-    # RENDER
-    # =====================================================
-
-    return render(
-        request,
-        "listings/filter_results.html",
-        {
-            "listings": listings,
-            "packages": packages,
-
-            "cities": cities,
-
-            "selected_city": selected_city,
-            "selected_city_id": city_id,
-
-            "selected_state_id": state_id,
-
-            "guests": guests,
-
-            "min_price": min_price,
-            "max_price": max_price,
-
-            "pricing_type": pricing_type,
-
-            "category_slugs":
-                category_slugs,
-
-            "service_slugs":
-                service_slugs,
 
             "total_matches":
                 total_matches,
