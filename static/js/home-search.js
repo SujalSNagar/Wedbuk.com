@@ -52,53 +52,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Selecting a city suggestion or leaving an exact city name
-    // saves it to the Django session.
-    searchInput.addEventListener("change", async function () {
-        const option = getMatchingCity();
 
-        if (!option) return;
-
-        const cityId = option.dataset.cityId;
-
-        if (!cityId) return;
-
-        try {
-            await saveSelectedCity(cityId);
-        } catch (error) {
-            console.error("City selection failed:", error);
-        }
-    });
 });
 
 
 
-window.addEventListener("pageshow", function () {
-    fetch(window.location.href, {
-        method: "GET",
-        credentials: "same-origin",
-        cache: "no-store",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest"
-        }
-    })
-    .then(function (response) {
-        if (!response.ok) return null;
-        return response.text();
-    })
-    .then(function (html) {
-        if (!html) return;
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input");
 
-        const doc = new DOMParser().parseFromString(html, "text/html");
-
-        const freshCity = doc.getElementById("selected-city-label");
-        const currentCity = document.getElementById("selected-city-label");
-
-        if (freshCity && currentCity) {
-            currentCity.textContent = freshCity.textContent.trim();
-        }
-    })
-    .catch(function (error) {
-        console.error("Could not refresh selected city:", error);
-    });
+    if (!searchInput) return;
 });

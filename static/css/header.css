@@ -861,10 +861,48 @@
     font-size: 1.1rem;
 }
 
+
+
+.brand {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.brand-mark,
+.brand-name,
+.selected-city-name {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.selected-city-name {
+    font-size: 20px;
+    line-height: 1;
+    text-align: center;
+}
+
+
+
+
+
 @media (max-width: 480px) {
     .selected-city-display {
         font-size: 0.75rem;
         gap: 2px;
     }
-}
 
+    .brand-mark{
+        font-size: 25px;
+    }
+    .brand-name{
+        font-size: 1.4rem;
+    }
+    .selected-city-name{
+        font-size: 17px;
+    }
+}

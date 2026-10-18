@@ -3,24 +3,19 @@
     <div class="container header-inner">
 
         <!-- BRAND -->
-        <a href="{% url 'core:home' %}" class="brand">
+<a href="{% url 'core:home' %}" class="brand">
+    <span class="brand-mark">
+        <iconify-icon icon="fluent-emoji-flat:ring"></iconify-icon>
+    </span>
 
-            <span class="brand-mark">
-                <iconify-icon icon="fluent-emoji-flat:ring"></iconify-icon>
-            </span>
+    <span class="brand-name">WedBuk</span>
 
-            <span class="brand-name">
-                WedBuk
-            </span>
-
-            <span id="selected-city-label">
-    {% if selected_city %}
-        {{ selected_city.name }}
-    {% else %}
-        Select City
-    {% endif %}
-</span>
-        </a>
+    <span id="selected-city-label" class="selected-city-name">
+        {% if selected_city %}
+            {{ selected_city.name }}
+        {% endif %}
+    </span>
+</a>
 
 
 <!-- MOBILE MENU WRAPPER -->
