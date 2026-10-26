@@ -1404,6 +1404,14 @@ def search(request):
             request.session["selected_city_id"] = selected_city.id
             city = str(selected_city.id)
 
+            # If the old search query is itself a city name,
+            # the explicitly selected filter city takes priority.
+            if query and City.objects.filter(
+                name__iexact=query,
+                is_active=True,
+                state__is_active=True,
+            ).exists():
+                query = ""
     # If no explicit city was passed, check whether
     # the entire search text exactly matches a city.
     elif query:

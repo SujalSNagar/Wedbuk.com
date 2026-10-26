@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const section = document.querySelector("#wedbook-video-story");
+  const section = document.querySelector("#wedbuk-video-story");
 
   if (!section) {
     return;
   }
 
-  const video = section.querySelector(".wedbook-story-video");
+  const video = section.querySelector(".wedbuk-story-video");
 
-  const stories = Array.from(section.querySelectorAll(".wedbook-story-text"));
+  const stories = Array.from(section.querySelectorAll(".wedbuk-story-text"));
 
-  const progressBar = section.querySelector(".wedbook-video-progress span");
+  const progressBar = section.querySelector(".wedbuk-video-progress span");
 
-  const scrollIndicator = section.querySelector(".wedbook-scroll-indicator");
+  const scrollIndicator = section.querySelector(".wedbuk-scroll-indicator");
 
   if (!video || !stories.length) {
     return;

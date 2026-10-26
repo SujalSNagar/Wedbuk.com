@@ -1,5 +1,5 @@
 /* =========================================================
-   WEDBOOK HOMEPAGE
+   wedbuk HOMEPAGE
    FINAL RESPONSIVE LAYOUT
    ========================================================= */
 
@@ -17,7 +17,7 @@
 .trending-section,
 .function-section,
 .inspiration-section,
-.why-wedbook-section,
+.why-wedbuk-section,
 .testimonials-section,
 .vendor-cta-section,
 .budget-planner-section {
@@ -36,7 +36,7 @@
 .trending-section *,
 .function-section *,
 .inspiration-section *,
-.why-wedbook-section *,
+.why-wedbuk-section *,
 .testimonials-section *,
 .vendor-cta-section *,
 .budget-planner-section * {
@@ -53,7 +53,7 @@
 .trending-section img,
 .function-section img,
 .inspiration-section img,
-.why-wedbook-section img,
+.why-wedbuk-section img,
 .testimonials-section img,
 .vendor-cta-section img {
     max-width: 100%;
@@ -211,7 +211,7 @@
 
 
     /* -----------------------------------------
-       WHY WEDBOOK
+       WHY wedbuk
        ----------------------------------------- */
 
     .why-grid {
@@ -247,7 +247,7 @@
     .trending-section,
     .function-section,
     .inspiration-section,
-    .why-wedbook-section,
+    .why-wedbuk-section,
     .testimonials-section {
         padding-top: 85px;
         padding-bottom: 85px;
@@ -358,7 +358,7 @@
     .trending-section,
     .function-section,
     .inspiration-section,
-    .why-wedbook-section,
+    .why-wedbuk-section,
     .testimonials-section {
         padding-top: 65px;
         padding-bottom: 65px;
@@ -728,7 +728,7 @@
     .trending-section,
     .function-section,
     .inspiration-section,
-    .why-wedbook-section,
+    .why-wedbuk-section,
     .testimonials-section {
         padding-top: 48px;
         padding-bottom: 48px;
@@ -1125,7 +1125,7 @@
 
 
     /* =====================================================
-       WHY WEDBOOK
+       WHY wedbuk
        ===================================================== */
 
     .why-grid {
@@ -1865,4 +1865,37 @@ span.flatpickr-weekday {
 .budget-planner-section,
 .budget-planner-section .budget-planner {
     overflow: visible;
+}
+
+
+/* Featured vendor card: equal chip sizing */
+.vendor-info-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.vendor-info-chips .vendor-info-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 30px;
+    padding: 6px 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.vendor-info-chips .vendor-info-chip iconify-icon {
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+.vendor-info-chips .guest-chip {
+    white-space: nowrap;
 }

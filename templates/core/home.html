@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block title %}
-WedBook — India's Wedding Marketplace
+wedbuk — India's Wedding Marketplace
 {% endblock %}
 
 
@@ -86,14 +86,14 @@ WedBook — India's Wedding Marketplace
             type="text"
             id="search-input"
             name="q"
-            list="wedbook-search-cities"
+            list="wedbuk-search-cities"
             placeholder="Search vendors, services or cities..."
             aria-label="Search vendors, services or cities"
             autocomplete="off"
         >
     </label>
 
-    <datalist id="wedbook-search-cities">
+    <datalist id="wedbuk-search-cities">
         {% for city in cities %}
             <option
                 value="{{ city.name }}"
@@ -322,7 +322,7 @@ WedBook — India's Wedding Marketplace
             >
         {% else %}
             <div class="vendor-image-placeholder">
-                WedBook
+                wedbuk
             </div>
         {% endif %}
 
@@ -357,15 +357,15 @@ WedBook — India's Wedding Marketplace
             {% endif %}
 
             {% if listing.min_guests or listing.max_guests %}
-                <span class="vendor-info-chip guest-chip ">
+                <span class="vendor-info-chip guest-chip">
                     <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
-
+                
                     {% if listing.min_guests and listing.max_guests %}
-                       <span class="vendor-info-chip service-chip"> {{ listing.min_guests }}–{{ listing.max_guests }} </span>
+                        {{ listing.min_guests }}–{{ listing.max_guests }} Guests
                     {% elif listing.min_guests %}
-                        <span class="vendor-info-chip service-chip"> {{ listing.min_guests }}+ </span>
+                        {{ listing.min_guests }}+ Guests
                     {% else %}
-                        <span class="vendor-info-chip service-chip"> Up to {{ listing.max_guests }} </span>
+                        Up to {{ listing.max_guests }} Guests
                     {% endif %}
                 </span>
             {% endif %}
@@ -1288,7 +1288,7 @@ WedBook — India's Wedding Marketplace
 
                 <p>
                     Explore popular services available
-                    from WedBook vendors.
+                    from wedbuk vendors.
                 </p>
 
             </div>
@@ -1597,7 +1597,7 @@ WedBook — India's Wedding Marketplace
             </div>
 
             <h2>
-                How WedBook Works
+                How wedbuk Works
             </h2>
 
         </div>
@@ -1662,7 +1662,7 @@ WedBook — India's Wedding Marketplace
                 <p>
                     Select your preferred service, choose your
                     event date and confirm your booking securely
-                    through WedBook.
+                    through wedbuk.
                 </p>
 
             </div>
@@ -1676,11 +1676,11 @@ WedBook — India's Wedding Marketplace
 
 
 <!-- =========================================================
-     WHY WEDBOOK
+     WHY wedbuk
      ========================================================= -->
 
 <section
-    class="why-wedbook-section"
+    class="why-wedbuk-section"
 >
 
     <div class="container">
@@ -1693,7 +1693,7 @@ WedBook — India's Wedding Marketplace
             </div>
 
             <h2>
-                Why Choose WedBook?
+                Why Choose wedbuk?
             </h2>
 
             <p>
@@ -1813,7 +1813,7 @@ WedBook — India's Wedding Marketplace
             </div>
 
             <h2>
-                They Said "Yes" to WedBook
+                They Said "Yes" to wedbuk
             </h2>
 
         </div>
@@ -1899,7 +1899,7 @@ WedBook — India's Wedding Marketplace
                 </div>
 
                 <blockquote>
-                    "WedBook helped us discover vendors we
+                    "wedbuk helped us discover vendors we
                     would never have found on our own. It made
                     planning our wedding much easier."
                 </blockquote>
@@ -1952,7 +1952,7 @@ WedBook — India's Wedding Marketplace
 
 
             <div class="eyebrow eyebrow-gold">
-                GROW WITH WEDBOOK
+                GROW WITH wedbuk
             </div>
 
 
@@ -1962,7 +1962,7 @@ WedBook — India's Wedding Marketplace
 
 
             <p>
-                Join WedBook and reach couples planning
+                Join wedbuk and reach couples planning
                 their dream wedding across India.
             </p>
 

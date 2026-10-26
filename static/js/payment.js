@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 key: config.key,
                 amount: order.amount_paise,
                 currency: "INR",
-                name: "WedBook",
+                name: "wedbuk",
                 description: config.description || "Booking payment",
                 order_id: order.order_id,
                 prefill: {

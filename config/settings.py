@@ -28,6 +28,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
 
+
+
+
 ALLOWED_HOSTS = [
     "www.wedbuk.com",
     ".wedbuk.com",
@@ -46,6 +49,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -184,3 +188,78 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+
+
+
+
+
+JAZZMIN_SETTINGS = {
+
+    "custom_css": "css/admin-custom.css",
+    "site_title": "WedBuk Admin",
+    "site_header": "WedBuk Admin",
+    "site_brand": "WedBuk",
+    "welcome_sign": "Welcome to WedBuk Dashboard",
+    "copyright": "WedBuk.com",
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "show_theme_chooser": False,
+    "show_ui_builder": False,
+
+    "order_with_respect_to": [
+        "core",
+        "bookings",
+        "payments",
+        "listings",
+        "vendors",
+        "packages",
+        "categories",
+        "accounts",
+        "locations",
+    ],
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "accounts.user": "fas fa-user",
+        "vendors.vendorprofile": "fas fa-store",
+        "listings.listing": "fas fa-list",
+        "bookings.bookinggroup": "fas fa-calendar-check",
+        "bookings.booking": "fas fa-calendar",
+        "payments.payment": "fas fa-credit-card",
+        "packages.package": "fas fa-box",
+        "categories.category": "fas fa-tags",
+    },
+
+    "topmenu_links": [
+        {
+            "name": "Visit WedBuk",
+            "url": "https://wedbuk.com/",
+            "new_window": True,
+        },
+    ],
+
+    "changeform_format": "horizontal_tabs",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "default_theme_mode": "light",
+    "navbar": "navbar-dark",
+    "navbar_small_text": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_nav_flat_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_compact_style": False,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
+
+

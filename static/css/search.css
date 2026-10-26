@@ -1,11 +1,11 @@
 /* =========================================================
-   WEDBOOK — SEARCH RESULTS PAGE
+   wedbuk — SEARCH RESULTS PAGE
 ========================================================= */
 
 .search-results-page {
     background: #fffaf5;
     min-height: 100vh;
-    padding: 100px 0 90px;
+    padding: 80px 0 60px;
 }
 
 
@@ -18,7 +18,7 @@
     max-width: 850px;
     margin: 0 auto 5px;
     
-    padding-top: 50px;
+    padding-top: 0;
 }
 
 .search-results-eyebrow {
@@ -527,98 +527,6 @@
 
 
 /* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 1050px) {
-
-    .search-results-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-}
-
-
-@media (max-width: 760px) {
-
-    .search-results-page {
-        padding: 50px 0 70px;
-    }
-
-    .search-results-header {
-        margin-bottom: 5px;
-    }
-
-    .search-results-title {
-        font-size: 38px;
-    }
-
-    .search-summary {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .search-results-grid {
-        grid-template-columns: 1fr;
-        max-width: 560px;
-    }
-
-    .search-result-image {
-        height: 270px;
-    }
-
-}
-
-
-@media (max-width: 500px) {
-
-    .search-results-page {
-        padding: 38px 0 55px;
-    }
-
-    .search-results-title {
-        font-size: 32px;
-    }
-
-    .search-results-subtitle {
-        font-size: 13px;
-    }
-
-    .search-summary {
-        padding: 14px;
-        border-radius: 12px;
-    }
-
-    .search-result-image {
-        height: 220px;
-    }
-
-    .search-result-body {
-        padding: 17px;
-    }
-
-    .search-result-title {
-        font-size: 20px;
-    }
-
-    .search-result-footer {
-        align-items: center;
-    }
-
-    .search-price {
-        font-size: 20px;
-    }
-
-    .search-view-button {
-        min-width: 82px;
-        height: 38px;
-    }
-
-}
-
-
-/* =========================================================
    SEARCH + FILTER LAYOUT
    ========================================================= */
 
@@ -752,39 +660,223 @@
 }
 
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
 
-@media (max-width: 1050px) {
-
+/* TABLET AND SCREEN WIDTH BETWEEN 761px AND 1250px */
+@media (min-width: 761px) and (max-width: 1250px) {
     .search-results-layout {
-        grid-template-columns: 250px minmax(0, 1fr);
-        gap: 22px;
-    }
-
-    .search-results-main .search-results-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-}
-
-
-@media (max-width: 760px) {
-
-    .search-results-layout {
-        grid-template-columns: 1fr;
-        gap: 24px;
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr); /* Sidebar aur content dono ko fit karega */
+        gap: 20px;
+        width: 100%;
     }
 
     .search-filter-sidebar {
-        position: static;
+        position: sticky;
+        top: 100px;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-results-main {
+        display: block;
+        width: 100%;
+        min-width: 0;
     }
 
     .search-results-main .search-results-grid {
-        grid-template-columns: 1fr;
-        max-width: 560px;
-        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* Is width mein 2 cards show honge taaki space barabar rahe */
+        gap: 20px;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+}
+
+
+
+/* FIX SEARCH RESULTS ON MOBILE */
+@media (max-width: 760px) {
+
+    .search-results-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        gap: 16px !important;
     }
 
+    .search-filter-sidebar {
+        display: block;
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+
+    .search-results-main {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+
+    .search-results-main .search-results-grid {
+        display: grid !important;
+        grid-template-columns: minmax(2, 1fr) !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        gap: 16px !important;
+    }
+
+    .search-results-main .search-result-card {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .search-results-main .search-result-image {
+        width: 100% !important;
+        height: 220px;
+        flex: none !important;
+    }
+}
+
+
+
+/* MOBILE: TWO CARDS PER ROW */
+@media (max-width: 760px) {
+
+    .search-results-main {
+        width: 100% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+    }
+
+    .search-results-main .search-results-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .search-results-main .search-result-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .search-results-main .search-result-image {
+        width: 100% !important;
+        height: 135px !important;
+        object-fit: cover;
+    }
+
+    .search-results-main .search-result-body {
+        padding: 10px !important;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .search-results-main .search-result-title {
+        font-size: 15px !important;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .search-results-main .search-result-footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .search-results-main .search-price {
+        font-size: 16px !important;
+        min-width: 0;
+    }
+
+    .search-results-main .search-view-button {
+        min-width: 0 !important;
+        max-width: 100%;
+        height: auto !important;
+        padding: 8px !important;
+        white-space: normal;
+    }
+}
+
+
+
+/* TABLET: FILTERS ABOVE CARDS */
+@media (min-width: 761px) and (max-width: 900px) {
+
+    .search-results-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        gap: 16px !important;
+    }
+
+    .search-filter-sidebar {
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+
+    .search-results-main {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+
+    .search-results-main .search-results-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .search-results-main .search-result-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .search-results-main .search-result-body {
+        min-width: 0;
+        padding: 12px !important;
+        overflow-wrap: anywhere;
+    }
+
+    .search-results-main .search-result-footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .search-results-main .search-view-button {
+        min-width: 0 !important;
+        max-width: 100%;
+        white-space: normal;
+    }
 }

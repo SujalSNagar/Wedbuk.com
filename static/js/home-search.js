@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cityOptions = document.querySelectorAll(
-        "#wedbook-search-cities option"
+        "#wedbuk-search-cities option"
     );
 
     if (!searchInput) return;

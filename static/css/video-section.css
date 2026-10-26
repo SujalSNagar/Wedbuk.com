@@ -1,8 +1,8 @@
 /* =========================================================
-   WEDBOOK CINEMATIC VIDEO STORY
+   wedbuk CINEMATIC VIDEO STORY
    ========================================================= */
 
-.wedbook-video-story {
+.wedbuk-video-story {
     position: relative;
     height: 500vh;
     width: 100%;
@@ -15,7 +15,7 @@
    STICKY VIEWPORT
    --------------------------------------------------------- */
 
-.wedbook-video-sticky {
+.wedbuk-video-sticky {
     position: sticky;
     top: 0;
 
@@ -34,7 +34,7 @@
    VIDEO
    --------------------------------------------------------- */
 
-.wedbook-story-video {
+.wedbuk-story-video {
     position: absolute;
 
     inset: 0;
@@ -54,7 +54,7 @@
    MAIN DARK OVERLAY
    --------------------------------------------------------- */
 
-.wedbook-video-overlay {
+.wedbuk-video-overlay {
     position: absolute;
 
     inset: 0;
@@ -76,7 +76,7 @@
    BOTTOM CINEMATIC GRADIENT
    --------------------------------------------------------- */
 
-.wedbook-video-overlay::after {
+.wedbuk-video-overlay::after {
     content: "";
 
     position: absolute;
@@ -100,7 +100,7 @@
    GOLDEN GLOW
    --------------------------------------------------------- */
 
-.wedbook-video-glow {
+.wedbuk-video-glow {
     position: absolute;
 
     width: 650px;
@@ -129,7 +129,7 @@
    CONTENT
    --------------------------------------------------------- */
 
-.wedbook-video-content {
+.wedbuk-video-content {
     position: absolute;
 
     inset: 0;
@@ -154,7 +154,7 @@
    STORY TEXT
    --------------------------------------------------------- */
 
-.wedbook-story-text {
+.wedbuk-story-text {
     position: absolute;
 
     width: min(700px, 75vw);
@@ -176,7 +176,7 @@
 }
 
 
-.wedbook-story-text.active {
+.wedbuk-story-text.active {
     opacity: 1;
 
     visibility: visible;
@@ -191,7 +191,7 @@
    LABEL
    --------------------------------------------------------- */
 
-.wedbook-story-label {
+.wedbuk-story-label {
     display: inline-flex;
 
     align-items: center;
@@ -212,7 +212,7 @@
 }
 
 
-.wedbook-story-label::before {
+.wedbuk-story-label::before {
     content: "";
 
     width: 34px;
@@ -227,7 +227,7 @@
    HEADING
    --------------------------------------------------------- */
 
-.wedbook-story-text h2 {
+.wedbuk-story-text h2 {
     margin: 0;
 
     max-width: 720px;
@@ -244,7 +244,7 @@
 }
 
 
-.wedbook-story-text h2 strong {
+.wedbuk-story-text h2 strong {
     display: block;
 
     font-weight: 700;
@@ -257,7 +257,7 @@
    DESCRIPTION
    --------------------------------------------------------- */
 
-.wedbook-story-text p {
+.wedbuk-story-text p {
     max-width: 550px;
 
     margin: 25px 0 0;
@@ -271,10 +271,10 @@
 
 
 /* ---------------------------------------------------------
-   WEDBOOK LOGO TEXT
+   wedbuk LOGO TEXT
    --------------------------------------------------------- */
 
-.wedbook-story-logo {
+.wedbuk-story-logo {
     margin-bottom: 24px;
 
     font-size: clamp(30px, 4vw, 54px);
@@ -291,7 +291,7 @@
    CTA
    --------------------------------------------------------- */
 
-.wedbook-story-button {
+.wedbuk-story-button {
     display: inline-flex;
 
     align-items: center;
@@ -325,7 +325,7 @@
 }
 
 
-.wedbook-story-button:hover {
+.wedbuk-story-button:hover {
     transform: translateY(-3px);
 
     background: #f0cf86;
@@ -335,7 +335,7 @@
 }
 
 
-.wedbook-story-button iconify-icon {
+.wedbuk-story-button iconify-icon {
     font-size: 19px;
 }
 
@@ -344,7 +344,7 @@
    PROGRESS BAR
    --------------------------------------------------------- */
 
-.wedbook-video-progress {
+.wedbuk-video-progress {
     position: absolute;
 
     z-index: 10;
@@ -365,7 +365,7 @@
 }
 
 
-.wedbook-video-progress span {
+.wedbuk-video-progress span {
     display: block;
 
     width: 100%;
@@ -382,7 +382,7 @@
    SCROLL INDICATOR
    --------------------------------------------------------- */
 
-.wedbook-scroll-indicator {
+.wedbuk-scroll-indicator {
     position: absolute;
 
     z-index: 10;
@@ -413,15 +413,15 @@
 }
 
 
-.wedbook-scroll-indicator iconify-icon {
+.wedbuk-scroll-indicator iconify-icon {
     font-size: 22px;
 
     animation:
-        wedbookScrollArrow 1.5s ease-in-out infinite;
+        wedbukScrollArrow 1.5s ease-in-out infinite;
 }
 
 
-@keyframes wedbookScrollArrow {
+@keyframes wedbukScrollArrow {
 
     0%,
     100% {
@@ -440,15 +440,15 @@
 
 @media (max-width: 900px) {
 
-    .wedbook-video-content {
+    .wedbuk-video-content {
         padding-left: 7vw;
     }
 
-    .wedbook-story-text {
+    .wedbuk-story-text {
         width: 75vw;
     }
 
-    .wedbook-video-progress {
+    .wedbuk-video-progress {
         right: 22px;
     }
 }
@@ -460,17 +460,17 @@
 
 @media (max-width: 600px) {
 
-    .wedbook-video-story {
+    .wedbuk-video-story {
         height: 460vh;
     }
 
 
-    .wedbook-video-sticky {
+    .wedbuk-video-sticky {
         min-height: 600px;
     }
 
 
-    .wedbook-video-overlay {
+    .wedbuk-video-overlay {
         background:
             linear-gradient(
                 90deg,
@@ -480,12 +480,12 @@
     }
 
 
-    .wedbook-video-overlay::after {
+    .wedbuk-video-overlay::after {
         height: 45%;
     }
 
 
-    .wedbook-video-content {
+    .wedbuk-video-content {
         align-items: flex-end;
 
         padding:
@@ -493,12 +493,12 @@
     }
 
 
-    .wedbook-story-text {
+    .wedbuk-story-text {
         width: calc(100vw - 50px);
     }
 
 
-    .wedbook-story-label {
+    .wedbuk-story-label {
         margin-bottom: 16px;
 
         font-size: 10px;
@@ -507,7 +507,7 @@
     }
 
 
-    .wedbook-story-text h2 {
+    .wedbuk-story-text h2 {
         font-size: clamp(36px, 11vw, 52px);
 
         line-height: 1.06;
@@ -516,7 +516,7 @@
     }
 
 
-    .wedbook-story-text p {
+    .wedbuk-story-text p {
         margin-top: 18px;
 
         font-size: 15px;
@@ -525,21 +525,21 @@
     }
 
 
-    .wedbook-story-logo {
+    .wedbuk-story-logo {
         font-size: 32px;
 
         letter-spacing: 5px;
     }
 
 
-    .wedbook-story-button {
+    .wedbuk-story-button {
         margin-top: 22px;
 
         padding: 13px 21px;
     }
 
 
-    .wedbook-video-progress {
+    .wedbuk-video-progress {
         top: auto;
 
         right: 18px;
@@ -552,7 +552,7 @@
     }
 
 
-    .wedbook-scroll-indicator {
+    .wedbuk-scroll-indicator {
         bottom: 25px;
 
         font-size: 9px;
@@ -568,11 +568,11 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-    .wedbook-story-text {
+    .wedbuk-story-text {
         transition: none;
     }
 
-    .wedbook-scroll-indicator iconify-icon {
+    .wedbuk-scroll-indicator iconify-icon {
         animation: none;
     }
 }

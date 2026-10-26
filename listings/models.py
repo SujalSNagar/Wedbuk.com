@@ -144,6 +144,16 @@ class Listing(models.Model):
         default=True
     )
 
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name="Featured on Homepage"
+    )
+
+    featured_order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Featured Display Order"
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )

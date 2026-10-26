@@ -104,12 +104,15 @@ class ListingAdmin(admin.ModelAdmin):
         'category',
         'base_price',
         'is_active',
+        'is_featured',
+        'featured_order',
         'created_at',
     )
 
     list_filter = (
         'category',
         'is_active',
+        'is_featured',
         'event_types',
     )
 
@@ -119,6 +122,11 @@ class ListingAdmin(admin.ModelAdmin):
         'description',
     )
 
+    list_editable = (
+        'is_active',
+        'is_featured',
+        'featured_order',
+    )
     filter_horizontal = (
         'event_types',
     )

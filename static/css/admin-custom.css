@@ -1,0 +1,225 @@
+
+/* =========================================
+   WedBuk Admin — Clean Custom Theme
+   ========================================= */
+
+:root {
+    --wedbuk-maroon: #680b1c;
+    --wedbuk-maroon-dark: #480713;
+    --wedbuk-gold: #d4a64a;
+    --wedbuk-cream: #faf7f0;
+    --wedbuk-text: #292524;
+    --wedbuk-border: #e7ded0;
+    --wedbuk-sidebar: #343a40;
+}
+
+/* Main page */
+.content-wrapper {
+    background: var(--wedbuk-cream) !important;
+    color: var(--wedbuk-text);
+}
+
+/* Top navbar */
+.main-header.navbar {
+    background: #fff !important;
+    border-bottom: 1px solid var(--wedbuk-border);
+}
+
+.main-header .nav-link {
+    color: var(--wedbuk-text) !important;
+}
+
+/* Sidebar */
+.main-sidebar,
+.main-sidebar.sidebar-dark-primary {
+    background: var(--wedbuk-sidebar) !important;
+}
+
+.brand-link {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.brand-link .brand-text,
+.main-sidebar .nav-link,
+.main-sidebar .nav-header {
+    color: #fff !important;
+}
+
+/* Sidebar hover and active item */
+.nav-sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+}
+
+.nav-sidebar .nav-link.active {
+    background: var(--wedbuk-gold) !important;
+    color: #32100a !important;
+    font-weight: 600;
+    box-shadow: none !important;
+}
+
+.nav-sidebar .nav-link.active i,
+.nav-sidebar .nav-link.active p {
+    color: #32100a !important;
+}
+
+/* Page headings */
+.content-header h1,
+.content-header h1 a {
+    color: var(--wedbuk-maroon) !important;
+    font-weight: 700;
+}
+
+/* Cards */
+.card {
+    background: #fff !important;
+    border: 1px solid var(--wedbuk-border) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 3px 12px rgba(72, 7, 19, 0.05);
+}
+
+.card-header {
+    background: #fff !important;
+    color: var(--wedbuk-maroon) !important;
+    border-bottom: 1px solid var(--wedbuk-border) !important;
+}
+
+.card-title {
+    color: var(--wedbuk-maroon) !important;
+    font-weight: 600;
+}
+
+/* Dashboard model links */
+.app-wrapper .card a,
+.content-wrapper .app-list a,
+.content-wrapper .module a {
+    color: var(--wedbuk-maroon) !important;
+    text-decoration: none !important;
+    font-weight: 500;
+}
+
+.app-wrapper .card a:hover,
+.content-wrapper .app-list a:hover,
+.content-wrapper .module a:hover {
+    color: #9a2439 !important;
+}
+
+/* Add and Change buttons */
+.app-wrapper a.btn-success,
+.app-wrapper a.addlink,
+.content-wrapper a.btn-success,
+.content-wrapper a.addlink {
+    background: var(--wedbuk-maroon) !important;
+    border-color: var(--wedbuk-maroon) !important;
+    color: #fff !important;
+}
+
+.app-wrapper a.btn-info,
+.app-wrapper a.changelink,
+.content-wrapper a.btn-info,
+.content-wrapper a.changelink {
+    background: var(--wedbuk-gold) !important;
+    border-color: var(--wedbuk-gold) !important;
+    color: #32100a !important;
+}
+
+/* Button hover */
+.app-wrapper a.btn-success:hover,
+.app-wrapper a.addlink:hover,
+.content-wrapper a.btn-success:hover,
+.content-wrapper a.addlink:hover {
+    background: var(--wedbuk-maroon-dark) !important;
+    border-color: var(--wedbuk-maroon-dark) !important;
+    color: #fff !important;
+}
+
+.app-wrapper a.btn-info:hover,
+.app-wrapper a.changelink:hover,
+.content-wrapper a.btn-info:hover,
+.content-wrapper a.changelink:hover {
+    background: #c09232 !important;
+    border-color: #c09232 !important;
+    color: #32100a !important;
+}
+
+/* Tables */
+.table,
+#result_list {
+    background: #fff;
+    color: var(--wedbuk-text);
+}
+
+.table thead th,
+#result_list thead th {
+    background: #f3eadb !important;
+    color: var(--wedbuk-maroon) !important;
+    border-color: var(--wedbuk-border) !important;
+}
+
+.table td,
+.table th,
+#result_list td,
+#result_list th {
+    border-color: var(--wedbuk-border) !important;
+}
+
+/* Form fields */
+.form-control,
+.custom-select,
+select,
+textarea,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"] {
+    background-color: #fff !important;
+    color: var(--wedbuk-text) !important;
+    border: 1px solid #cfc4b5 !important;
+    border-radius: 6px !important;
+}
+
+.form-control:focus,
+.custom-select:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--wedbuk-gold) !important;
+    box-shadow: 0 0 0 0.15rem rgba(212, 166, 74, 0.2) !important;
+}
+
+/* Primary and success buttons */
+.btn-primary,
+.btn-success {
+    background: var(--wedbuk-maroon) !important;
+    border-color: var(--wedbuk-maroon) !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover,
+.btn-success:hover {
+    background: var(--wedbuk-maroon-dark) !important;
+    border-color: var(--wedbuk-maroon-dark) !important;
+}
+
+/* Breadcrumbs and general links */
+.content-wrapper a {
+    color: var(--wedbuk-maroon);
+}
+
+.content-wrapper a:hover {
+    color: #9a2439;
+}
+
+.breadcrumb {
+    background: transparent !important;
+}
+
+.breadcrumb-item,
+.breadcrumb-item a {
+    color: var(--wedbuk-maroon) !important;
+}
+
+/* Readable secondary text */
+.text-muted {
+    color: #625b54 !important;
+}

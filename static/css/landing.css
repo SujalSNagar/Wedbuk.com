@@ -1,5 +1,5 @@
 /* =========================================================
-   WEDBOOK LANDING PAGE
+   wedbuk LANDING PAGE
    ========================================================= */
 
 
@@ -1029,10 +1029,10 @@
 
 
 /* =========================================================
-   WHY WEDBOOK
+   WHY wedbuk
    ========================================================= */
 
-.why-wedbook-section {
+.why-wedbuk-section {
     padding: 100px 0;
     background: #fffaf3;
 }
@@ -1183,7 +1183,7 @@
     .function-section,
     .inspiration-section,
     .budget-planner-section,
-    .why-wedbook-section {
+    .why-wedbuk-section {
         padding: 75px 0;
     }
 
@@ -1241,7 +1241,7 @@
     .function-section,
     .inspiration-section,
     .budget-planner-section,
-    .why-wedbook-section {
+    .why-wedbuk-section {
         padding: 60px 0;
     }
 
@@ -1951,10 +1951,10 @@
 
 
 /* =========================================================
-   WHY WEDBOOK
+   WHY wedbuk
 ========================================================= */
 
-.why-wedbook-section {
+.why-wedbuk-section {
     position: relative;
     overflow: hidden;
 
@@ -1972,7 +1972,7 @@
         #fffaf3;
 }
 
-.why-wedbook-section::before {
+.why-wedbuk-section::before {
     content: "";
 
     position: absolute;
@@ -1994,7 +1994,7 @@
     pointer-events: none;
 }
 
-.why-wedbook-section::after {
+.why-wedbuk-section::after {
     content: "";
 
     position: absolute;
@@ -2012,7 +2012,7 @@
     pointer-events: none;
 }
 
-.why-wedbook-section .container {
+.why-wedbuk-section .container {
     position: relative;
     z-index: 2;
 }
@@ -2177,7 +2177,7 @@
     .packages-discovery-section::before,
     .function-section::before,
     .inspiration-section::before,
-    .why-wedbook-section::before,
+    .why-wedbuk-section::before,
     .testimonials-section::before,
     .vendor-cta-section::before {
         opacity: .8;

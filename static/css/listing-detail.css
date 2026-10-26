@@ -1,5 +1,5 @@
     /* =========================================================
-    WEDBOOK - LISTING DETAIL
+    wedbuk - LISTING DETAIL
     ========================================================= */
 
     .listing-detail-page {
@@ -699,7 +699,7 @@
     @media (max-width: 700px) {
 
         .listing-detail-page {
-            padding: 22px 15px 60px;
+            padding: 90px 15px 60px;
         }
 
         .listing-main-image {
@@ -1379,3 +1379,5 @@
         font-size: 12px;
     }
 }
+
+
