@@ -12,37 +12,27 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 import os
-
 import dj_database_url
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
+load_dotenv(BASE_DIR / ".env")
 
 
 # Security settings
 SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
-
-
-
-ALLOWED_HOSTS = [
-    "wedbuk.com",
-    "www.wedbuk.com",
-    "localhost",
-    "127.0.0.1",
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://wedbuk.com",
-    "https://www.wedbuk.com",
-]
-
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    ""
+).split(",")
 
 
 # Application definition
