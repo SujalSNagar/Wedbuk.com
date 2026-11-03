@@ -81,6 +81,14 @@
 
         {% if request.user.is_authenticated %}
 
+            
+            {% if request.user.is_staff and request.user.is_superuser %}
+                <a href="{% url 'admin:index' %}" class="gold-action">
+                    Admin Panel
+                </a>
+            {% endif %}
+
+
             {% if request.user.role == 'customer' %}
                 <a href="{% url 'bookings:my_bookings' %}" class="nav-user-link">
                     My Bookings

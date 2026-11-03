@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const remainingLabel = document.getElementById("remainingAmountLabel");
     const payButton = document.getElementById("payButton");
     const payButtonLabel = document.getElementById("payButtonLabel");
+    const totalPayableLabel = document.getElementById("totalPayableLabel");
 
     if (!slider || !payButton) {
         console.error("Payment slider or button was not found.");
@@ -69,7 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (payButtonLabel) {
             payButtonLabel.textContent = `Pay ${money(payAmount)}`;
         }
-
+        if (totalPayableLabel) {
+            totalPayableLabel.textContent = money(payAmount);
+        }
+        
         return { percentage, payAmount, remainingAmount };
     }
 

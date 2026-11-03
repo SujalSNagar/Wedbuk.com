@@ -334,13 +334,8 @@ class ListingForm(forms.ModelForm):
 
         if category_id and service_id:
 
-            attributes = (
-                CategoryAttribute.objects
-                .filter(
-                    category_id=category_id,
-                    service_id=service_id
-                )
-                .order_by('order', 'id')
+            attributes = CategoryAttribute.for_service(
+                service_id=service_id,
             )
 
             existing_values = {}

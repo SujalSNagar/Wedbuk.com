@@ -1,0 +1,341 @@
+
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WedBuk.com Invoice</title>
+
+    <style>
+               @page {
+            size: A4;
+            margin: 24px;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            color: #333333;
+        }
+
+        .brand {
+            color: #7b1e2b;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #777777;
+            font-size: 10px;
+        }
+
+        .top-table,
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .top-table td {
+            padding: 8px 0;
+            vertical-align: top;
+        }
+
+        h2 {
+            color: #7b1e2b;
+            font-size: 13px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        .data-table th {
+            background-color: #7b1e2b;
+            color: #ffffff;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .data-table td {
+            border-bottom: 1px solid #dddddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        
+.summary {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.summary td:first-child {
+    width: 65%;
+}
+
+.summary td:last-child {
+    width: 35%;
+    text-align: right;
+}
+
+.summary td {
+    padding: 8px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+        .summary td {
+            padding: 7px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .grand-total {
+            color: #7b1e2b;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .balance {
+            color: #b42318;
+            font-weight: bold;
+        }
+
+        .paid {
+            color: #18794e;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 12px;
+            border-top: 1px solid #dddddd;
+            text-align: center;
+            color: #777777;
+        }
+
+        .muted {
+            color: #777777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- INVOICE HEADER -->
+    <table class="top-table">
+        <tr>
+            <td width="55%">
+                <div class="brand">WedBuk.com</div>
+                <div class="subtitle">
+                    EVENT BOOKING INVOICE & PAYMENT STATEMENT
+                </div>
+            </td>
+
+            <td width="45%" class="right">
+                <strong>Invoice No:</strong>
+                WB-{{ booking_group.created_at|date:"Y" }}-{{ booking_group.id|stringformat:"06d" }}<br>
+
+                <strong>Booking ID:</strong>
+                #{{ booking_group.id }}<br>
+
+                <strong>Invoice Date:</strong>
+                {{ invoice_date|date:"d M Y" }}<br>
+
+                <strong>Booking Date:</strong>
+                {{ booking_group.created_at|date:"d M Y" }}
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- CUSTOMER DETAILS -->
+    <h2>Customer Details</h2>
+
+    <table class="top-table">
+        <tr>
+            <td width="50%">
+                <strong>Name:</strong>
+                {{ booking_group.full_name|default:"—" }}<br>
+
+                <strong>Phone:</strong>
+                {{ booking_group.phone_number|default:"—" }}<br>
+
+                <strong>Email:</strong>
+                {{ booking_group.email|default:"—" }}
+            </td>
+
+            <td width="50%">
+                <strong>Event Date:</strong>
+                {{ booking_group.event_start_date|date:"d M Y" }}
+
+                {% if booking_group.event_start_date != booking_group.event_end_date %}
+                    - {{ booking_group.event_end_date|date:"d M Y" }}
+                {% endif %}
+                <br>
+
+                <strong>Guests:</strong>
+                {{ booking_group.guest_count|default:"—" }}<br>
+
+                <strong>Duration:</strong>
+                {{ booking_group.total_days|default:"—" }} day(s)
+            </td>
+        </tr>
+    </table>
+
+    
+<!-- BOOKED SERVICES -->
+<h2>Booked Services & Vendors</h2>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th width="6%">S.No.</th>
+            <th width="25%">Service / Package & Vendor</th>
+            <th width="18%">Pricing Type</th>
+            <th width="27%">Price Calculation</th>
+            <th width="24%" class="right">Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for booking in bookings %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+
+                <td>
+                    <strong>
+                        {{ booking.item_name|default:"Booked Service" }}
+                    </strong>
+                    <br>
+                    <span class="muted">
+                        Vendor:
+                        {% if booking.listing %}
+                            {{ booking.listing.vendor|default:"—" }}
+                        {% elif booking.package %}
+                            {{ booking.package.vendor|default:"—" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </td>
+
+                <td>
+                    {{ booking.invoice_pricing_type }}
+                </td>
+
+                <td>
+                    {{ booking.invoice_calculation }}
+                </td>
+
+                <td class="right">
+                    INR {{ booking.item_price|floatformat:2|intcomma }}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">No booking items found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+    <!-- PAYMENT SUMMARY -->
+    <h2>Payment Summary</h2>
+
+    <table class="summary">
+        <tr>
+            <td>Total Booking Amount</td>
+            <td class="right grand-total">
+                INR {{ booking_group.total_amount|floatformat:2|intcomma }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Total Successfully Paid</td>
+            <td class="right paid">
+                INR {{ total_paid|floatformat:2|intcomma }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Remaining Balance</td>
+            <td class="right balance">
+                INR {{ remaining_balance|floatformat:2|intcomma }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Payment Status</td>
+            <td class="right">
+                {% if remaining_balance <= 0 %}
+                    Fully Paid
+                {% elif total_paid > 0 %}
+                    Partially Paid
+                {% else %}
+                    Payment Pending
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <!-- PAYMENT HISTORY -->
+    <h2>Payment History</h2>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th width="8%">S.No.</th>
+                <th width="22%">Payment Date</th>
+                <th width="22%">Payment Type</th>
+                <th width="28%">Transaction ID</th>
+                <th width="20%" class="right">Amount</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for payment in payments %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>
+                        {% if payment.paid_at %}
+                            {{ payment.paid_at|date:"d M Y, h:i A" }}
+                        {% else %}
+                            {{ payment.created_at|date:"d M Y, h:i A" }}
+                        {% endif %}
+                    </td>
+
+                    <td>{{ payment.get_payment_type_display }}</td>
+
+                    <td>
+                        {{ payment.transaction_id|default:"—" }}
+                    </td>
+
+                    <td class="right">
+                        INR {{ payment.amount|floatformat:2|intcomma }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">
+                        No successful payments recorded yet.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <strong>Thank you for choosing WedBuk!</strong><br>
+        <span>
+            Please retain this document for your booking and payment records.
+        </span>
+    </div>
+
+</body>
+</html>

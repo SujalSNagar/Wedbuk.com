@@ -9,10 +9,17 @@ from .forms import BookingForm
 
 from .models import BookingGroup
 
-
-
+from payments.models import Payment
+from django.db.models import Prefetch
+from io import BytesIO
+from django.db.models import Sum
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.utils import timezone
+from xhtml2pdf import pisa
 
 from decimal import Decimal
+
 
 
 def calculate_booking_total(listing, start_date, end_date, guest_count=0):
@@ -258,8 +265,14 @@ def my_bookings(request):
         BookingGroup.objects
         .filter(customer=request.user)
         .prefetch_related(
-            'bookings__listing',
-            'bookings__package',
+            "bookings__listing",
+            "bookings__package",
+            Prefetch(
+                "payments",
+                queryset=Payment.objects.filter(
+                    status=Payment.Status.SUCCESS
+                ).order_by("-paid_at", "-created_at"),
+            ),
         )
     )
 
@@ -280,6 +293,12 @@ def booking_detail(request, booking_id):
         .prefetch_related(
             "bookings__listing",
             "bookings__package",
+            Prefetch(
+                "payments",
+                queryset=Payment.objects.filter(
+                    status=Payment.Status.SUCCESS
+                ).order_by("-paid_at", "-created_at"),
+            ),
         ),
         id=booking_id,
         customer=request.user,
@@ -292,3 +311,133 @@ def booking_detail(request, booking_id):
             "booking_group": booking_group,
         },
     )
+
+
+
+
+@login_required
+def booking_invoice(request, booking_id):
+    booking_group = get_object_or_404(
+        BookingGroup,
+        id=booking_id,
+        customer=request.user,
+    )
+
+    bookings = list(
+        booking_group.bookings.select_related(
+            "listing__vendor",
+            "package__vendor",
+        )
+    )
+
+
+    
+    # Prepare actual pricing breakdown for every booked item.
+    for booking in bookings:
+        if booking.listing_id:
+            listing = booking.listing
+            rate = Decimal(str(listing.base_price))
+
+            if listing.pricing_type == Listing.PricingType.PER_DAY:
+                quantity = booking_group.total_days or 1
+                unit_label = "day"
+                calculation = (
+                    f"INR {rate:,.2f} x {quantity} {unit_label}(s)"
+                )
+
+            elif listing.pricing_type == Listing.PricingType.PER_PLATE:
+                quantity = booking_group.guest_count or 0
+                unit_label = "guest/plate"
+                calculation = (
+                    f"INR {rate:,.2f} x {quantity} {unit_label}(s)"
+                )
+
+            else:
+                quantity = 1
+                unit_label = "fixed price"
+                calculation = f"INR {rate:,.2f} - {unit_label}"
+
+            booking.invoice_rate = rate
+            booking.invoice_quantity = quantity
+            booking.invoice_unit_label = unit_label
+            booking.invoice_calculation = calculation
+            booking.invoice_pricing_type = listing.get_pricing_type_display()
+
+        elif booking.package_id:
+            booking.invoice_rate = booking.item_price
+            booking.invoice_quantity = 1
+            booking.invoice_unit_label = "package"
+            booking.invoice_calculation = "Fixed package price"
+            booking.invoice_pricing_type = "Package Price"
+
+        else:
+            booking.invoice_rate = booking.item_price
+            booking.invoice_quantity = 1
+            booking.invoice_unit_label = "item"
+            booking.invoice_calculation = "Price details unavailable"
+            booking.invoice_pricing_type = "Price"
+
+
+    payments = list(
+        Payment.objects.filter(
+            booking_group=booking_group,
+            status=Payment.Status.SUCCESS,
+        ).order_by("paid_at", "created_at")
+    )
+
+    total_paid = sum(
+        (payment.amount for payment in payments),
+        Decimal("0.00"),
+    )
+
+    total_amount = booking_group.total_amount or Decimal("0.00")
+
+    remaining_balance = max(
+        Decimal("0.00"),
+        total_amount - total_paid,
+    )
+
+    context = {
+        "booking_group": booking_group,
+        "bookings": bookings,
+        "payments": payments,
+        "total_paid": total_paid,
+        "remaining_balance": remaining_balance,
+        "invoice_date": timezone.localdate(),
+    }
+
+    html = render_to_string(
+        "bookings/invoice_pdf.html",
+        context,
+        request=request,
+    )
+
+    # HTML to PDF  convert .
+    pdf_buffer = BytesIO()
+    pdf_result = pisa.CreatePDF(
+        html,
+        dest=pdf_buffer,
+        encoding="UTF-8",
+    )
+
+    if pdf_result.err:
+        return HttpResponse(
+            "Invoice PDF generate nahi ho paya. Please try again.",
+            status=500,
+        )
+
+    response = HttpResponse(
+        pdf_buffer.getvalue(),
+        content_type="application/pdf",
+    )
+
+    invoice_number = (
+        f"WB-{booking_group.created_at.year}-"
+        f"{booking_group.id:06d}"
+    )
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="Invoice-{invoice_number}.pdf"'
+    )
+
+    return response

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% load static %}
 
 {% block title %}{{ listing.title }} | wedbuk{% endblock %}
@@ -198,6 +199,33 @@
                         </div>
 
                     {% endif %}
+
+                    <div class="quick-facts">
+    {% if listing.service %}
+        <span class="quick-fact">
+            <iconify-icon icon="mdi:check-circle"></iconify-icon>
+            {{ listing.service.name }}
+        </span>
+    {% endif %}
+
+    {% if listing.min_guests or listing.max_guests %}
+        <span class="quick-fact">
+            <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
+            {% if listing.max_guests %}
+                {% if listing.min_guests and listing.min_guests != listing.max_guests %}{{ listing.min_guests }} – {% endif %}{{ listing.max_guests }} guests
+            {% else %}
+                From {{ listing.min_guests }} guests
+            {% endif %}
+        </span>
+    {% endif %}
+
+    <span class="quick-fact">
+        <iconify-icon icon="mdi:tag-outline"></iconify-icon>
+        {% if listing.pricing_type == "per_day" %}Per Day
+        {% elif listing.pricing_type == "per_plate" %}Per Plate / Person
+        {% else %}Fixed Price{% endif %}
+    </span>
+</div>
 
                 </div>
 
@@ -404,7 +432,7 @@
 
             <div class="pricing-detail-amount">
                 <span class="currency-symbol">₹</span>
-                {{ listing.base_price|floatformat:0 }}
+                {{ listing.base_price|floatformat:0|intcomma }}
             </div>
 
             <span class="pricing-type-badge">
@@ -769,7 +797,7 @@
 
                         <span>₹</span>
 
-                        {{ listing.base_price|floatformat:0 }}
+                        {{ listing.base_price|floatformat:0|intcomma }}
 
                     </div>
 
@@ -863,6 +891,18 @@
     </div>
 
 </section>
+
+
+<div class="mobile-booking-bar">
+    <div class="mobile-booking-price">
+        <span>Starting from</span>
+        <strong>₹{{ listing.base_price|floatformat:0 }}</strong>
+    </div>
+    <button type="button" class="mobile-booking-btn" id="mobileAvailabilityBtn">
+        Check Availability
+    </button>
+</div>
+
 
 
 <!-- =========================================================
@@ -1181,5 +1221,15 @@
 <script src="{% static 'js/listing-detail.js' %}"></script>
 
 <script src="{% static 'js/listing-calendar.js' %}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var mobileBtn = document.getElementById("mobileAvailabilityBtn");
+    var mainBtn = document.querySelector(".check-availability-button");
+    if (mobileBtn && mainBtn) {
+        mobileBtn.addEventListener("click", function () { mainBtn.click(); });
+    }
+});
+</script>
 
 {% endblock %}

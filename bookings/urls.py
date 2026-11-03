@@ -31,4 +31,11 @@ path(
     views.booking_detail,
     name="booking_detail",
 ),
+
+
+path(
+    "invoice/<int:booking_id>/",
+    views.booking_invoice,
+    name="booking_invoice",
+),
 ]

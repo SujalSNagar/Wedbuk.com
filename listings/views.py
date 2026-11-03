@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
-from categories.models import Category, CategoryAttribute
+from categories.models import Category, CategoryAttribute, Service
 from locations.models import City,State
 from vendors.models import VendorProfile
 from bookings.models import Booking
@@ -1870,29 +1870,34 @@ def search(request):
 # =========================================================
 
 
-def category_attributes(request):
-    """Attributes of ONE selected service (add / edit listing form)."""
 
-    category_id = request.GET.get('category_id')
-    service_id = request.GET.get('service_id')
+def category_attributes(request):
+    """Return attributes applicable to the selected listing service."""
+
+    category_id = request.GET.get("category_id")
+    service_id = request.GET.get("service_id")
 
     if not category_id or not service_id:
-        return JsonResponse({'attributes': []})
+        return JsonResponse({"attributes": []})
 
     try:
         category_id = int(category_id)
         service_id = int(service_id)
-    except ValueError:
-        return JsonResponse({'attributes': []})
+    except (TypeError, ValueError):
+        return JsonResponse({"attributes": []})
 
-    attributes = (
-        CategoryAttribute.objects
-        .filter(
-            category_id=category_id,
-            service_id=service_id,
-            service__category_id=category_id,
-        )
-        .order_by('order', 'id')
+    # Confirm that the selected service belongs to the selected category.
+    service_exists = Service.objects.filter(
+        id=service_id,
+        category_id=category_id,
+        is_active=True,
+    ).exists()
+
+    if not service_exists:
+        return JsonResponse({"attributes": []})
+
+    attributes = CategoryAttribute.for_service(
+        service_id=service_id,
     )
 
     data = []
@@ -1900,25 +1905,22 @@ def category_attributes(request):
     for attribute in attributes:
         options = [
             option.strip()
-            for option in (attribute.options or '').split(',')
+            for option in (attribute.options or "").split(",")
             if option.strip()
         ]
 
         data.append({
-            'id': attribute.id,
-            'label': attribute.label,
-            'field_type': attribute.field_type,
-            'options': options,
-            'unit': attribute.unit,
-            'help_text': attribute.help_text,
-            'is_required': attribute.is_required,
+            "id": attribute.id,
+            "label": attribute.label,
+            "field_type": attribute.field_type,
+            "options": options,
+            "unit": attribute.unit,
+            "help_text": attribute.help_text,
+            "is_required": attribute.is_required,
         })
 
-    return JsonResponse({'attributes': data})
+    return JsonResponse({"attributes": data})
 
-# =========================================================
-# CATEGORY DETAIL
-# =========================================================
 
 # =========================================================
 # CATEGORY DETAIL
@@ -2544,45 +2546,46 @@ def listing_availability(
 # SAVE DYNAMIC LISTING ATTRIBUTES
 # =========================================================
 
+
 def save_listing_attributes(listing, form):
-    """Save attribute values of the listing's ONE service and sync
-    min_guests / max_guests from the special attributes."""
+    """
+    Save the selected service's applicable attributes and sync
+    min_guests / max_guests to the Listing columns.
+    """
 
     if listing.service_id:
         attributes = list(
-            CategoryAttribute.objects
-            .filter(
-                category=listing.category,
-                service_id=listing.service_id
+            CategoryAttribute.for_service(
+                service_id=listing.service_id,
             )
-            .order_by('order', 'id')
         )
     else:
         attributes = []
 
-    # Values of attributes that do not belong to the (new) service
+    attribute_ids = [attribute.id for attribute in attributes]
+
+    # Remove values that no longer apply after category/service changes.
     ListingAttributeValue.objects.filter(
         listing=listing
     ).exclude(
-        attribute_id__in=[a.id for a in attributes]
+        attribute_id__in=attribute_ids
     ).delete()
 
     for attribute in attributes:
+        value = form.cleaned_data.get(f"attribute_{attribute.id}")
 
-        value = form.cleaned_data.get(f'attribute_{attribute.id}')
-
-        if value is None or value == '' or value == []:
+        if value is None or value == "" or value == []:
             ListingAttributeValue.objects.filter(
                 listing=listing,
-                attribute=attribute
+                attribute=attribute,
             ).delete()
             continue
 
-        if attribute.field_type == 'boolean':
-            value = 'true' if value == 'true' else 'false'
+        if attribute.field_type == "boolean":
+            value = "true" if value == "true" else "false"
 
-        elif attribute.field_type == 'multiselect':
-            value = ', '.join(value)
+        elif attribute.field_type == "multiselect":
+            value = ", ".join(value)
 
         else:
             value = str(value)
@@ -2590,15 +2593,15 @@ def save_listing_attributes(listing, form):
         ListingAttributeValue.objects.update_or_create(
             listing=listing,
             attribute=attribute,
-            defaults={'value': value}
+            defaults={"value": value},
         )
 
-    # Guest capacity columns (used by search / budget planner)
+    # Keep guest-capacity search and budget planner behaviour intact.
     special = form.get_special_values()
 
     Listing.objects.filter(pk=listing.pk).update(
-        min_guests=special['min_guests'],
-        max_guests=special['max_guests'],
+        min_guests=special["min_guests"],
+        max_guests=special["max_guests"],
     )
 
 # =========================================================

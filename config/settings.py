@@ -32,16 +32,15 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = [
+    "wedbuk.com",
     "www.wedbuk.com",
-    ".wedbuk.com",
-    "wedbukcom-production.up.railway.app",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://wedbuk.com",
     "https://www.wedbuk.com",
-    "https://wedbukcom-production.up.railway.app",
 ]
 
 
@@ -201,9 +200,11 @@ JAZZMIN_SETTINGS = {
     "site_brand": "WedBuk",
     "welcome_sign": "Welcome to WedBuk Dashboard",
     "copyright": "WedBuk.com",
+    "site_logo": "images/wedbuk-logo.png",
+    "login_logo": "images/wedbuk-logo.png",
 
     "show_sidebar": True,
-    "navigation_expanded": True,
+    "navigation_expanded": False,
     "show_theme_chooser": False,
     "show_ui_builder": False,
 
@@ -236,6 +237,11 @@ JAZZMIN_SETTINGS = {
             "name": "Visit WedBuk",
             "url": "https://wedbuk.com/",
             "new_window": True,
+        },
+        {
+            "name": "Logout",
+            "url": "admin:logout",
+            "icon": "fas fa-sign-out-alt",
         },
     ],
 
